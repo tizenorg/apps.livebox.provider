@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.live-video" version="0.0.1" install-location="auto">
+	<label>Live Player</label>
+	<author email="nicesj.park@samsung.com" href="www.samsung.com">Sung-jae Park</author>
+	<description>Application based livebox media player</description>
+	<ui-application appid="org.tizen.live-video" exec="/opt/usr/apps/org.tizen.live-video/bin/live-video" nodisplay="false" multiple="false" type="capp" taskmanage="false">
+		<icon>org.tizen.live-video.png</icon>
+		<label>Live Player</label>
+	</ui-application>
+</manifest>

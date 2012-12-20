@@ -1,0 +1,76 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(provider C)
+
+SET(PREFIX ${CMAKE_INSTALL_PREFIX})
+SET(EXEC_PREFIX "\${prefix}")
+SET(PROJECT_NAME "${PROJECT_NAME}")
+SET(LIBDIR "\${exec_prefix}/lib")
+SET(INCLUDEDIR "\${prefix}/include/${PROJECT_NAME}")
+SET(VERSION_MAJOR 0)
+SET(VERSION "${VERSION_MAJOR}.0.1")
+
+set(CMAKE_SKIP_BUILD_RPATH true)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
+
+INCLUDE(FindPkgConfig)
+pkg_check_modules(pkgs REQUIRED
+	dlog
+	glib-2.0
+	gio-2.0
+	com-core
+	x11
+	xext
+	libdri2
+	libdrm
+	libdrm_slp
+	xfixes
+	dri2proto
+	xdamage
+)
+
+FOREACH(flag ${pkgs_CFLAGS})
+	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
+ENDFOREACH(flag)
+
+SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} -fvisibility=hidden -Wall -Werror -Winline -g")
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+
+#ADD_DEFINITIONS("-Werror")
+#ADD_DEFINITIONS("-Wall")
+#ADD_DEFINITIONS("-Wextra")
+#ADD_DEFINITIONS("-ansi")
+#ADD_DEFINITIONS("-pedantic")
+
+ADD_DEFINITIONS("-DPREFIX=\"${PREFIX}\"")
+ADD_DEFINITIONS("-DLOG_TAG=\"${PROJECT_NAME}\"")
+ADD_DEFINITIONS("-DNDEBUG")
+ADD_DEFINITIONS("-DINFO_SOCKET=\"/opt/usr/share/live_magazine/.live.socket\"")
+ADD_DEFINITIONS("-DCLIENT_SOCKET=\"/opt/usr/share/live_magazine/.client.socket\"")
+ADD_DEFINITIONS("-DSLAVE_SOCKET=\"/opt/usr/share/live_magazine/.slave.socket\"")
+ADD_DEFINITIONS("-DSERVICE_SOCKET=\"/opt/usr/share/live_magazine/.service.socket\"")
+#ADD_DEFINITIONS("-DFLOG")
+
+ADD_LIBRARY(${PROJECT_NAME} SHARED
+	src/provider_buffer.c
+	src/provider.c
+	src/util.c
+	src/fb.c
+	src/dlist.c
+)
+
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES SOVERSION ${VERSION_MAJOR})
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES VERSION ${VERSION})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} "-lpthread")
+
+CONFIGURE_FILE(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${PROJECT_NAME}.pc")
+
+INSTALL(TARGETS ${PROJECT_NAME} DESTINATION lib)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION lib/pkgconfig)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/include/provider.h DESTINATION include/${PROJECT_NAME})
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/include/provider_buffer.h DESTINATION include/${PROJECT_NAME})
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION /usr/share/license RENAME "lib${PROJECT_NAME}")
+
+#ADD_SUBDIRECTORY(data)

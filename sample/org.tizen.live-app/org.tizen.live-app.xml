@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.live-app" version="0.0.1" install-location="auto">
+	<label>Live App</label>
+	<author email="nicesj.park@samsung.com" href="www.samsung.com">Sung-jae Park</author>
+	<description>Sample for an application style livebox</description>
+	<ui-application appid="org.tizen.live-app" exec="/opt/usr/apps/org.tizen.live-app/bin/live-app" nodisplay="false" multiple="false" type="capp" taskmanage="false">
+		<icon>org.tizen.live-app.png</icon>
+		<label>App Livebox</label>
+	</ui-application>
+</manifest>
