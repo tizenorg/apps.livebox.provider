@@ -1,11 +1,11 @@
 Name: libprovider
 Summary: Library for the development of a livebox data provider
-Version: 0.5.7
+Version: 0.5.8
 Release: 1
 Group: main/app
 License: Flora License
 Source0: %{name}-%{version}.tar.gz
-BuildRequires: cmake, gettext-tools
+BuildRequires: cmake, gettext-tools, coreutils
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gio-2.0)
@@ -40,18 +40,20 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 %make_install
-mkdir -p %{buildroot}/usr/share/license
+mkdir -p %{buildroot}/%{_datarootdir}/license
 
 %post
 
 %files -n libprovider
 %manifest libprovider.manifest
 %defattr(-,root,root,-)
-/usr/lib/*.so*
-/usr/share/license/*
+%{_libdir}/*.so*
+%{_datarootdir}/license/*
 
 %files devel
 %defattr(-,root,root,-)
-/usr/include/provider/provider.h
-/usr/include/provider/provider_buffer.h
-/usr/lib/pkgconfig/*.pc
+%{_includedir}/provider/provider.h
+%{_includedir}/provider/provider_buffer.h
+%{_libdir}/pkgconfig/*.pc
+
+# End of a file

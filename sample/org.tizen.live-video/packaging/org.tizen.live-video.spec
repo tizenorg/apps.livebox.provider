@@ -5,7 +5,7 @@ Release: 1
 Group: main/app
 License: Flora License
 Source0: %{name}-%{version}.tar.gz
-BuildRequires: cmake, gettext-tools
+BuildRequires: cmake, gettext-tools, coreutils
 BuildRequires: pkgconfig(appcore-efl)
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(glib-2.0)
