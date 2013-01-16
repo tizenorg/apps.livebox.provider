@@ -464,26 +464,21 @@ struct packet *provider_buffer_lb_mouse_enter(pid_t pid, int handle, const struc
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -498,26 +493,21 @@ struct packet *provider_buffer_lb_mouse_leave(pid_t pid, int handle, const struc
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -532,26 +522,21 @@ struct packet *provider_buffer_lb_mouse_down(pid_t pid, int handle, const struct
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -566,26 +551,21 @@ struct packet *provider_buffer_lb_mouse_up(pid_t pid, int handle, const struct p
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -600,26 +580,21 @@ struct packet *provider_buffer_lb_mouse_move(pid_t pid, int handle, const struct
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -634,26 +609,21 @@ struct packet *provider_buffer_pd_mouse_enter(pid_t pid, int handle, const struc
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -668,26 +638,21 @@ struct packet *provider_buffer_pd_mouse_leave(pid_t pid, int handle, const struc
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -702,26 +667,21 @@ struct packet *provider_buffer_pd_mouse_down(pid_t pid, int handle, const struct
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -736,26 +696,21 @@ struct packet *provider_buffer_pd_mouse_up(pid_t pid, int handle, const struct p
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
 	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
 
 out:
 	return NULL;
@@ -770,27 +725,21 @@ struct packet *provider_buffer_pd_mouse_move(pid_t pid, int handle, const struct
 	double x;
 	double y;
 	double timestamp;
-	int ret;
 	struct livebox_buffer *info;
 
-	ret = packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y); 
-	if (ret != 7) {
+	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
 	if (!info) {
 		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
-		ret = -ENOENT;
 		goto out;
 	}
 
 	if (info->handler)
-		ret = info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
-	else
-		ret = -ENOSYS;
+		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
 
 out:
 	return NULL;

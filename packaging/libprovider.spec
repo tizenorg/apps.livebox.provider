@@ -1,6 +1,6 @@
 Name: libprovider
 Summary: Library for the development of a livebox data provider
-Version: 0.5.8
+Version: 0.5.9
 Release: 1
 Group: main/app
 License: Flora License
