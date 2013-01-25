@@ -39,6 +39,15 @@ struct event_info {
         } part;
 };
 
+enum access_event {
+	ACCESS_READ,
+	ACCESS_READ_NEXT,
+	ACCESS_READ_PREV,
+	ACCESS_ACTIVATE,
+	ACCESS_UP,
+	ACCESS_DOWN,
+};
+
 struct event_arg {
 	enum {
 		EVENT_NEW, /*!< Master will send this to create a new livebox instance */
@@ -67,6 +76,9 @@ struct event_arg {
 
 		EVENT_LB_PAUSE, /*!< Freeze the update timer of a specified livebox */
 		EVENT_LB_RESUME, /*!< Thaw the update timer of a specified livebox */
+
+		EVENT_PD_ACCESS, /* PD: Accessibility event */
+		EVENT_LB_ACCESS, /* LB: Accessibility event */
 	} type;
 	const char *pkgname; /*!< Package name of a livebox */
 	const char *id; /*!< Instance Id of a livebox */
@@ -175,6 +187,24 @@ struct event_arg {
 		struct {
 			/*!< */
 		} lb_resume;
+
+		struct {
+			/*!< Accessibility */
+			enum access_event event;
+			double x;
+			double y;
+			int w;
+			int h;
+		} lb_access;
+
+		struct {
+			/*!< Accessibility */
+			enum access_event event;
+			double x;
+			double y;
+			int w;
+			int h;
+		} pd_access;
 	} info;
 };
 
@@ -209,6 +239,13 @@ struct event_handler {
 	 */
 	int (*pd_create)(struct event_arg *arg, void *data);
 	int (*pd_destroy)(struct event_arg *arg, void *data);
+
+	/*!
+	 * \note
+	 * Accessibility functions
+	 */
+	int (*lb_access)(struct event_arg *arg, void *data);
+	int (*pd_access)(struct event_arg *arg, void *data);
 };
 
 /*!

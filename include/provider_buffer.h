@@ -41,6 +41,9 @@ enum buffer_event {
 	BUFFER_EVENT_DOWN, /*!< */
 	BUFFER_EVENT_MOVE, /*!< */
 	BUFFER_EVENT_UP, /*!< */
+
+	BUFFER_EVENT_KEY_DOWN, /*!< */
+	BUFFER_EVENT_KEY_UP, /*!< */
 };
 
 struct livebox_buffer;
@@ -169,6 +172,22 @@ extern int provider_buffer_pre_render(struct livebox_buffer *info);
 /*!
  */
 extern int provider_buffer_post_render(struct livebox_buffer *info);
+
+/*!
+ */
+extern struct packet *provider_buffer_lb_key_down(pid_t pid, int handle, const struct packet *packet);
+
+/*!
+ */
+extern struct packet *provider_buffer_lb_key_up(pid_t pid, int handle, const struct packet *packet);
+
+/*!
+ */
+extern struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct packet *packet);
+
+/*!
+ */
+extern struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct packet *packet);
 
 #ifdef __cplusplus
 }

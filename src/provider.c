@@ -560,6 +560,214 @@ out:
 	return NULL;
 }
 
+struct packet *master_pd_access_read(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_READ;
+	if (s_info.table.pd_access)
+		ret = s_info.table.pd_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_read_prev(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_READ_PREV;
+	if (s_info.table.pd_access)
+		ret = s_info.table.pd_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_read_next(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_READ_NEXT;
+	if (s_info.table.pd_access)
+		ret = s_info.table.pd_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_activate(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_ACTIVATE;
+	if (s_info.table.pd_access)
+		ret = s_info.table.pd_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_read(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_READ;
+	if (s_info.table.lb_access)
+		ret = s_info.table.lb_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_read_prev(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_READ_PREV;
+	if (s_info.table.lb_access)
+		ret = s_info.table.lb_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_read_next(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_READ_NEXT;
+	if (s_info.table.lb_access)
+		ret = s_info.table.lb_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_activate(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
+	{
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_ACTIVATE;
+	if (s_info.table.lb_access)
+		ret = s_info.table.lb_access(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
 static struct method s_table[] = {
 	/*!< For the buffer type */
 	{
@@ -609,6 +817,22 @@ static struct method s_table[] = {
 	{
 		.cmd = "lb_mouse_leave",
 		.handler = provider_buffer_lb_mouse_leave,
+	},
+	{
+		.cmd = "lb_key_down",
+		.handler = provider_buffer_lb_key_down,
+	},
+	{
+		.cmd = "lb_key_up",
+		.handler = provider_buffer_lb_key_up,
+	},
+	{
+		.cmd = "pd_key_down",
+		.handler = provider_buffer_pd_key_down,
+	},
+	{
+		.cmd = "pd_key_up",
+		.handler = provider_buffer_pd_key_up,
 	},
 	{
 		.cmd = "lb_pause",
@@ -669,6 +893,38 @@ static struct method s_table[] = {
 	{
 		.cmd = "resume",
 		.handler = master_resume, /* timestamp, ret */
+	},
+	{
+		.cmd = "pd_access_read",
+		.handler = master_pd_access_read,
+	},
+	{
+		.cmd = "pd_access_read_prev",
+		.handler = master_pd_access_read_prev,
+	},
+	{
+		.cmd = "pd_access_read_next",
+		.handler = master_pd_access_read_next,
+	},
+	{
+		.cmd = "pd_access_activate",
+		.handler = master_pd_access_activate,
+	},
+	{
+		.cmd = "lb_access_read",
+		.handler = master_lb_access_read,
+	},
+	{
+		.cmd = "lb_access_read_prev",
+		.handler = master_lb_access_read_prev,
+	},
+	{
+		.cmd = "lb_access_read_next",
+		.handler = master_lb_access_read_next,
+	},
+	{
+		.cmd = "lb_access_activate",
+		.handler = master_lb_access_activate,
 	},
 	{
 		.cmd = NULL,

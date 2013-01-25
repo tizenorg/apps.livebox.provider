@@ -1,8 +1,8 @@
 Name: libprovider
-Summary: Library for the development of a livebox data provider
-Version: 0.5.9
+Summary: Library for developing the livebox service provider.
+Version: 0.5.10
 Release: 1
-Group: main/app
+Group: framework/livebox
 License: Flora License
 Source0: %{name}-%{version}.tar.gz
 BuildRequires: cmake, gettext-tools, coreutils
@@ -20,10 +20,12 @@ BuildRequires: pkgconfig(dri2proto)
 BuildRequires: pkgconfig(xdamage)
 
 %description
-Livebox data provider development library
+Supporting the commnuncation channel with master service for livebox remote view.
+API for accessing the remote buffer of liveboxes.
+Feature for life-cycle management by the master provider.
 
 %package devel
-Summary: Files for livebox data provider development.
+Summary: Header & package configuration files for developing the livebox service provider 
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
