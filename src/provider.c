@@ -592,11 +592,11 @@ struct packet *master_pd_access_read_prev(pid_t pid, int handle, const struct pa
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.pd_access.w, &arg.info.pd_access.h,
 					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
-	{
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -618,11 +618,11 @@ struct packet *master_pd_access_read_next(pid_t pid, int handle, const struct pa
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.pd_access.w, &arg.info.pd_access.h,
 					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
-	{
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -644,11 +644,11 @@ struct packet *master_pd_access_activate(pid_t pid, int handle, const struct pac
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.pd_access.w, &arg.info.pd_access.h,
 					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
-	{
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -670,11 +670,11 @@ struct packet *master_lb_access_read(pid_t pid, int handle, const struct packet 
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.lb_access.w, &arg.info.lb_access.h,
 					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
-	{
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -722,10 +722,11 @@ struct packet *master_lb_access_read_next(pid_t pid, int handle, const struct pa
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.lb_access.w, &arg.info.lb_access.h,
 					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 7)
 	{
 		ErrPrint("Invalid packet\n");
 		goto out;
@@ -748,11 +749,11 @@ struct packet *master_lb_access_activate(pid_t pid, int handle, const struct pac
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.lb_access.w, &arg.info.lb_access.h,
 					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
-	{
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}

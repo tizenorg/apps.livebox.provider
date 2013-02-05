@@ -1,6 +1,6 @@
 Name: libprovider
 Summary: Library for developing the livebox service provider.
-Version: 0.5.10
+Version: 0.5.11
 Release: 1
 Group: framework/livebox
 License: Flora License
