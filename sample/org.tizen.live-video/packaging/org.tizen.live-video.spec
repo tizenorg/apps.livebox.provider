@@ -19,7 +19,7 @@ BuildRequires: pkgconfig(ecore)
 BuildRequires: pkgconfig(x11)
 BuildRequires: pkgconfig(xdamage)
 BuildRequires: pkgconfig(libdrm)
-BuildRequires: pkgconfig(libdrm_slp)
+BuildRequires: pkgconfig(libtbm)
 BuildRequires: pkgconfig(libdri2)
 
 %description

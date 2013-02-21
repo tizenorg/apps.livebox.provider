@@ -23,7 +23,7 @@ pkg_check_modules(pkgs REQUIRED
 	xext
 	libdri2
 	libdrm
-	libdrm_slp
+	libtbm
 	xfixes
 	dri2proto
 	xdamage

@@ -16,7 +16,7 @@ pkg_check_modules(pkg REQUIRED
 	xdamage
 	mm-player
 	libdrm
-	libdrm_slp
+	libtbm
 	libdri2
 )
 

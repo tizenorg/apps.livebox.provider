@@ -38,7 +38,7 @@
 #include <dri2.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
-#include <drm_slp_bufmgr.h>
+#include <tbm_bufmgr.h>
 
 #include <dlog.h>
 
@@ -71,7 +71,7 @@ struct buffer { /*!< Must has to be sync with slave & provider */
 struct gem_data {
 	DRI2Buffer *dri2_buffer;
 	unsigned int attachments[1];
-	drm_slp_bo pixmap_bo;
+	tbm_bo pixmap_bo;
 	int count;
 	int buf_count;
 	int w;
@@ -97,7 +97,7 @@ struct fb_info {
 };
 
 static struct {
-	drm_slp_bufmgr slp_bufmgr;
+	tbm_bufmgr bufmgr;
 	int evt_base;
 	int err_base;
 	int fd;
@@ -109,7 +109,7 @@ static struct {
 	Visual *visual;
 	int disp_is_opened;
 } s_info = {
-	.slp_bufmgr = NULL,
+	.bufmgr = NULL,
 	.evt_base = 0,
 	.err_base = 0,
 	.fd = -1,
@@ -185,8 +185,8 @@ int fb_init(void *disp)
 		return 0;
 	}
 
-	s_info.slp_bufmgr = drm_slp_bufmgr_init(s_info.fd, NULL);
-	if (!s_info.slp_bufmgr) {
+	s_info.bufmgr = tbm_bufmgr_init(s_info.fd);
+	if (!s_info.bufmgr) {
 		DbgPrint("Failed to init bufmgr\n");
 		close(s_info.fd);
 		s_info.fd = -1;
@@ -205,9 +205,9 @@ int fb_fini(void)
 		s_info.fd = -1;
 	}
 
-	if (s_info.slp_bufmgr) {
-		drm_slp_bufmgr_destroy(s_info.slp_bufmgr);
-		s_info.slp_bufmgr = NULL;
+	if (s_info.bufmgr) {
+		tbm_bufmgr_deinit(s_info.bufmgr);
+		s_info.bufmgr = NULL;
 	}
 
 	if (s_info.disp_is_opened && s_info.disp) {
@@ -450,7 +450,7 @@ static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth
 	DbgPrint("dri2_buffer->pitch : %d, buf_count: %d\n",
 				gem->dri2_buffer->pitch, gem->buf_count);
 
-	gem->pixmap_bo = drm_slp_bo_import(s_info.slp_bufmgr, gem->dri2_buffer->name);
+	gem->pixmap_bo = tbm_bo_import(s_info.bufmgr, gem->dri2_buffer->name);
 	if (!gem->pixmap_bo) {
 		ErrPrint("Failed to import BO\n");
 		DRI2DestroyDrawable(s_info.disp, gem->pixmap);
@@ -486,7 +486,7 @@ static inline int destroy_gem(struct gem_data *gem)
 
 	if (gem->pixmap_bo) {
 		DbgPrint("unref pixmap bo\n");
-		drm_slp_bo_unref(gem->pixmap_bo);
+		tbm_bo_unref(gem->pixmap_bo);
 		gem->pixmap_bo = NULL;
 
 		DbgPrint("DRI2DestroyDrawable\n");
@@ -500,9 +500,9 @@ static inline int destroy_gem(struct gem_data *gem)
 static inline void *acquire_gem(struct gem_data *gem)
 {
 	if (!gem->data) {
-		gem->data = (void *)drm_slp_bo_map(gem->pixmap_bo,
-					DRM_SLP_DEVICE_CPU,
-					DRM_SLP_OPTION_READ|DRM_SLP_OPTION_WRITE);
+		tbm_bo_handle handle;
+		handle = tbm_bo_map(gem->pixmap_bo, TBM_DEVICE_CPU, TBM_OPTION_READ | TBM_OPTION_WRITE);
+		gem->data = handle.ptr;
 		if (!gem->data)
 			ErrPrint("Failed to get BO\n");
 	}
@@ -533,7 +533,7 @@ static inline void release_gem(struct gem_data *gem)
 				gem_pixel = (int *)(((char *)gem_pixel) + gap);
 			}
 		}
-		drm_slp_bo_unmap(gem->pixmap_bo, DRM_SLP_DEVICE_CPU);
+		tbm_bo_unmap(gem->pixmap_bo);
 		gem->data = NULL;
 	} else if (gem->refcnt < 0) {
 		ErrPrint("Invalid refcnt: %d (reset)\n", gem->refcnt);
