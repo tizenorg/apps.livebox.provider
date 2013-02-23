@@ -37,6 +37,8 @@ struct livebox_buffer {
 
 	int (*handler)(struct livebox_buffer *info, enum buffer_event event, double timestamp, double x, double y, void *data);
 	void *data;
+
+	void *user_data;
 };
 
 extern struct livebox_buffer *provider_buffer_find_buffer(enum target_type type, const char *pkgname, const char *id);

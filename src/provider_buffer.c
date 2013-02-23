@@ -167,6 +167,27 @@ struct livebox_buffer *provider_buffer_find_buffer(enum target_type type, const 
 	return NULL;
 }
 
+EAPI int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data)
+{
+	if (!handle || handle->state != BUFFER_CREATED) {
+		ErrPrint("info is not valid\n");
+		return -EINVAL;
+	}
+
+	handle->user_data = data;
+	return 0;
+}
+
+EAPI void *provider_buffer_user_data(struct livebox_buffer *handle)
+{
+	if (!handle || handle->state != BUFFER_CREATED) {
+		ErrPrint("info is not valid\n");
+		return NULL;
+	}
+
+	return handle->user_data;
+}
+
 EAPI struct livebox_buffer *provider_buffer_acquire(enum target_type type, const char *pkgname, const char *id, int width, int height, int pixel_size, int (*handler)(struct livebox_buffer *, enum buffer_event, double, double, double, void *), void *data)
 {
 	struct livebox_buffer *info;

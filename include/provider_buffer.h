@@ -189,6 +189,14 @@ extern struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const s
  */
 extern struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct packet *packet);
 
+/*!
+ */
+extern void *provider_buffer_user_data(struct livebox_buffer *handle);
+
+/*!
+ */
+extern int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data);
+
 #ifdef __cplusplus
 }
 #endif
