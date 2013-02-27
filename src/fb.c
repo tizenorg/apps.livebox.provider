@@ -68,6 +68,12 @@ struct buffer { /*!< Must has to be sync with slave & provider */
 	char data[];
 };
 
+struct pixmap_info {
+	XShmSegmentInfo si;
+	XImage *xim;
+	GC gc;
+};
+
 struct gem_data {
 	DRI2Buffer *dri2_buffer;
 	unsigned int attachments[1];
@@ -101,7 +107,8 @@ static struct {
 	int evt_base;
 	int err_base;
 	int fd;
-	struct dlist *pixmap_list;
+	struct dlist *gem_list;
+	struct dlist *shm_list;
 
 	Display *disp;
 	int screen;
@@ -113,7 +120,8 @@ static struct {
 	.evt_base = 0,
 	.err_base = 0,
 	.fd = -1,
-	.pixmap_list = NULL,
+	.gem_list = NULL,
+	.shm_list = NULL,
 
 	.disp = NULL,
 	.screen = 0,
@@ -261,9 +269,7 @@ static inline int sync_for_file(struct fb_info *info)
 static inline int sync_for_pixmap(struct fb_info *info)
 {
 	struct buffer *buffer;
-	XShmSegmentInfo si;
-	XImage *xim;
-	GC gc;
+	struct pixmap_info *pixmap_info;
 
 	buffer = info->buffer;
 	if (!buffer) {
@@ -291,71 +297,13 @@ static inline int sync_for_pixmap(struct fb_info *info)
 		return 0;
 	}
 
-	si.shmid = shmget(IPC_PRIVATE, info->bufsz, IPC_CREAT | 0666);
-	if (si.shmid < 0) {
-		ErrPrint("shmget: %s\n", strerror(errno));
-		return -EFAULT;
-	}
-
-	si.readOnly = False;
-	si.shmaddr = shmat(si.shmid, NULL, 0);
-	if (si.shmaddr == (void *)-1) {
-		if (shmctl(si.shmid, IPC_RMID, 0) < 0)
-			ErrPrint("shmctl: %s\n", strerror(errno));
-		return -EFAULT;
-	}
-
-	/*!
-	 * \NOTE
-	 * XCreatePixmap can only uses 24 bits depth only.
-	 */
-	xim = XShmCreateImage(s_info.disp, s_info.visual, 24/* (s_info.depth << 3) */, ZPixmap, NULL, &si, info->w, info->h);
-	if (xim == NULL) {
-		if (shmdt(si.shmaddr) < 0)
-			ErrPrint("shmdt: %s\n", strerror(errno));
-
-		if (shmctl(si.shmid, IPC_RMID, 0) < 0)
-			ErrPrint("shmctl: %s\n", strerror(errno));
-		return -EFAULT;
-	}
-
-	xim->data = si.shmaddr;
-	XShmAttach(s_info.disp, &si);
-	XSync(s_info.disp, False);
-
-	gc = XCreateGC(s_info.disp, (Pixmap)info->handle, 0, NULL);
-	if (!gc) {
-		XShmDetach(s_info.disp, &si);
-		XDestroyImage(xim);
-
-		if (shmdt(si.shmaddr) < 0)
-			ErrPrint("shmdt: %s\n", strerror(errno));
-
-		if (shmctl(si.shmid, IPC_RMID, 0) < 0)
-			ErrPrint("shmctl: %s\n", strerror(errno));
-
-		return -EFAULT;
-	}
-
-	memcpy(xim->data, buffer->data, info->bufsz);
-
+	pixmap_info = (struct pixmap_info *)buffer->data;
 	/*!
 	 * \note Do not send the event.
 	 *       Instead of X event, master will send the updated event to the viewer
 	 */
-	XShmPutImage(s_info.disp, (Pixmap)info->handle, gc, xim, 0, 0, 0, 0, info->w, info->h, False);
+	XShmPutImage(s_info.disp, (Pixmap)info->handle, pixmap_info->gc, pixmap_info->xim, 0, 0, 0, 0, info->w, info->h, False);
 	XSync(s_info.disp, False);
-
-	XFreeGC(s_info.disp, gc);
-	XShmDetach(s_info.disp, &si);
-	XDestroyImage(xim);
-
-	if (shmdt(si.shmaddr) < 0)
-		ErrPrint("shmdt: %s\n", strerror(errno));
-
-	if (shmctl(si.shmid, IPC_RMID, 0) < 0)
-		ErrPrint("shmctl: %s\n", strerror(errno));
-
 	return 0;
 }
 
@@ -383,13 +331,54 @@ int fb_sync(struct fb_info *info)
 	return -EINVAL;
 }
 
+static inline struct fb_info *find_shm_by_pixmap(Pixmap id)
+{
+	struct fb_info *info;
+	struct dlist *l;
+
+	info = NULL;
+	dlist_foreach(s_info.shm_list, l, info) {
+		if (info->handle == (int)id) {
+			break;
+		}
+		info = NULL;
+	}
+
+	return info;
+}
+
+static inline struct fb_info *find_shm_by_canvas(void *canvas)
+{
+	struct pixmap_info *pixmap_info;
+	struct buffer *buffer;
+	struct fb_info *info;
+	struct dlist *l;
+
+	info = NULL;
+	dlist_foreach(s_info.shm_list, l, info) {
+		buffer = info->buffer;
+		if (!buffer) {
+			ErrPrint("Info has invalid buffer ptr\n");
+			continue;
+		}
+
+		pixmap_info = (struct pixmap_info *)buffer->data;
+		if (pixmap_info->si.shmaddr == canvas)
+			break;
+
+		info = NULL;
+	}
+
+	return info;
+}
+
 static inline struct gem_data *find_gem_by_pixmap(Pixmap id)
 {
 	struct gem_data *gem;
 	struct dlist *l;
 
 	gem = NULL;
-	dlist_foreach(s_info.pixmap_list, l, gem) {
+	dlist_foreach(s_info.gem_list, l, gem) {
 		if (gem->pixmap == id)
 			break;
 
@@ -405,7 +394,7 @@ static inline struct gem_data *find_gem_by_canvas(void *canvas)
 	struct dlist *l;
 
 	gem = NULL;
-	dlist_foreach(s_info.pixmap_list, l, gem) {
+	dlist_foreach(s_info.gem_list, l, gem) {
 		if (gem->data == canvas || gem->compensate_data == canvas)
 			break;
 
@@ -413,6 +402,94 @@ static inline struct gem_data *find_gem_by_canvas(void *canvas)
 	}
 
 	return gem;
+}
+
+static inline int create_pixmap_info(struct fb_info *info)
+{
+	struct pixmap_info *pixmap_info;
+	struct buffer *buffer;
+
+	buffer = info->buffer;
+	pixmap_info = (struct pixmap_info *)buffer->data;
+
+	pixmap_info->si.shmid = shmget(IPC_PRIVATE, info->bufsz, IPC_CREAT | 0666);
+	if (pixmap_info->si.shmid < 0) {
+		ErrPrint("shmget: %s\n", strerror(errno));
+		return -EFAULT;
+	}
+
+	DbgPrint("SHMID: %d (Size: %d)\n", pixmap_info->si.shmid, info->bufsz);
+
+	pixmap_info->si.readOnly = False;
+	pixmap_info->si.shmaddr = shmat(pixmap_info->si.shmid, NULL, 0);
+	if (pixmap_info->si.shmaddr == (void *)-1) {
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+			ErrPrint("shmctl: %s\n", strerror(errno));
+
+		return -EFAULT;
+	}
+	DbgPrint("SHMADDR: 0x%p\n", pixmap_info->si.shmaddr);
+
+	/*!
+	 * \NOTE
+	 * XCreatePixmap can only uses 24 bits depth only.
+	 */
+	pixmap_info->xim = XShmCreateImage(s_info.disp, s_info.visual, 24/* (s_info.depth << 3) */, ZPixmap, NULL, &pixmap_info->si, info->w, info->h);
+	if (pixmap_info->xim == NULL) {
+		if (shmdt(pixmap_info->si.shmaddr) < 0)
+			ErrPrint("shmdt: %s\n", strerror(errno));
+
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+			ErrPrint("shmctl: %s\n", strerror(errno));
+
+		return -EFAULT;
+	}
+
+	pixmap_info->xim->data = pixmap_info->si.shmaddr;
+	XShmAttach(s_info.disp, &pixmap_info->si);
+	XSync(s_info.disp, False);
+
+	pixmap_info->gc = XCreateGC(s_info.disp, (Pixmap)info->handle, 0, NULL);
+	if (!pixmap_info->gc) {
+		XShmDetach(s_info.disp, &pixmap_info->si);
+		XDestroyImage(pixmap_info->xim);
+
+		if (shmdt(pixmap_info->si.shmaddr) < 0)
+			ErrPrint("shmdt: %s\n", strerror(errno));
+
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+			ErrPrint("shmctl: %s\n", strerror(errno));
+
+		return -EFAULT;
+	}
+
+	s_info.shm_list = dlist_append(s_info.shm_list, info);
+	DbgPrint("Pixmap info is successfully created\n");
+	return 0;
+}
+
+static inline int destroy_pixmap_info(struct fb_info *info)
+{
+	struct pixmap_info *pixmap_info;
+	struct buffer *buffer;
+
+	DbgPrint("Destroy a pixmap info\n");
+	buffer = info->buffer;
+	pixmap_info = (struct pixmap_info *)buffer->data;
+
+	XFreeGC(s_info.disp, pixmap_info->gc);
+	XShmDetach(s_info.disp, &pixmap_info->si);
+	XDestroyImage(pixmap_info->xim);
+
+	if (shmdt(pixmap_info->si.shmaddr) < 0)
+		ErrPrint("shmdt: %s\n", strerror(errno));
+
+	if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+		ErrPrint("shmctl: %s\n", strerror(errno));
+
+	dlist_remove_data(s_info.shm_list, info);
+	DbgPrint("Successfully destroyed\n");
+	return 0;
 }
 
 static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth)
@@ -470,13 +547,13 @@ static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth
 	}
 
 	DbgPrint("Return buffer: %p\n", gem);
-	s_info.pixmap_list = dlist_append(s_info.pixmap_list, gem);
+	s_info.gem_list = dlist_append(s_info.gem_list, gem);
 	return gem;
 }
 
 static inline int destroy_gem(struct gem_data *gem)
 {
-	dlist_remove_data(s_info.pixmap_list, gem);
+	dlist_remove_data(s_info.gem_list, gem);
 
 	if (gem->compensate_data) {
 		DbgPrint("Release compensate buffer %p\n", gem->compensate_data);
@@ -674,7 +751,9 @@ int fb_is_created(struct fb_info *info)
 
 void *fb_acquire_buffer(struct fb_info *info)
 {
+	struct pixmap_info *pixmap_info;
 	struct buffer *buffer;
+	void *addr;
 
 	if (!info)
 		return NULL;
@@ -685,7 +764,7 @@ void *fb_acquire_buffer(struct fb_info *info)
 			 * Use the S/W backend
 			 */
 			info->bufsz = info->w * info->h * s_info.depth;
-			buffer = calloc(1, sizeof(*buffer) + info->bufsz);
+			buffer = calloc(1, sizeof(*buffer) + sizeof(*pixmap_info));
 			if (!buffer) {
 				ErrPrint("Heap: %s\n", strerror(errno));
 				info->bufsz = 0;
@@ -697,6 +776,14 @@ void *fb_acquire_buffer(struct fb_info *info)
 			buffer->state = CREATED;
 			buffer->info = info;
 			info->buffer = buffer;
+
+			DbgPrint("Create PIXMAP Info\n");
+			if (create_pixmap_info(info) < 0) {
+				free(buffer);
+				info->buffer = NULL;
+				info->bufsz = 0;
+				return NULL;
+			}
 		} else if (!strncasecmp(info->id, SCHEMA_FILE, strlen(SCHEMA_FILE))) {
 			info->bufsz = info->w * info->h * s_info.depth;
 			buffer = calloc(1, sizeof(*buffer) + info->bufsz);
@@ -718,7 +805,7 @@ void *fb_acquire_buffer(struct fb_info *info)
 				return NULL;
 			}
 
-			return buffer->data;
+			info->buffer = buffer;
 		} else {
 			DbgPrint("Buffer is NIL\n");
 			return NULL;
@@ -729,25 +816,36 @@ void *fb_acquire_buffer(struct fb_info *info)
 	switch (buffer->type) {
 	case BUFFER_TYPE_PIXMAP:
 		buffer->refcnt++;
+		pixmap_info = (struct pixmap_info *)buffer->data;
+		addr = pixmap_info->si.shmaddr;
 		break;
 	case BUFFER_TYPE_FILE:
 		buffer->refcnt++;
+		/* Fall through */
+	case BUFFER_TYPE_SHM:
+		addr = buffer->data;
 		break;
 	default:
-		return NULL;
+		addr = NULL;
+		break;
 	}
 
-	return buffer->data;
+	return addr;
 }
 
 int fb_release_buffer(void *data)
 {
 	struct buffer *buffer;
+	struct fb_info *info;
 
 	if (!data)
 		return 0;
 
-	buffer = container_of(data, struct buffer, data);
+	info = find_shm_by_canvas(data);
+	if (info)
+		buffer = info->buffer;
+	else
+		buffer = container_of(data, struct buffer, data);
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid handle\n");
@@ -767,14 +865,13 @@ int fb_release_buffer(void *data)
 	case BUFFER_TYPE_PIXMAP:
 		buffer->refcnt--;
 		if (buffer->refcnt == 0) {
-			struct fb_info *info;
-			info = buffer->info;
-
+			if (info) {
+				destroy_pixmap_info(info);
+				if (info->buffer == buffer)
+					info->buffer = NULL;
+			}
 			buffer->state = DESTROYED;
 			free(buffer);
-
-			if (info && info->buffer == buffer)
-				info->buffer = NULL;
 		}
 		break;
 	case BUFFER_TYPE_FILE:
