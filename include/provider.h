@@ -73,6 +73,7 @@ struct event_arg {
 
 		EVENT_PD_CREATE, /*!< Only for the buffer type */
 		EVENT_PD_DESTROY, /*!< Only for the buffer type */
+		EVENT_PD_MOVE, /*!< Only for the buffer type */
 
 		EVENT_LB_PAUSE, /*!< Freeze the update timer of a specified livebox */
 		EVENT_LB_RESUME, /*!< Thaw the update timer of a specified livebox */
@@ -88,12 +89,20 @@ struct event_arg {
 			int w; /*!< PD buffer is created with width "w" */
 			int h; /*!< PD buffer is created with height "h" */
 
-			double x; /*!< Relative position of a livebox from this PD */
-			double y; /*!< Relative position of a livebox from this PD */
+			double x; /*!< Relative X position of a livebox from this PD */
+			double y; /*!< Relative Y position of a livebox from this PD */
 		} pd_create;
 
 		struct {
 		} pd_destroy;
+
+		struct {
+			int w; /*!< PD buffer width */
+			int h; /*!< PD buffer height */
+
+			double x; /*!< Relative X position of a livebox from this PD */
+			double y; /*!< Relative Y position of a livebox from this PD */
+		} pd_move;
 
 		struct {
 			const char *content; /*!< Content info */
@@ -239,6 +248,7 @@ struct event_handler {
 	 */
 	int (*pd_create)(struct event_arg *arg, void *data);
 	int (*pd_destroy)(struct event_arg *arg, void *data);
+	int (*pd_move)(struct event_arg *arg, void *data);
 
 	/*!
 	 * \note

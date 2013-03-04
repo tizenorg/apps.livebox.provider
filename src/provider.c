@@ -538,6 +538,29 @@ out:
 	return NULL;
 }
 
+struct packet *master_pd_move(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	int ret;
+
+	ret = packet_get(packet, "ssiidd", &arg.pkgname, &arg.id, &arg.info.pd_move.w, &arg.info.pd_move.h, &arg.info.pd_move.x, &arg.info.pd_move.y);
+	if (ret != 6) {
+		ErrPrint("Invalid packet\n");
+		ret = -EINVAL;
+		goto out;
+	}
+
+	arg.type = EVENT_PD_MOVE;
+
+	if (s_info.table.pd_move)
+		ret = s_info.table.pd_move(&arg, s_info.data);
+	else
+		ret = -ENOSYS;
+
+out:
+	return NULL;
+}
+
 struct packet *master_pd_destroy(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
@@ -786,6 +809,10 @@ static struct method s_table[] = {
 	{
 		.cmd = "pd_hide",
 		.handler = master_pd_destroy,
+	},
+	{
+		.cmd = "pd_move",
+		.handler = master_pd_move,
 	},
 	{
 		.cmd = "pd_mouse_up",
