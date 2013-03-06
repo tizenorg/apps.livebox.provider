@@ -461,7 +461,7 @@ EAPI int provider_buffer_post_render(struct livebox_buffer *info)
 	int ret = 0;
 
 	if (fb_has_gem(info->fb))
-		ret = fb_release_gem(info->fb) ? 0 : -EFAULT;
+		ret = fb_release_gem(info->fb);
 
 	return ret;
 }
