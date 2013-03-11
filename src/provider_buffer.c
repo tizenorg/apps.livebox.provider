@@ -384,6 +384,16 @@ EAPI int provider_buffer_get_size(struct livebox_buffer *info, int *w, int *h, i
 	return 0;
 }
 
+EAPI const char *provider_buffer_uri(struct livebox_buffer *info)
+{
+	if (!info || info->state != BUFFER_CREATED) {
+		ErrPrint("Buffer handler is NULL\n");
+		return NULL;
+	}
+
+	return fb_id(info->fb);
+}
+
 /*!
  * \brief
  * If the given buffer is created as pixmap,

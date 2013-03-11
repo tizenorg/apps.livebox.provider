@@ -120,6 +120,13 @@ extern const char *provider_buffer_pkgname(struct livebox_buffer *info);
 extern const char *provider_buffer_id(struct livebox_buffer *info);
 
 /*!
+ * \brief Give the URI of buffer information.
+ * \param[in] info
+ * \return uri
+ */
+extern const char *provider_buffer_uri(struct livebox_buffer *info);
+
+/*!
  * \brief
  * \param[in] info
  * \param[out] w
