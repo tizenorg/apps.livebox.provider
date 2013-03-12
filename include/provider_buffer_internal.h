@@ -47,11 +47,16 @@ extern struct packet *provider_buffer_lb_mouse_up(pid_t pid, int handle, const s
 extern struct packet *provider_buffer_lb_mouse_move(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_lb_mouse_enter(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_lb_mouse_leave(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_key_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_key_up(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_mouse_down(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_mouse_up(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_mouse_move(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_mouse_enter(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_mouse_leave(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct packet *packet);
+
 extern const char *provider_name(void);
 
 /* End of a file */

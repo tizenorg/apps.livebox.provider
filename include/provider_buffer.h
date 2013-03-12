@@ -145,7 +145,7 @@ extern unsigned long provider_buffer_pixmap_id(struct livebox_buffer *info);
 
 /*!
  * \brief
- * \param[in] disp
+ * \param[in] disp Display information for handling the XPixmap type.
  * \return int
  */
 extern int provider_buffer_init(void *disp);
@@ -157,44 +157,43 @@ extern int provider_buffer_init(void *disp);
 extern int provider_buffer_fini(void);
 
 /*!
+ * \param[in] info
+ * \return int
  */
 extern int provider_buffer_pixmap_is_support_hw(struct livebox_buffer *info);
 
 /*!
+ * \param[in] info
+ * \return int
  */
 extern int provider_buffer_pixmap_create_hw(struct livebox_buffer *info);
 
 /*!
+ * \param[in] info
+ * \return int
  */
 extern int provider_buffer_pixmap_destroy_hw(struct livebox_buffer *info);
 
 /*!
+ * \brief Get the H/W system mapped buffer address(GEM buffer) if a buffer support it.
+ * \param[in] info
+ * \return void * H/W system mapped buffer address
  */
 extern void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info);
 
 /*!
+ * \brief Prepare the render buffer to write or read something on it.
+ * \param[in] info
+ * \return int
  */
 extern int provider_buffer_pre_render(struct livebox_buffer *info);
 
 /*!
+ * \brief Finish the render buffer acessing.
+ * \param[in] info 
+ * \return int
  */
 extern int provider_buffer_post_render(struct livebox_buffer *info);
-
-/*!
- */
-extern struct packet *provider_buffer_lb_key_down(pid_t pid, int handle, const struct packet *packet);
-
-/*!
- */
-extern struct packet *provider_buffer_lb_key_up(pid_t pid, int handle, const struct packet *packet);
-
-/*!
- */
-extern struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct packet *packet);
-
-/*!
- */
-extern struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct packet *packet);
 
 /*!
  */
