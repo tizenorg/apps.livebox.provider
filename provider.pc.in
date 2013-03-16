@@ -1,0 +1,11 @@
+prefix=@PREFIX@
+exec_prefix=@EXEC_PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
+
+Name: libprovider
+Description: livebox supporting library
+Version: @VERSION@
+Libs: -L${libdir} -lprovider
+Cflags: -I${includedir}
+cppflags: -I${includedir}
