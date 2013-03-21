@@ -490,14 +490,12 @@ struct packet *provider_buffer_lb_key_down(pid_t pid, int handle, const struct p
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -508,8 +506,17 @@ struct packet *provider_buffer_lb_key_down(pid_t pid, int handle, const struct p
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_KEY_DOWN, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_KEY_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -519,14 +526,12 @@ struct packet *provider_buffer_lb_key_up(pid_t pid, int handle, const struct pac
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -537,8 +542,17 @@ struct packet *provider_buffer_lb_key_up(pid_t pid, int handle, const struct pac
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_KEY_UP, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_KEY_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -548,14 +562,12 @@ struct packet *provider_buffer_lb_mouse_enter(pid_t pid, int handle, const struc
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -566,8 +578,16 @@ struct packet *provider_buffer_lb_mouse_enter(pid_t pid, int handle, const struc
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -577,14 +597,12 @@ struct packet *provider_buffer_lb_mouse_leave(pid_t pid, int handle, const struc
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -595,8 +613,16 @@ struct packet *provider_buffer_lb_mouse_leave(pid_t pid, int handle, const struc
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -606,14 +632,12 @@ struct packet *provider_buffer_lb_mouse_down(pid_t pid, int handle, const struct
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -624,8 +648,16 @@ struct packet *provider_buffer_lb_mouse_down(pid_t pid, int handle, const struct
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -635,14 +667,12 @@ struct packet *provider_buffer_lb_mouse_up(pid_t pid, int handle, const struct p
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -653,8 +683,16 @@ struct packet *provider_buffer_lb_mouse_up(pid_t pid, int handle, const struct p
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -664,14 +702,12 @@ struct packet *provider_buffer_lb_mouse_move(pid_t pid, int handle, const struct
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -682,8 +718,15 @@ struct packet *provider_buffer_lb_mouse_move(pid_t pid, int handle, const struct
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -693,14 +736,12 @@ struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct p
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -711,8 +752,16 @@ struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct p
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_KEY_DOWN, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_KEY_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -722,14 +771,12 @@ struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct pac
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -740,8 +787,16 @@ struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct pac
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_KEY_UP, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_KEY_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -751,14 +806,12 @@ struct packet *provider_buffer_pd_mouse_enter(pid_t pid, int handle, const struc
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -769,8 +822,16 @@ struct packet *provider_buffer_pd_mouse_enter(pid_t pid, int handle, const struc
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_ENTER, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -780,14 +841,12 @@ struct packet *provider_buffer_pd_mouse_leave(pid_t pid, int handle, const struc
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -798,8 +857,16 @@ struct packet *provider_buffer_pd_mouse_leave(pid_t pid, int handle, const struc
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_LEAVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -809,14 +876,12 @@ struct packet *provider_buffer_pd_mouse_down(pid_t pid, int handle, const struct
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -827,8 +892,16 @@ struct packet *provider_buffer_pd_mouse_down(pid_t pid, int handle, const struct
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -838,14 +911,12 @@ struct packet *provider_buffer_pd_mouse_up(pid_t pid, int handle, const struct p
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -856,8 +927,16 @@ struct packet *provider_buffer_pd_mouse_up(pid_t pid, int handle, const struct p
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
@@ -867,14 +946,12 @@ struct packet *provider_buffer_pd_mouse_move(pid_t pid, int handle, const struct
 {
 	const char *pkgname;
 	const char *id;
-	int w;
-	int h;
-	double x;
-	double y;
+	int x;
+	int y;
 	double timestamp;
 	struct livebox_buffer *info;
 
-	if (packet_get(packet, "ssiiddd", &pkgname, &id, &w, &h, &timestamp, &x, &y) != 7) {
+	if (packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y) != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -885,8 +962,16 @@ struct packet *provider_buffer_pd_mouse_move(pid_t pid, int handle, const struct
 		goto out;
 	}
 
-	if (info->handler)
-		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, x, y, info->data);
+	if (info->handler) {
+		int w;
+		int h;
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0) {
+			ErrPrint("Failed to get buffer size [%s:%s]\n", pkgname, id);
+			goto out;
+		}
+
+		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
 
 out:
 	return NULL;
