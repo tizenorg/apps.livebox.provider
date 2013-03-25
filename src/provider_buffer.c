@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright 2013  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
 #include <com-core_packet.h>
 
 #include <dlog.h>
+#include <livebox-errno.h>
 
 #include "dlist.h"
 #include "util.h"
@@ -99,19 +100,19 @@ static inline int send_release_request(enum target_type type, const char *pkgnam
 	packet = packet_create("release_buffer", "isss", type, provider_name(), pkgname, id);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	result = com_core_packet_oneshot_send(SLAVE_SOCKET, packet, 0.0f);
 	packet_destroy(packet);
 	if (!result) {
 		ErrPrint("Failed to send a request\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	if (packet_get(result, "i", &ret) != 1) {
 		ErrPrint("Invalid result packet\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 	}
 
 	packet_unref(result);
@@ -171,11 +172,11 @@ EAPI int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data
 {
 	if (!handle || handle->state != BUFFER_CREATED) {
 		ErrPrint("info is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	handle->user_data = data;
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 EAPI void *provider_buffer_user_data(struct livebox_buffer *handle)
@@ -257,12 +258,12 @@ EAPI int provider_buffer_resize(struct livebox_buffer *info, int w, int h)
 
 	if (!info || info->state != BUFFER_CREATED) {
 		ErrPrint("info is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	fb = send_resize_request(info->type, info->pkgname, info->id, w, h);
 	if (!fb)
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 
 	/*!
 	 * \note
@@ -271,7 +272,7 @@ EAPI int provider_buffer_resize(struct livebox_buffer *info, int w, int h)
 	 * it only can be destroyed when there is no reference exists.
 	 */
 	info->fb = fb;
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 EAPI void *provider_buffer_ref(struct livebox_buffer *info)
@@ -288,7 +289,7 @@ EAPI int provider_buffer_unref(void *ptr)
 {
 	if (!ptr) {
 		ErrPrint("PTR is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	return fb_release_buffer(ptr);
@@ -300,7 +301,7 @@ EAPI int provider_buffer_release(struct livebox_buffer *info)
 
 	if (!info || info->state != BUFFER_CREATED) {
 		ErrPrint("Buffer handler is NULL\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	dlist_remove_data(s_info.buffer_list, info);
@@ -318,14 +319,14 @@ EAPI int provider_buffer_release(struct livebox_buffer *info)
 	free(info->pkgname);
 	free(info->id);
 	free(info);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_buffer_sync(struct livebox_buffer *info)
 {
 	if (!info || info->state != BUFFER_CREATED) {
 		ErrPrint("Buffer handler is NULL\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	return fb_sync(info->fb);
@@ -369,7 +370,7 @@ EAPI int provider_buffer_get_size(struct livebox_buffer *info, int *w, int *h, i
 {
 	if (!info || info->state != BUFFER_CREATED) {
 		ErrPrint("Buffer handler is NULL\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (w)
@@ -381,7 +382,7 @@ EAPI int provider_buffer_get_size(struct livebox_buffer *info, int *w, int *h, i
 	if (pixel_size)
 		*pixel_size = info->pixel_size;
 
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 EAPI const char *provider_buffer_uri(struct livebox_buffer *info)
@@ -429,7 +430,7 @@ EAPI int provider_buffer_pixmap_is_support_hw(struct livebox_buffer *info)
 EAPI int provider_buffer_pixmap_create_hw(struct livebox_buffer *info)
 {
 	if (!fb_has_gem(info->fb))
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 
 	return fb_create_gem(info->fb);
 }
@@ -437,7 +438,7 @@ EAPI int provider_buffer_pixmap_create_hw(struct livebox_buffer *info)
 EAPI int provider_buffer_pixmap_destroy_hw(struct livebox_buffer *info)
 {
 	if (!fb_has_gem(info->fb))
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 
 	return fb_destroy_gem(info->fb);
 }
@@ -458,7 +459,7 @@ EAPI void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info)
 
 EAPI int provider_buffer_pre_render(struct livebox_buffer *info)
 {
-	int ret = 0;
+	int ret = LB_STATUS_SUCCESS;
 
 	if (fb_has_gem(info->fb))
 		ret = fb_acquire_gem(info->fb) ? 0 : -EFAULT;
@@ -468,7 +469,7 @@ EAPI int provider_buffer_pre_render(struct livebox_buffer *info)
 
 EAPI int provider_buffer_post_render(struct livebox_buffer *info)
 {
-	int ret = 0;
+	int ret = LB_STATUS_SUCCESS;
 
 	if (fb_has_gem(info->fb))
 		ret = fb_release_gem(info->fb);

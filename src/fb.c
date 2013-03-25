@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright 2013  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@
 #include <tbm_bufmgr.h>
 
 #include <dlog.h>
+#include <livebox-errno.h>
 
 #include "debug.h"
 #include "util.h"
@@ -142,7 +143,7 @@ int fb_init(void *disp)
 		s_info.disp = XOpenDisplay(NULL);
 		if (!s_info.disp) {
 			ErrPrint("Failed to open a display\n");
-			return -EFAULT;
+			return LB_STATUS_ERROR_FAULT;
 		}
 
 		s_info.disp_is_opened = 1;
@@ -155,21 +156,21 @@ int fb_init(void *disp)
 
 	if (!DRI2QueryExtension(s_info.disp, &s_info.evt_base, &s_info.err_base)) {
 		DbgPrint("DRI2 is not supported\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (!DRI2QueryVersion(s_info.disp, &dri2Major, &dri2Minor)) {
 		DbgPrint("DRI2 is not supported\n");
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (!DRI2Connect(s_info.disp, DefaultRootWindow(s_info.disp), &driverName, &deviceName)) {
 		DbgPrint("DRI2 is not supported\n");
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	s_info.fd = open(deviceName, O_RDWR);
@@ -179,7 +180,7 @@ int fb_init(void *disp)
 		DbgPrint("Failed to open a drm device: (%s)\n", strerror(errno));
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	drmGetMagic(s_info.fd, &magic);
@@ -190,7 +191,7 @@ int fb_init(void *disp)
 		s_info.fd = -1;
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	s_info.bufmgr = tbm_bufmgr_init(s_info.fd);
@@ -200,10 +201,10 @@ int fb_init(void *disp)
 		s_info.fd = -1;
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_fini(void)
@@ -226,7 +227,7 @@ int fb_fini(void)
 	s_info.screen = 0;
 	s_info.visual = NULL;
 	s_info.depth = 0;
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 static inline int sync_for_file(struct fb_info *info)
@@ -237,33 +238,33 @@ static inline int sync_for_file(struct fb_info *info)
 	buffer = info->buffer;
 	if (!buffer) {
 		DbgPrint("Buffer is NIL, skip sync\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid state of a FB\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (buffer->type != BUFFER_TYPE_FILE) {
 		DbgPrint("Ingore sync\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	fd = open(util_uri_to_path(info->id), O_WRONLY | O_CREAT, 0644);
 	if (fd < 0) {
 		ErrPrint("open %s: %s\n", util_uri_to_path(info->id), strerror(errno));
-		return -EIO;
+		return LB_STATUS_ERROR_IO;
 	}
 
 	if (write(fd, buffer->data, info->bufsz) != info->bufsz) {
 		ErrPrint("write: %s\n", strerror(errno));
 		close(fd);
-		return -EIO;
+		return LB_STATUS_ERROR_IO;
 	}
 
 	close(fd);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 static inline int sync_for_pixmap(struct fb_info *info)
@@ -274,27 +275,27 @@ static inline int sync_for_pixmap(struct fb_info *info)
 	buffer = info->buffer;
 	if (!buffer) {
 		DbgPrint("Buffer is NIL, skip sync\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid state of a FB\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (buffer->type != BUFFER_TYPE_PIXMAP) {
 		DbgPrint("Invalid buffer\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (info->handle == 0) {
 		DbgPrint("Pixmap ID is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (info->bufsz == 0) {
 		DbgPrint("Nothing can be sync\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	pixmap_info = (struct pixmap_info *)buffer->data;
@@ -304,19 +305,19 @@ static inline int sync_for_pixmap(struct fb_info *info)
 	 */
 	XShmPutImage(s_info.disp, (Pixmap)info->handle, pixmap_info->gc, pixmap_info->xim, 0, 0, 0, 0, info->w, info->h, False);
 	XSync(s_info.disp, False);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_sync(struct fb_info *info)
 {
 	if (!info) {
 		ErrPrint("FB Handle is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (!info->id || info->id[0] == '\0') {
 		DbgPrint("Ingore sync\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	if (!strncasecmp(info->id, SCHEMA_FILE, strlen(SCHEMA_FILE))) {
@@ -324,11 +325,11 @@ int fb_sync(struct fb_info *info)
 	} else if (!strncasecmp(info->id, SCHEMA_PIXMAP, strlen(SCHEMA_PIXMAP))) {
 		return sync_for_pixmap(info);
 	} else if (!strncasecmp(info->id, SCHEMA_SHM, strlen(SCHEMA_SHM))) {
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	DbgPrint("Invalid URI: [%s]\n", info->id);
-	return -EINVAL;
+	return LB_STATUS_ERROR_INVALID;
 }
 
 static inline struct fb_info *find_shm_by_pixmap(Pixmap id)
@@ -415,7 +416,7 @@ static inline int create_pixmap_info(struct fb_info *info)
 	pixmap_info->si.shmid = shmget(IPC_PRIVATE, info->bufsz, IPC_CREAT | 0666);
 	if (pixmap_info->si.shmid < 0) {
 		ErrPrint("shmget: %s\n", strerror(errno));
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	DbgPrint("SHMID: %d (Size: %d)\n", pixmap_info->si.shmid, info->bufsz);
@@ -426,7 +427,7 @@ static inline int create_pixmap_info(struct fb_info *info)
 		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
 			ErrPrint("shmctl: %s\n", strerror(errno));
 
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 	DbgPrint("SHMADDR: 0x%p\n", pixmap_info->si.shmaddr);
 
@@ -442,7 +443,7 @@ static inline int create_pixmap_info(struct fb_info *info)
 		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
 			ErrPrint("shmctl: %s\n", strerror(errno));
 
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	pixmap_info->xim->data = pixmap_info->si.shmaddr;
@@ -460,12 +461,12 @@ static inline int create_pixmap_info(struct fb_info *info)
 		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
 			ErrPrint("shmctl: %s\n", strerror(errno));
 
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	s_info.shm_list = dlist_append(s_info.shm_list, info);
 	DbgPrint("Pixmap info is successfully created\n");
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 static inline int destroy_pixmap_info(struct fb_info *info)
@@ -489,7 +490,7 @@ static inline int destroy_pixmap_info(struct fb_info *info)
 
 	dlist_remove_data(s_info.shm_list, info);
 	DbgPrint("Successfully destroyed\n");
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth)
@@ -571,7 +572,7 @@ static inline int destroy_gem(struct gem_data *gem)
 	}
 
 	free(gem);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 static inline void *acquire_gem(struct gem_data *gem)
@@ -667,23 +668,23 @@ int fb_create_gem(struct fb_info *info)
 {
 	if (info->gem) {
 		DbgPrint("Already created\n");
-		return 0;
+		return LB_STATUS_SUCCESS;
 	}
 
 	info->gem = create_gem(info->handle, info->w, info->h, sizeof(int));
-	return info->gem ? 0 : -EFAULT;
+	return info->gem ? LB_STATUS_SUCCESS : LB_STATUS_ERROR_FAULT;
 }
 
 int fb_destroy_gem(struct fb_info *info)
 {
 	if (!info->gem) {
 		ErrPrint("GEM is not created\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	destroy_gem(info->gem);
 	info->gem = NULL;
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 void *fb_acquire_gem(struct fb_info *info)
@@ -700,18 +701,18 @@ int fb_release_gem(struct fb_info *info)
 {
 	if (!info->gem) {
 		ErrPrint("Invalid FB info\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	release_gem(info->gem);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_destroy(struct fb_info *info)
 {
 	if (!info) {
 		ErrPrint("Handle is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (info->buffer) {
@@ -722,7 +723,7 @@ int fb_destroy(struct fb_info *info)
 
 	free(info->id);
 	free(info);
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_is_created(struct fb_info *info)
@@ -839,7 +840,7 @@ int fb_release_buffer(void *data)
 	struct fb_info *info;
 
 	if (!data)
-		return 0;
+		return LB_STATUS_SUCCESS;
 
 	info = find_shm_by_canvas(data);
 	if (info)
@@ -849,7 +850,7 @@ int fb_release_buffer(void *data)
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid handle\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	switch (buffer->type) {
@@ -889,10 +890,10 @@ int fb_release_buffer(void *data)
 		break;
 	default:
 		ErrPrint("Unknown type\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_refcnt(void *data)
@@ -902,20 +903,20 @@ int fb_refcnt(void *data)
 	int ret;
 
 	if (!data)
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 
 	buffer = container_of(data, struct buffer, data);
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid handle\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	switch (buffer->type) {
 	case BUFFER_TYPE_SHM:
 		if (shmctl(buffer->refcnt, IPC_STAT, &buf) < 0) {
 			ErrPrint("shmctl: %s\n", strerror(errno));
-			ret = -EFAULT;
+			ret = LB_STATUS_ERROR_FAULT;
 			break;
 		}
 
@@ -928,7 +929,7 @@ int fb_refcnt(void *data)
 		ret = buffer->refcnt;
 		break;
 	default:
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		break;
 	}
 
@@ -944,12 +945,12 @@ int fb_get_size(struct fb_info *info, int *w, int *h)
 {
 	if (!info) {
 		ErrPrint("Handle is not valid\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	*w = info->w;
 	*h = info->h;
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 int fb_size(struct fb_info *info)

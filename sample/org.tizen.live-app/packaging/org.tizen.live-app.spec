@@ -5,7 +5,7 @@ Release: 1
 Group: main/app
 License: Flora License
 Source0: %{name}-%{version}.tar.gz
-BuildRequires: cmake, gettext-tools, coreutils
+BuildRequires: cmake, gettext-tools
 BuildRequires: pkgconfig(appcore-efl)
 BuildRequires: pkgconfig(dlog)
 BuildRequires: pkgconfig(glib-2.0)
@@ -37,7 +37,7 @@ mkdir -p /opt/usr/live/org.tizen.live-app/libexec
 touch /opt/usr/live/org.tizen.live-app/libexec/liblive-org.tizen.live-app.so
 
 %files -n org.tizen.live-app
-#%manifest org.tizen.data-provider-slave.manifest
+#%manifest org.tizen.live-app.manifest
 %defattr(-,root,root,-)
 /opt/usr/apps/org.tizen.live-app/bin/live-app
 /opt/share/packages/*.xml

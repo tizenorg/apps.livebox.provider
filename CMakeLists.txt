@@ -27,6 +27,7 @@ pkg_check_modules(pkgs REQUIRED
 	xfixes
 	dri2proto
 	xdamage
+	livebox-service # To import the error code
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

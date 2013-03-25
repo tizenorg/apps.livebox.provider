@@ -32,10 +32,8 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkg_LDFLAGS} "-ldl")
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/org.tizen.${PROJECT_NAME}.xml DESTINATION /opt/share/packages)
-INSTALL(FILES ${CMAKE_SOURCE_DIR}/org.tizen.${PROJECT_NAME}.conf DESTINATION
-	/opt/usr/live/org.tizen.${PROJECT_NAME}/etc)
-INSTALL(FILES ${CMAKE_SOURCE_DIR}/res/image/unknown.png DESTINATION
-	/opt/usr/live/org.tizen.${PROJECT_NAME}/res/image)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/org.tizen.${PROJECT_NAME}.conf DESTINATION /opt/usr/live/org.tizen.${PROJECT_NAME}/etc)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/res/image/unknown.png DESTINATION /opt/usr/live/org.tizen.${PROJECT_NAME}/res/image)
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION
 	/opt/usr/apps/org.tizen.${PROJECT_NAME}/bin
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE

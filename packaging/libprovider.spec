@@ -1,8 +1,8 @@
 Name: libprovider
 Summary: Library for developing the livebox service provider.
-Version: 0.6.0
+Version: 0.6.2
 Release: 1
-Group: framework/livebox
+Group: HomeTF/Livebox
 License: Flora License
 Source0: %{name}-%{version}.tar.gz
 BuildRequires: cmake, gettext-tools, coreutils
@@ -18,6 +18,7 @@ BuildRequires: pkgconfig(libtbm)
 BuildRequires: pkgconfig(xfixes)
 BuildRequires: pkgconfig(dri2proto)
 BuildRequires: pkgconfig(xdamage)
+BuildRequires: pkgconfig(livebox-service)
 
 %description
 Supporting the commnuncation channel with master service for livebox remote view.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright 2013  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 #include <com-core_packet.h>
 
 #include <dlog.h>
+#include <livebox-errno.h>
 
 #include "dlist.h"
 #include "util.h"
@@ -67,16 +68,13 @@ static struct packet *master_script(pid_t pid, int handle, const struct packet *
 		&(arg.info.content_event.info.pointer.down));
 	if (ret != 11) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
 		goto errout;
 	}
 
 	arg.type = EVENT_CONTENT_EVENT;
 
 	if (s_info.table.content_event)
-		ret = s_info.table.content_event(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.content_event(&arg, s_info.data);
 
 errout:
 	return NULL;
@@ -95,16 +93,13 @@ static struct packet *master_clicked(pid_t pid, int handle, const struct packet 
 			&arg.info.clicked.x, &arg.info.clicked.y);
 	if (ret != 6) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
 		goto errout;
 	}
 
 	arg.type = EVENT_CLICKED;
 
 	if (s_info.table.clicked)
-		ret = s_info.table.clicked(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.clicked(&arg, s_info.data);
 
 errout:
 	return NULL;
@@ -124,7 +119,6 @@ static struct packet *master_text_signal(pid_t pid, int handle, const struct pac
 
 	if (ret != 8) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
 		goto errout;
 	}
 
@@ -134,9 +128,7 @@ static struct packet *master_text_signal(pid_t pid, int handle, const struct pac
 	arg.type = EVENT_TEXT_SIGNAL;
 
 	if (s_info.table.text_signal)
-		ret = s_info.table.text_signal(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.text_signal(&arg, s_info.data);
 
 errout:
 	return NULL;
@@ -152,7 +144,7 @@ static struct packet *master_delete(pid_t pid, int handle, const struct packet *
 	ret = packet_get(packet, "ss", &arg.pkgname, &arg.id);
 	if (ret != 2) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -161,7 +153,7 @@ static struct packet *master_delete(pid_t pid, int handle, const struct packet *
 	if (s_info.table.lb_destroy)
 		ret = s_info.table.lb_destroy(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -178,7 +170,7 @@ static struct packet *master_resize(pid_t pid, int handle, const struct packet *
 	ret = packet_get(packet, "ssii", &arg.pkgname, &arg.id, &arg.info.resize.w, &arg.info.resize.h);
 	if (ret != 4) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -187,7 +179,7 @@ static struct packet *master_resize(pid_t pid, int handle, const struct packet *
 	if (s_info.table.resize)
 		ret = s_info.table.resize(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -217,7 +209,7 @@ static struct packet *master_renew(pid_t pid, int handle, const struct packet *p
 				&arg.info.lb_recreate.abi);
 	if (ret != 11) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -226,7 +218,7 @@ static struct packet *master_renew(pid_t pid, int handle, const struct packet *p
 	if (s_info.table.lb_recreate)
 		ret = s_info.table.lb_recreate(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	if (arg.info.lb_recreate.out_content)
@@ -277,7 +269,7 @@ static struct packet *master_new(pid_t pid, int handle, const struct packet *pac
 				&arg.info.lb_create.height);
 	if (ret != 12) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -286,7 +278,7 @@ static struct packet *master_new(pid_t pid, int handle, const struct packet *pac
 	if (s_info.table.lb_create)
 		ret = s_info.table.lb_create(&arg, &width, &height, &priority, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	if (arg.info.lb_create.out_content)
@@ -320,7 +312,7 @@ static struct packet *master_set_period(pid_t pid, int handle, const struct pack
 	ret = packet_get(packet, "ssd", &arg.pkgname, &arg.id, &arg.info.set_period.period);
 	if (ret != 3) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -329,7 +321,7 @@ static struct packet *master_set_period(pid_t pid, int handle, const struct pack
 	if (s_info.table.set_period)
 		ret = s_info.table.set_period(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -347,7 +339,7 @@ static struct packet *master_change_group(pid_t pid, int handle, const struct pa
 				&arg.info.change_group.cluster, &arg.info.change_group.category);
 	if (ret != 4) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -356,7 +348,7 @@ static struct packet *master_change_group(pid_t pid, int handle, const struct pa
 	if (s_info.table.change_group)
 		ret = s_info.table.change_group(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -374,7 +366,7 @@ static struct packet *master_pinup(pid_t pid, int handle, const struct packet *p
 	ret = packet_get(packet, "ssi", &arg.pkgname, &arg.id, &arg.info.pinup.state);
 	if (ret != 3) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -383,7 +375,7 @@ static struct packet *master_pinup(pid_t pid, int handle, const struct packet *p
 	if (s_info.table.pinup)
 		ret = s_info.table.pinup(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	content = "default";
@@ -405,16 +397,13 @@ static struct packet *master_update_content(pid_t pid, int handle, const struct 
 	ret = packet_get(packet, "ssss", &arg.pkgname, &arg.id, &arg.info.update_content.cluster, &arg.info.update_content.category);
 	if (ret != 4) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
 		goto errout;
 	}
 
 	arg.type = EVENT_UPDATE_CONTENT;
 
 	if (s_info.table.update_content)
-		ret = s_info.table.update_content(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.update_content(&arg, s_info.data);
 
 errout:
 	return NULL;
@@ -468,7 +457,7 @@ static struct packet *master_pause(pid_t pid, int handle, const struct packet *p
 	ret = packet_get(packet, "d", &arg.info.pause.timestamp);
 	if (ret != 1) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 	arg.pkgname = NULL;
@@ -478,7 +467,7 @@ static struct packet *master_pause(pid_t pid, int handle, const struct packet *p
 	if (s_info.table.pause)
 		ret = s_info.table.pause(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -495,7 +484,7 @@ static struct packet *master_resume(pid_t pid, int handle, const struct packet *
 	ret = packet_get(packet, "d", &arg.info.resume.timestamp);
 	if (ret != 1) {
 		ErrPrint("Parameter is not valid\n");
-		ret = -EINVAL;
+		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
@@ -506,7 +495,7 @@ static struct packet *master_resume(pid_t pid, int handle, const struct packet *
 	if (s_info.table.resume)
 		ret = s_info.table.resume(&arg, s_info.data);
 	else
-		ret = -ENOSYS;
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -523,16 +512,13 @@ struct packet *master_pd_create(pid_t pid, int handle, const struct packet *pack
 	ret = packet_get(packet, "ssiidd", &arg.pkgname, &arg.id, &arg.info.pd_create.w, &arg.info.pd_create.h, &arg.info.pd_create.x, &arg.info.pd_create.y);
 	if (ret != 6) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	arg.type = EVENT_PD_CREATE;
 
 	if (s_info.table.pd_create)
-		ret = s_info.table.pd_create(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_create(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -546,16 +532,13 @@ struct packet *master_pd_move(pid_t pid, int handle, const struct packet *packet
 	ret = packet_get(packet, "ssiidd", &arg.pkgname, &arg.id, &arg.info.pd_move.w, &arg.info.pd_move.h, &arg.info.pd_move.x, &arg.info.pd_move.y);
 	if (ret != 6) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	arg.type = EVENT_PD_MOVE;
 
 	if (s_info.table.pd_move)
-		ret = s_info.table.pd_move(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_move(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -569,15 +552,12 @@ struct packet *master_pd_destroy(pid_t pid, int handle, const struct packet *pac
 	ret = packet_get(packet, "ss", &arg.pkgname, &arg.id);
 	if (ret != 2) {
 		ErrPrint("Invalid packet\n");
-		ret = -EINVAL;
 		goto out;
 	}
 
 	arg.type = EVENT_PD_DESTROY;
 	if (s_info.table.pd_destroy)
-		ret = s_info.table.pd_destroy(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_destroy(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -589,11 +569,11 @@ struct packet *master_pd_access_read(pid_t pid, int handle, const struct packet 
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.pd_access.w, &arg.info.pd_access.h,
 					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y) != 7)
-	{
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -601,9 +581,7 @@ struct packet *master_pd_access_read(pid_t pid, int handle, const struct packet 
 	arg.type = EVENT_PD_ACCESS;
 	arg.info.pd_access.event = ACCESS_READ;
 	if (s_info.table.pd_access)
-		ret = s_info.table.pd_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -627,9 +605,7 @@ struct packet *master_pd_access_read_prev(pid_t pid, int handle, const struct pa
 	arg.type = EVENT_PD_ACCESS;
 	arg.info.pd_access.event = ACCESS_READ_PREV;
 	if (s_info.table.pd_access)
-		ret = s_info.table.pd_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -653,9 +629,7 @@ struct packet *master_pd_access_read_next(pid_t pid, int handle, const struct pa
 	arg.type = EVENT_PD_ACCESS;
 	arg.info.pd_access.event = ACCESS_READ_NEXT;
 	if (s_info.table.pd_access)
-		ret = s_info.table.pd_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -679,9 +653,7 @@ struct packet *master_pd_access_activate(pid_t pid, int handle, const struct pac
 	arg.type = EVENT_PD_ACCESS;
 	arg.info.pd_access.event = ACCESS_ACTIVATE;
 	if (s_info.table.pd_access)
-		ret = s_info.table.pd_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.pd_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -705,9 +677,7 @@ struct packet *master_lb_access_read(pid_t pid, int handle, const struct packet 
 	arg.type = EVENT_LB_ACCESS;
 	arg.info.lb_access.event = ACCESS_READ;
 	if (s_info.table.lb_access)
-		ret = s_info.table.lb_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.lb_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -719,11 +689,11 @@ struct packet *master_lb_access_read_prev(pid_t pid, int handle, const struct pa
 	double timestamp;
 	int ret;
 
-	if (packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
 					 &arg.info.lb_access.w, &arg.info.lb_access.h,
 					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y) != 7)
-	{
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -731,9 +701,7 @@ struct packet *master_lb_access_read_prev(pid_t pid, int handle, const struct pa
 	arg.type = EVENT_LB_ACCESS;
 	arg.info.lb_access.event = ACCESS_READ_PREV;
 	if (s_info.table.lb_access)
-		ret = s_info.table.lb_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.lb_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -749,8 +717,7 @@ struct packet *master_lb_access_read_next(pid_t pid, int handle, const struct pa
 					 &arg.info.lb_access.w, &arg.info.lb_access.h,
 					 &timestamp,
 					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 7)
-	{
+	if (ret != 7) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -758,9 +725,7 @@ struct packet *master_lb_access_read_next(pid_t pid, int handle, const struct pa
 	arg.type = EVENT_LB_ACCESS;
 	arg.info.lb_access.event = ACCESS_READ_NEXT;
 	if (s_info.table.lb_access)
-		ret = s_info.table.lb_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.lb_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -784,9 +749,7 @@ struct packet *master_lb_access_activate(pid_t pid, int handle, const struct pac
 	arg.type = EVENT_LB_ACCESS;
 	arg.info.lb_access.event = ACCESS_ACTIVATE;
 	if (s_info.table.lb_access)
-		ret = s_info.table.lb_access(&arg, s_info.data);
-	else
-		ret = -ENOSYS;
+		(void)s_info.table.lb_access(&arg, s_info.data);
 
 out:
 	return NULL;
@@ -1008,18 +971,18 @@ EAPI int provider_init(void *disp, const char *name, struct event_handler *table
 
 	if (!name || !table) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (s_info.name) {
 		ErrPrint("Provider is already initialized\n");
-		return -EALREADY;
+		return LB_STATUS_ERROR_ALREADY;
 	}
 
 	s_info.name = strdup(name);
 	if (!s_info.name) {
 		ErrPrint("Heap: %s\n", strerror(errno));
-		return -ENOMEM;
+		return LB_STATUS_ERROR_MEMORY;
 	}
 
 	memcpy(&s_info.table, table, sizeof(*table));
@@ -1031,13 +994,13 @@ EAPI int provider_init(void *disp, const char *name, struct event_handler *table
 	ret = com_core_packet_client_init(SLAVE_SOCKET, 0, s_table);
 	if (ret < 0) {
 		ErrPrint("Failed to establish the connection with the master\n");
-		return s_info.fd;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	provider_buffer_init(disp);
 
 	DbgPrint("Slave is initialized\n");
-	return 0;
+	return LB_STATUS_SUCCESS;
 }
 
 EAPI void *provider_fini(void)
@@ -1074,18 +1037,18 @@ EAPI int provider_send_call(const char *pkgname, const char *id, const char *fun
 
 	if (!pkgname || !id || !funcname) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("call", "ssss", s_info.name, pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_ret(const char *pkgname, const char *id, const char *funcname)
@@ -1095,18 +1058,18 @@ EAPI int provider_send_ret(const char *pkgname, const char *id, const char *func
 
 	if (!pkgname || !id || !funcname) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("ret", "ssss", s_info.name, pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_faulted(const char *pkgname, const char *id, const char *funcname)
@@ -1116,18 +1079,18 @@ EAPI int provider_send_faulted(const char *pkgname, const char *id, const char *
 
 	if (!pkgname || !id || !funcname) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("faulted", "ssss", s_info.name, pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_hello(void)
@@ -1138,23 +1101,23 @@ EAPI int provider_send_hello(void)
 
 	if (!s_info.name) {
 		ErrPrint("Provider is not initialized\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("hello", "s", s_info.name);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_ping(void)
@@ -1165,23 +1128,23 @@ EAPI int provider_send_ping(void)
 	DbgPrint("name[%s]\n", s_info.name);
 	if (!s_info.name) {
 		ErrPrint("Provider is not initialized\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("ping", "s", s_info.name);
 	if (!packet) {
 		ErrPrint("Failed to create a a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 static inline void keep_file_in_safe(const char *id)
@@ -1203,8 +1166,10 @@ static inline void keep_file_in_safe(const char *id)
 	if (s_info.prevent_overwrite)
 		return;
 
-	if (access(path, R_OK | F_OK) != 0)
+	if (access(path, R_OK | F_OK) != 0) {
+		ErrPrint("[%s] %s\n", path, strerror(errno));
 		return;
+	}
 
 	len = strlen(path);
 	base_idx = len - 1;
@@ -1237,7 +1202,7 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 
 	if (!pkgname || !id) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (!content_info)
@@ -1248,7 +1213,7 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	keep_file_in_safe(id);
@@ -1257,12 +1222,12 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 					s_info.name, pkgname, id, w, h, priority, content_info, title);
 	if (!packet) {
 		ErrPrint("failed to build a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile)
@@ -1272,12 +1237,12 @@ EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const c
 
 	if (!pkgname || !id) {
 		ErrPrint("Invalid argument\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (!descfile)
@@ -1286,12 +1251,12 @@ EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const c
 	packet = packet_create_noack("desc_updated", "ssss", s_info.name, pkgname, id, descfile);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 EAPI int provider_send_deleted(const char *pkgname, const char *id)
@@ -1301,23 +1266,23 @@ EAPI int provider_send_deleted(const char *pkgname, const char *id)
 
 	if (!pkgname || !id) {
 		ErrPrint("Invalid arguement\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
-		return -EINVAL;
+		return LB_STATUS_ERROR_INVALID;
 	}
 
 	packet = packet_create_noack("deleted", "sss", s_info.name, pkgname, id);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
-		return -EFAULT;
+		return LB_STATUS_ERROR_FAULT;
 	}
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
-	return ret;
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
 const char *provider_name(void)
