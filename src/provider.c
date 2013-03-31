@@ -563,23 +563,20 @@ out:
 	return NULL;
 }
 
-struct packet *master_pd_access_read(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_pd_access_value_change(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.pd_access.w, &arg.info.pd_access.h,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 7) {
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_READ;
+	arg.info.pd_access.event = ACCESS_VALUE_CHANGE;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
 
@@ -587,23 +584,20 @@ out:
 	return NULL;
 }
 
-struct packet *master_pd_access_read_prev(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_pd_access_scroll(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.pd_access.w, &arg.info.pd_access.h,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 7) {
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_READ_PREV;
+	arg.info.pd_access.event = ACCESS_SCROLL;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
 
@@ -611,23 +605,68 @@ out:
 	return NULL;
 }
 
-struct packet *master_pd_access_read_next(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_pd_access_hl(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_READ_NEXT;
+	arg.info.pd_access.event = ACCESS_HIGHLIGHT;
+	if (s_info.table.pd_access)
+		(void)s_info.table.pd_access(&arg, s_info.data);
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_HIGHLIGHT_PREV;
+	if (s_info.table.pd_access)
+		(void)s_info.table.pd_access(&arg, s_info.data);
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_HIGHLIGHT_NEXT;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
 
@@ -641,11 +680,10 @@ struct packet *master_pd_access_activate(pid_t pid, int handle, const struct pac
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.pd_access.w, &arg.info.pd_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -659,23 +697,22 @@ out:
 	return NULL;
 }
 
-struct packet *master_lb_access_read(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_lb_access_hl(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_READ;
+	arg.info.lb_access.event = ACCESS_HIGHLIGHT;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
 
@@ -683,23 +720,22 @@ out:
 	return NULL;
 }
 
-struct packet *master_lb_access_read_prev(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_READ_PREV;
+	arg.info.lb_access.event = ACCESS_HIGHLIGHT_PREV;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
 
@@ -707,23 +743,68 @@ out:
 	return NULL;
 }
 
-struct packet *master_lb_access_read_next(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
 
 	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_READ_NEXT;
+	arg.info.lb_access.event = ACCESS_HIGHLIGHT_NEXT;
+	if (s_info.table.lb_access)
+		(void)s_info.table.lb_access(&arg, s_info.data);
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_value_change(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_VALUE_CHANGE;
+	if (s_info.table.lb_access)
+		(void)s_info.table.lb_access(&arg, s_info.data);
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_scroll(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_SCROLL;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
 
@@ -737,11 +818,10 @@ struct packet *master_lb_access_activate(pid_t pid, int handle, const struct pac
 	double timestamp;
 	int ret;
 
-	ret = packet_get(packet, "ssiiddd", &arg.pkgname, &arg.id,
-					 &arg.info.lb_access.w, &arg.info.lb_access.h,
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
 					 &timestamp,
 					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 7) {
+	if (ret != 5) {
 		ErrPrint("Invalid packet\n");
 		goto out;
 	}
@@ -885,38 +965,57 @@ static struct method s_table[] = {
 		.cmd = "resume",
 		.handler = master_resume, /* timestamp, ret */
 	},
+
 	{
-		.cmd = "pd_access_read",
-		.handler = master_pd_access_read,
+		.cmd = "pd_access_hl",
+		.handler = master_pd_access_hl,
 	},
 	{
-		.cmd = "pd_access_read_prev",
-		.handler = master_pd_access_read_prev,
+		.cmd = "pd_access_hl_prev",
+		.handler = master_pd_access_hl_prev,
 	},
 	{
-		.cmd = "pd_access_read_next",
-		.handler = master_pd_access_read_next,
+		.cmd = "pd_access_hl_next",
+		.handler = master_pd_access_hl_next,
 	},
 	{
 		.cmd = "pd_access_activate",
 		.handler = master_pd_access_activate,
 	},
 	{
-		.cmd = "lb_access_read",
-		.handler = master_lb_access_read,
+		.cmd = "pd_access_scroll",
+		.handler = master_pd_access_scroll,
 	},
 	{
-		.cmd = "lb_access_read_prev",
-		.handler = master_lb_access_read_prev,
+		.cmd = "pd_access_value_change",
+		.handler = master_pd_access_value_change,
+	},
+
+	{
+		.cmd = "lb_access_hl",
+		.handler = master_lb_access_hl,
 	},
 	{
-		.cmd = "lb_access_read_next",
-		.handler = master_lb_access_read_next,
+		.cmd = "lb_access_hl_prev",
+		.handler = master_lb_access_hl_prev,
+	},
+	{
+		.cmd = "lb_access_hl_next",
+		.handler = master_lb_access_hl_next,
 	},
 	{
 		.cmd = "lb_access_activate",
 		.handler = master_lb_access_activate,
 	},
+	{
+		.cmd = "lb_access_scroll",
+		.handler = master_lb_access_scroll,
+	},
+	{
+		.cmd = "lb_access_value_change",
+		.handler = master_lb_access_value_change,
+	},
+
 	{
 		.cmd = NULL,
 		.handler = NULL,
@@ -1040,7 +1139,7 @@ EAPI int provider_send_call(const char *pkgname, const char *id, const char *fun
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	packet = packet_create_noack("call", "ssss", s_info.name, pkgname, id, funcname);
+	packet = packet_create_noack("call", "sss", pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -1061,7 +1160,7 @@ EAPI int provider_send_ret(const char *pkgname, const char *id, const char *func
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	packet = packet_create_noack("ret", "ssss", s_info.name, pkgname, id, funcname);
+	packet = packet_create_noack("ret", "sss", pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -1082,7 +1181,7 @@ EAPI int provider_send_faulted(const char *pkgname, const char *id, const char *
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	packet = packet_create_noack("faulted", "ssss", s_info.name, pkgname, id, funcname);
+	packet = packet_create_noack("faulted", "sss", pkgname, id, funcname);
 	if (!packet) {
 		ErrPrint("Failed to create a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -1218,8 +1317,8 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 
 	keep_file_in_safe(id);
 
-	packet = packet_create_noack("updated", "sssiidss",
-					s_info.name, pkgname, id, w, h, priority, content_info, title);
+	packet = packet_create_noack("updated", "ssiidss",
+					pkgname, id, w, h, priority, content_info, title);
 	if (!packet) {
 		ErrPrint("failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -1248,7 +1347,7 @@ EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const c
 	if (!descfile)
 		descfile = util_uri_to_path(id); /* In case of the NULL descfilename, use the ID */
 
-	packet = packet_create_noack("desc_updated", "ssss", s_info.name, pkgname, id, descfile);
+	packet = packet_create_noack("desc_updated", "sss", pkgname, id, descfile);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -1274,7 +1373,33 @@ EAPI int provider_send_deleted(const char *pkgname, const char *id)
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	packet = packet_create_noack("deleted", "sss", s_info.name, pkgname, id);
+	packet = packet_create_noack("deleted", "ss", pkgname, id);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_send_hold_scroll(const char *pkgname, const char *id, int hold)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("scroll", "ssi", pkgname, id, !!hold);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;

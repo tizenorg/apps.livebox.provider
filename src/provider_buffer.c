@@ -53,7 +53,7 @@ static inline struct fb_info *send_acquire_request(enum target_type type, const 
 	struct fb_info *ret;
 	int status;
 
-	packet = packet_create("acquire_buffer", "isssiii", type, provider_name(), pkgname, id, w, h, size);
+	packet = packet_create("acquire_buffer", "issiii", type, pkgname, id, w, h, size);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
 		return NULL;
@@ -97,7 +97,7 @@ static inline int send_release_request(enum target_type type, const char *pkgnam
 	struct packet *result;
 	int ret;
 
-	packet = packet_create("release_buffer", "isss", type, provider_name(), pkgname, id);
+	packet = packet_create("release_buffer", "iss", type, pkgname, id);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;
@@ -127,7 +127,7 @@ static inline struct fb_info *send_resize_request(enum target_type type, const c
 	const char *buffer_id;
 	struct fb_info *fb;
 
-	packet = packet_create("resize_buffer", "isssii", type, provider_name(), pkgname, id, w, h);
+	packet = packet_create("resize_buffer", "issii", type, pkgname, id, w, h);
 	if (!packet) {
 		ErrPrint("Faield to build a packet\n");
 		return NULL;

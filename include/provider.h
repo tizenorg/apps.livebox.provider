@@ -40,12 +40,12 @@ struct event_info {
 };
 
 enum access_event {
-	ACCESS_READ,
-	ACCESS_READ_NEXT,
-	ACCESS_READ_PREV,
+	ACCESS_HIGHLIGHT,
+	ACCESS_HIGHLIGHT_NEXT,
+	ACCESS_HIGHLIGHT_PREV,
 	ACCESS_ACTIVATE,
-	ACCESS_UP,
-	ACCESS_DOWN,
+	ACCESS_VALUE_CHANGE,
+	ACCESS_SCROLL,
 };
 
 struct event_arg {
@@ -263,7 +263,7 @@ struct event_handler {
  * \param[in] disp XDisplay object, if you don't know what this is, set NULL
  * \param[in] name Slave name which is given by the master provider.
  * \param[in] table Event handler table
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_init(void *disp, const char *name, struct event_handler *table, void *data);
 
@@ -276,13 +276,13 @@ extern void *provider_fini(void);
  * \brief Send the hello signal to the master
  *        Master will activate connection of this only if you send this hello event.
  *        or the master will reject all requests from your provider.
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_hello(void);
 
 /*!
  * \brief Send the ping message to the master to notify that your provider is working properly.
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_ping(void);
 
@@ -293,7 +293,7 @@ extern int provider_send_ping(void);
  * \param[in] w Width of an updated content
  * \param[in] h Height of an updated content
  * \param[in] priority Priority of an updated content
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_updated(const char *pkgname, const char *id, int w, int h, double priority, const char *content, const char *title);
 
@@ -302,7 +302,7 @@ extern int provider_send_updated(const char *pkgname, const char *id, int w, int
  * \param[in] pkgname Package name of an updated livebox.
  * \param[in] id Instance ID of an updated livebox.
  * \param[in] descfile The filename of a description file.
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile);
 
@@ -310,7 +310,7 @@ extern int provider_send_desc_updated(const char *pkgname, const char *id, const
  * \brief Send the deleted event of specified livebox instance
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Livebox instance ID
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_deleted(const char *pkgname, const char *id);
 
@@ -320,7 +320,7 @@ extern int provider_send_deleted(const char *pkgname, const char *id);
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which will be called
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_ret(const char *pkgname, const char *id, const char *funcname);
 
@@ -330,7 +330,7 @@ extern int provider_send_ret(const char *pkgname, const char *id, const char *fu
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which is called by the slave
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_call(const char *pkgname, const char *id, const char *funcname);
 
@@ -340,9 +340,19 @@ extern int provider_send_call(const char *pkgname, const char *id, const char *f
  * \param[in] pkgname Package name of the livebox
  * \param[in] id ID of the livebox instance
  * \param[in] funcname Reason of the fault error
- * \return int Success 0 otherwise errno < 0
+ * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
  */
 extern int provider_send_faulted(const char *pkgname, const char *id, const char *funcname);
+
+/*!
+ * \brief If you want notify to viewer to seize the screen,
+ *        prevent moving a box from user event
+ * \param[in] pkgname Package name of the livebox
+ * \param[in] id ID of the livebox instance
+ * \param[in] seize 1 if viewer needs to hold a box, or 0
+ * \return int Success LB_STATUS_SUCCESS othere LB_STATUS_ERROR_XXX
+ */
+extern int provider_send_hold_scroll(const char *pkgname, const char *id, int seize);
 
 #ifdef __cplusplus
 }

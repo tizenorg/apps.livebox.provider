@@ -435,7 +435,7 @@ static inline int create_pixmap_info(struct fb_info *info)
 	 * \NOTE
 	 * XCreatePixmap can only uses 24 bits depth only.
 	 */
-	pixmap_info->xim = XShmCreateImage(s_info.disp, s_info.visual, 24/* (s_info.depth << 3) */, ZPixmap, NULL, &pixmap_info->si, info->w, info->h);
+	pixmap_info->xim = XShmCreateImage(s_info.disp, s_info.visual, (s_info.depth << 3), ZPixmap, NULL, &pixmap_info->si, info->w, info->h);
 	if (pixmap_info->xim == NULL) {
 		if (shmdt(pixmap_info->si.shmaddr) < 0)
 			ErrPrint("shmdt: %s\n", strerror(errno));
