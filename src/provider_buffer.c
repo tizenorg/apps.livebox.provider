@@ -193,6 +193,11 @@ EAPI struct livebox_buffer *provider_buffer_acquire(enum target_type type, const
 {
 	struct livebox_buffer *info;
 
+	if (width <= 0 || height <= 0 || pixel_size <= 0) {
+		ErrPrint("Invalid size: %dx%d, %d\n", width, height, pixel_size);
+		return NULL;
+	}
+
 	if (!pkgname) {
 		ErrPrint("Invalid parameter: pkgname is NIL\n");
 		return NULL;
@@ -248,7 +253,7 @@ EAPI struct livebox_buffer *provider_buffer_acquire(enum target_type type, const
 	info->data = data;
 	info->state = BUFFER_CREATED;
 
-	s_info.buffer_list = dlist_append(s_info.buffer_list, info);
+	s_info.buffer_list = dlist_prepend(s_info.buffer_list, info);
 	return info;
 }
 

@@ -199,15 +199,17 @@ static struct packet *master_renew(pid_t pid, int handle, const struct packet *p
 	arg.info.lb_recreate.out_content = NULL;
 	arg.info.lb_recreate.out_is_pinned_up = 0;
 
-	ret = packet_get(packet, "sssiidssiis", &arg.pkgname, &arg.id,
+	ret = packet_get(packet, "sssiidssiisii", &arg.pkgname, &arg.id,
 				&arg.info.lb_recreate.content,
 				&arg.info.lb_recreate.timeout,
 				&arg.info.lb_recreate.has_script,
 				&arg.info.lb_recreate.period,
 				&arg.info.lb_recreate.cluster, &arg.info.lb_recreate.category,
 				&arg.info.lb_recreate.width, &arg.info.lb_recreate.height,
-				&arg.info.lb_recreate.abi);
-	if (ret != 11) {
+				&arg.info.lb_recreate.abi,
+				&arg.info.lb_recreate.hold_scroll,
+				&arg.info.lb_recreate.active_update);
+	if (ret != 13) {
 		ErrPrint("Parameter is not valid\n");
 		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
@@ -466,6 +468,29 @@ static struct packet *master_pause(pid_t pid, int handle, const struct packet *p
 
 	if (s_info.table.pause)
 		ret = s_info.table.pause(&arg, s_info.data);
+	else
+		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+
+errout:
+	result = packet_create_reply(packet, "i", ret);
+	return result;
+}
+
+static struct packet *master_update_mode(pid_t pid, int handle, const struct packet *packet)
+{
+	struct packet *result;
+	struct event_arg arg;
+	int ret;
+
+	ret = packet_get(packet, "ssi", &arg.pkgname, &arg.id, &arg.info.update_mode.active_update);
+	if (ret != 3) {
+		ErrPrint("Invalid parameter\n");
+		ret = LB_STATUS_ERROR_INVALID;
+		goto errout;
+	}
+
+	if (s_info.table.update_mode)
+		ret = s_info.table.update_mode(&arg, s_info.data);
 	else
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
 
@@ -1015,6 +1040,10 @@ static struct method s_table[] = {
 		.cmd = "lb_access_value_change",
 		.handler = master_lb_access_value_change,
 	},
+	{
+		.cmd = "update_mode",
+		.handler = master_update_mode,
+	},
 
 	{
 		.cmd = NULL,
@@ -1294,6 +1323,129 @@ static inline void keep_file_in_safe(const char *id)
 	free(new_path);
 }
 
+/*!
+ * \NOTE
+ *   Only for the buffer type
+ */
+EAPI int provider_send_lb_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (!content_info)
+		content_info = "";
+
+	if (!title)
+		title = "";
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("lb_update_begin", "ssdss",
+					pkgname, id, priority, content_info, title);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+
+	DbgPrint("[ACTIVE] LB BEGIN: %s (%d)\n", id, ret);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_send_lb_update_end(const char *pkgname, const char *id)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("lb_update_end", "ss", pkgname, id);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+
+	DbgPrint("[ACTIVE] LB END: %s (%d)\n", id, ret);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_send_pd_update_begin(const char *pkgname, const char *id)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("pd_update_begin", "ss", pkgname, id);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+
+	DbgPrint("[ACTIVE] PD BEGIN: %s (%d)\n", id, ret);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_send_pd_update_end(const char *pkgname, const char *id)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("pd_update_end", "ss", pkgname, id);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+
+	DbgPrint("[ACTIVE] PD END: %s (%d)\n", id, ret);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
 EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h, double priority, const char *content_info, const char *title)
 {
 	struct packet *packet;
@@ -1407,6 +1559,35 @@ EAPI int provider_send_hold_scroll(const char *pkgname, const char *id, int hold
 
 	ret = com_core_packet_send_only(s_info.fd, packet);
 	packet_destroy(packet);
+	DbgPrint("[HOLD] Send hold: %d (%s) ret(%d)\n", hold, id, ret);
+	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_send_access_status(const char *pkgname, const char *id, int status)
+{
+	struct packet *packet;
+	int ret;
+
+	if (!pkgname || !id) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.fd < 0) {
+		ErrPrint("Connection is not established\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	packet = packet_create_noack("access_status", "ssi", pkgname, id, status);
+	if (!packet) {
+		ErrPrint("Failed to build a packet\n");
+		return LB_STATUS_ERROR_FAULT;
+	}
+
+	ret = com_core_packet_send_only(s_info.fd, packet);
+	packet_destroy(packet);
+
+	DbgPrint("[ACCESS] Send status: %d (%s) (%d)\n", status, id, ret);
 	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 

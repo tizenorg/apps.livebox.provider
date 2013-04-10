@@ -133,6 +133,8 @@ struct event_arg {
 			char *out_content; /*!< Output content */
 			char *out_title; /*!< Output title */
 			int out_is_pinned_up; /*!< Is this pinned up? */
+			int hold_scroll; /*!< The scroller which is in viewer is locked */
+			int active_update; /*!< Need to know, current update mode */
 		} lb_recreate; /*!< renew */
 
 		struct {
@@ -202,8 +204,6 @@ struct event_arg {
 			enum access_event event;
 			double x;
 			double y;
-			int w;
-			int h;
 		} lb_access;
 
 		struct {
@@ -211,9 +211,11 @@ struct event_arg {
 			enum access_event event;
 			double x;
 			double y;
-			int w;
-			int h;
 		} pd_access;
+
+		struct {
+			int active_update;
+		} update_mode;
 	} info;
 };
 
@@ -256,6 +258,8 @@ struct event_handler {
 	 */
 	int (*lb_access)(struct event_arg *arg, void *data);
 	int (*pd_access)(struct event_arg *arg, void *data);
+
+	int (*update_mode)(struct event_arg *arg, void *data);
 };
 
 /*!
@@ -307,6 +311,41 @@ extern int provider_send_updated(const char *pkgname, const char *id, int w, int
 extern int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile);
 
 /*!
+ * \brief
+ * \param[in] pkgname
+ * \param[in] id
+ * \param[in] priority
+ * \param[in] content_info
+ * \param[in] title
+ * \return
+ */
+extern int provider_send_lb_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title);
+
+/*!
+ * \brief
+ * \param[in] pkgname
+ * \param[in] id
+ * \return
+ */
+extern int provider_send_lb_update_end(const char *pkgname, const char *id);
+
+/*!
+ * \brief
+ * \param[in] pkgname
+ * \param[in] id
+ * \return
+ */
+extern int provider_send_pd_update_begin(const char *pkgname, const char *id);
+
+/*!
+ * \brief
+ * \param[in] pkgname
+ * \param[in] id
+ * \return
+ */
+extern int provider_send_pd_update_end(const char *pkgname, const char *id);
+
+/*!
  * \brief Send the deleted event of specified livebox instance
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Livebox instance ID
@@ -353,6 +392,15 @@ extern int provider_send_faulted(const char *pkgname, const char *id, const char
  * \return int Success LB_STATUS_SUCCESS othere LB_STATUS_ERROR_XXX
  */
 extern int provider_send_hold_scroll(const char *pkgname, const char *id, int seize);
+
+/*!
+ * \brief Notify to viewer for accessiblity event processing status.
+ * \param[in] pkgname
+ * \param[in] id
+ * \param[in] status
+ * \return int
+ */
+extern int provider_send_access_status(const char *pkgname, const char *id, int status);
 
 #ifdef __cplusplus
 }
