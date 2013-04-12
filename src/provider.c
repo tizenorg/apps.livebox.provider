@@ -29,6 +29,7 @@
 
 #include <dlog.h>
 #include <livebox-errno.h>
+#include <livebox-service.h> /* LB_ACCESS_STATUS_XXXX */
 
 #include "dlist.h"
 #include "util.h"
@@ -604,6 +605,8 @@ struct packet *master_pd_access_value_change(pid_t pid, int handle, const struct
 	arg.info.pd_access.event = ACCESS_VALUE_CHANGE;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -625,6 +628,31 @@ struct packet *master_pd_access_scroll(pid_t pid, int handle, const struct packe
 	arg.info.pd_access.event = ACCESS_SCROLL;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_UNHIGHLIGHT;
+	if (s_info.table.pd_access)
+		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -648,6 +676,8 @@ struct packet *master_pd_access_hl(pid_t pid, int handle, const struct packet *p
 	arg.info.pd_access.event = ACCESS_HIGHLIGHT;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -671,6 +701,8 @@ struct packet *master_pd_access_hl_prev(pid_t pid, int handle, const struct pack
 	arg.info.pd_access.event = ACCESS_HIGHLIGHT_PREV;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -694,6 +726,8 @@ struct packet *master_pd_access_hl_next(pid_t pid, int handle, const struct pack
 	arg.info.pd_access.event = ACCESS_HIGHLIGHT_NEXT;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -717,6 +751,34 @@ struct packet *master_pd_access_activate(pid_t pid, int handle, const struct pac
 	arg.info.pd_access.event = ACCESS_ACTIVATE;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					&timestamp,
+					&arg.info.lb_access.x, &arg.info.lb_access.y);
+
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_UNHIGHLIGHT;
+	if (s_info.table.lb_access)
+		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -740,6 +802,8 @@ struct packet *master_lb_access_hl(pid_t pid, int handle, const struct packet *p
 	arg.info.lb_access.event = ACCESS_HIGHLIGHT;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -763,6 +827,8 @@ struct packet *master_lb_access_hl_prev(pid_t pid, int handle, const struct pack
 	arg.info.lb_access.event = ACCESS_HIGHLIGHT_PREV;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -786,6 +852,8 @@ struct packet *master_lb_access_hl_next(pid_t pid, int handle, const struct pack
 	arg.info.lb_access.event = ACCESS_HIGHLIGHT_NEXT;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -809,6 +877,8 @@ struct packet *master_lb_access_value_change(pid_t pid, int handle, const struct
 	arg.info.lb_access.event = ACCESS_VALUE_CHANGE;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -832,6 +902,8 @@ struct packet *master_lb_access_scroll(pid_t pid, int handle, const struct packe
 	arg.info.lb_access.event = ACCESS_SCROLL;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -855,6 +927,8 @@ struct packet *master_lb_access_activate(pid_t pid, int handle, const struct pac
 	arg.info.lb_access.event = ACCESS_ACTIVATE;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
 
 out:
 	return NULL;
@@ -1015,6 +1089,10 @@ static struct method s_table[] = {
 		.cmd = "pd_access_value_change",
 		.handler = master_pd_access_value_change,
 	},
+	{
+		.cmd = "pd_access_unhighlight",
+		.handler = master_pd_access_unhighlight,
+	},
 
 	{
 		.cmd = "lb_access_hl",
@@ -1043,6 +1121,10 @@ static struct method s_table[] = {
 	{
 		.cmd = "update_mode",
 		.handler = master_update_mode,
+	},
+	{
+		.cmd = "lb_access_unhighlight",
+		.handler = master_lb_access_unhighlight,
 	},
 
 	{

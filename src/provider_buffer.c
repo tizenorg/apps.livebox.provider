@@ -429,6 +429,9 @@ EAPI unsigned long provider_buffer_pixmap_id(struct livebox_buffer *info)
 
 EAPI int provider_buffer_pixmap_is_support_hw(struct livebox_buffer *info)
 {
+	if (!info)
+		return LB_STATUS_ERROR_INVALID;
+
 	return fb_has_gem(info->fb);
 }
 
@@ -442,7 +445,7 @@ EAPI int provider_buffer_pixmap_create_hw(struct livebox_buffer *info)
 
 EAPI int provider_buffer_pixmap_destroy_hw(struct livebox_buffer *info)
 {
-	if (!fb_has_gem(info->fb))
+	if (!info || !fb_has_gem(info->fb))
 		return LB_STATUS_ERROR_INVALID;
 
 	return fb_destroy_gem(info->fb);
@@ -452,7 +455,7 @@ EAPI void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info)
 {
 	void *addr;
 
-	if (!fb_has_gem(info->fb))
+	if (!info || !fb_has_gem(info->fb))
 		return NULL;
 
 	addr = fb_acquire_gem(info->fb);
@@ -466,6 +469,9 @@ EAPI int provider_buffer_pre_render(struct livebox_buffer *info)
 {
 	int ret = LB_STATUS_SUCCESS;
 
+	if (!info)
+		return LB_STATUS_ERROR_INVALID;
+
 	if (fb_has_gem(info->fb))
 		ret = fb_acquire_gem(info->fb) ? 0 : -EFAULT;
 
@@ -475,6 +481,9 @@ EAPI int provider_buffer_pre_render(struct livebox_buffer *info)
 EAPI int provider_buffer_post_render(struct livebox_buffer *info)
 {
 	int ret = LB_STATUS_SUCCESS;
+
+	if (!info)
+		return LB_STATUS_ERROR_INVALID;
 
 	if (fb_has_gem(info->fb))
 		ret = fb_release_gem(info->fb);

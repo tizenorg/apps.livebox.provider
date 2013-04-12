@@ -46,6 +46,7 @@ enum access_event {
 	ACCESS_ACTIVATE,
 	ACCESS_VALUE_CHANGE,
 	ACCESS_SCROLL,
+	ACCESS_UNHIGHLIGHT,
 };
 
 struct event_arg {
