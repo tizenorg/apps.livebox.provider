@@ -612,7 +612,7 @@ out:
 	return NULL;
 }
 
-struct packet *master_pd_access_scroll(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
@@ -626,6 +626,55 @@ struct packet *master_pd_access_scroll(pid_t pid, int handle, const struct packe
 
 	arg.type = EVENT_PD_ACCESS;
 	arg.info.pd_access.event = ACCESS_SCROLL;
+	arg.info.pd_access.mouse_state = ACCESS_MOUSE_DOWN;
+	if (s_info.table.pd_access)
+		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_SCROLL;
+	arg.info.pd_access.mouse_state = ACCESS_MOUSE_MOVE;
+	if (s_info.table.pd_access)
+		(void)s_info.table.pd_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_PD_ACCESS;
+	arg.info.pd_access.event = ACCESS_SCROLL;
+	arg.info.pd_access.mouse_state = ACCESS_MOUSE_UP;
 	if (s_info.table.pd_access)
 		(void)s_info.table.pd_access(&arg, s_info.data);
 	else
@@ -884,7 +933,7 @@ out:
 	return NULL;
 }
 
-struct packet *master_lb_access_scroll(pid_t pid, int handle, const struct packet *packet)
+struct packet *master_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
 {
 	struct event_arg arg;
 	double timestamp;
@@ -900,6 +949,59 @@ struct packet *master_lb_access_scroll(pid_t pid, int handle, const struct packe
 
 	arg.type = EVENT_LB_ACCESS;
 	arg.info.lb_access.event = ACCESS_SCROLL;
+	arg.info.lb_access.mouse_state = ACCESS_MOUSE_DOWN;
+	if (s_info.table.lb_access)
+		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_SCROLL;
+	arg.info.lb_access.mouse_state = ACCESS_MOUSE_MOVE;
+	if (s_info.table.lb_access)
+		(void)s_info.table.lb_access(&arg, s_info.data);
+	else
+		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
+
+out:
+	return NULL;
+}
+
+struct packet *master_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
+{
+	struct event_arg arg;
+	double timestamp;
+	int ret;
+
+	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
+					 &timestamp,
+					 &arg.info.lb_access.x, &arg.info.lb_access.y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	arg.type = EVENT_LB_ACCESS;
+	arg.info.lb_access.event = ACCESS_SCROLL;
+	arg.info.lb_access.mouse_state = ACCESS_MOUSE_UP;
 	if (s_info.table.lb_access)
 		(void)s_info.table.lb_access(&arg, s_info.data);
 	else
@@ -1082,16 +1184,24 @@ static struct method s_table[] = {
 		.handler = master_pd_access_activate,
 	},
 	{
-		.cmd = "pd_access_scroll",
-		.handler = master_pd_access_scroll,
-	},
-	{
 		.cmd = "pd_access_value_change",
 		.handler = master_pd_access_value_change,
 	},
 	{
 		.cmd = "pd_access_unhighlight",
 		.handler = master_pd_access_unhighlight,
+	},
+	{
+		.cmd = "pd_access_scroll_down",
+		.handler = master_pd_access_scroll_down,
+	},
+	{
+		.cmd = "pd_access_scroll_move",
+		.handler = master_pd_access_scroll_move,
+	},
+	{
+		.cmd = "pd_access_scroll_up",
+		.handler = master_pd_access_scroll_up,
 	},
 
 	{
@@ -1111,10 +1221,6 @@ static struct method s_table[] = {
 		.handler = master_lb_access_activate,
 	},
 	{
-		.cmd = "lb_access_scroll",
-		.handler = master_lb_access_scroll,
-	},
-	{
 		.cmd = "lb_access_value_change",
 		.handler = master_lb_access_value_change,
 	},
@@ -1125,6 +1231,18 @@ static struct method s_table[] = {
 	{
 		.cmd = "lb_access_unhighlight",
 		.handler = master_lb_access_unhighlight,
+	},
+	{
+		.cmd = "lb_access_scroll_down",
+		.handler = master_lb_access_scroll_down,
+	},
+	{
+		.cmd = "lb_access_scroll_move",
+		.handler = master_lb_access_scroll_move,
+	},
+	{
+		.cmd = "lb_access_scroll_up",
+		.handler = master_lb_access_scroll_up,
 	},
 
 	{

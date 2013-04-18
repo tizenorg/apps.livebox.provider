@@ -49,6 +49,12 @@ enum access_event {
 	ACCESS_UNHIGHLIGHT,
 };
 
+enum access_mouse_state {
+	ACCESS_MOUSE_DOWN = 0,
+	ACCESS_MOUSE_MOVE = 1,
+	ACCESS_MOUSE_UP = 2,
+};
+
 struct event_arg {
 	enum {
 		EVENT_NEW, /*!< Master will send this to create a new livebox instance */
@@ -203,15 +209,17 @@ struct event_arg {
 		struct {
 			/*!< Accessibility */
 			enum access_event event;
-			double x;
-			double y;
+			int x;
+			int y;
+			int mouse_state;
 		} lb_access;
 
 		struct {
 			/*!< Accessibility */
 			enum access_event event;
-			double x;
-			double y;
+			int x;
+			int y;
+			int mouse_state;
 		} pd_access;
 
 		struct {
