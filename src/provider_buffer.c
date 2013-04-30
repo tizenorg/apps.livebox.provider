@@ -1,7 +1,7 @@
 /*
  * Copyright 2013  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Flora License, Version 1.1 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,6 +28,7 @@
 
 #include <dlog.h>
 #include <livebox-errno.h>
+#include <livebox-service.h> /* LB_ACCESS_STATUS_ERROR */
 
 #include "dlist.h"
 #include "util.h"
@@ -986,6 +987,806 @@ struct packet *provider_buffer_pd_mouse_move(pid_t pid, int handle, const struct
 		}
 
 		(void)info->handler(info, BUFFER_EVENT_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_action_up(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_action_down(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_hl(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_pd_access_activate(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_hl(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_action_up(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_action_down(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
+	}
+
+out:
+	return NULL;
+}
+
+struct packet *provider_buffer_lb_access_activate(pid_t pid, int handle, const struct packet *packet)
+{
+	const char *pkgname;
+	const char *id;
+	double timestamp;
+	int ret;
+	int x;
+	int y;
+	struct livebox_buffer *info;
+
+	ret = packet_get(packet, "ssdii", &pkgname, &id, &timestamp, &x, &y);
+	if (ret != 5) {
+		ErrPrint("Invalid packet\n");
+		goto out;
+	}
+
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
+		ErrPrint("Failed to find a buffer [%s:%s]\n", pkgname, id);
+		goto out;
+	}
+
+	if (info->handler) {
+		int w;
+		int h;
+
+		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
+			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
+
+		ret = info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
+		if (ret < 0)
+			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
+		else
+			(void)provider_send_access_status(pkgname, id, ret);
 	}
 
 out:

@@ -1,7 +1,7 @@
 /*
  * Copyright 2013  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Flora License, Version 1.1 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,22 +37,6 @@ struct event_info {
                 double ex; /*!< Pressed object's right bottom X */
                 double ey; /*!< Pressed object's right bottom Y */
         } part;
-};
-
-enum access_event {
-	ACCESS_HIGHLIGHT,
-	ACCESS_HIGHLIGHT_NEXT,
-	ACCESS_HIGHLIGHT_PREV,
-	ACCESS_ACTIVATE,
-	ACCESS_VALUE_CHANGE,
-	ACCESS_SCROLL,
-	ACCESS_UNHIGHLIGHT,
-};
-
-enum access_mouse_state {
-	ACCESS_MOUSE_DOWN = 0,
-	ACCESS_MOUSE_MOVE = 1,
-	ACCESS_MOUSE_UP = 2,
 };
 
 struct event_arg {
@@ -207,22 +191,6 @@ struct event_arg {
 		} lb_resume;
 
 		struct {
-			/*!< Accessibility */
-			enum access_event event;
-			int x;
-			int y;
-			int mouse_state;
-		} lb_access;
-
-		struct {
-			/*!< Accessibility */
-			enum access_event event;
-			int x;
-			int y;
-			int mouse_state;
-		} pd_access;
-
-		struct {
 			int active_update;
 		} update_mode;
 	} info;
@@ -260,13 +228,6 @@ struct event_handler {
 	int (*pd_create)(struct event_arg *arg, void *data);
 	int (*pd_destroy)(struct event_arg *arg, void *data);
 	int (*pd_move)(struct event_arg *arg, void *data);
-
-	/*!
-	 * \note
-	 * Accessibility functions
-	 */
-	int (*lb_access)(struct event_arg *arg, void *data);
-	int (*pd_access)(struct event_arg *arg, void *data);
 
 	int (*update_mode)(struct event_arg *arg, void *data);
 };

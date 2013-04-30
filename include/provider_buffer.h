@@ -1,7 +1,7 @@
 /*
  * Copyright 2013  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Flora License, Version 1.1 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,6 +44,17 @@ enum buffer_event {
 
 	BUFFER_EVENT_KEY_DOWN, /*!< */
 	BUFFER_EVENT_KEY_UP, /*!< */
+
+	BUFFER_EVENT_HIGHLIGHT,
+	BUFFER_EVENT_HIGHLIGHT_NEXT,
+	BUFFER_EVENT_HIGHLIGHT_PREV,
+	BUFFER_EVENT_ACTIVATE,
+	BUFFER_EVENT_ACTION_UP,
+	BUFFER_EVENT_ACTION_DOWN,
+	BUFFER_EVENT_SCROLL_UP,
+	BUFFER_EVENT_SCROLL_MOVE,
+	BUFFER_EVENT_SCROLL_DOWN,
+	BUFFER_EVENT_UNHIGHLIGHT,
 };
 
 struct livebox_buffer;
@@ -202,6 +213,46 @@ extern void *provider_buffer_user_data(struct livebox_buffer *handle);
 /*!
  */
 extern int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data);
+
+extern struct packet *provider_buffer_pd_access_action_up(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_action_down(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_hl(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_pd_access_activate(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_hl(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_action_up(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_action_down(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
+
+extern struct packet *provider_buffer_lb_access_activate(pid_t pid, int handle, const struct packet *packet);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright 2013  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the "License");
+ * Licensed under the Flora License, Version 1.1 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -589,453 +589,6 @@ out:
 	return NULL;
 }
 
-struct packet *master_pd_access_value_change(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_VALUE_CHANGE;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_SCROLL;
-	arg.info.pd_access.mouse_state = ACCESS_MOUSE_DOWN;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_SCROLL;
-	arg.info.pd_access.mouse_state = ACCESS_MOUSE_MOVE;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_SCROLL;
-	arg.info.pd_access.mouse_state = ACCESS_MOUSE_UP;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id, &timestamp, &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_UNHIGHLIGHT;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_hl(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_HIGHLIGHT;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_HIGHLIGHT_PREV;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_HIGHLIGHT_NEXT;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_pd_access_activate(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.pd_access.x, &arg.info.pd_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_PD_ACCESS;
-	arg.info.pd_access.event = ACCESS_ACTIVATE;
-	if (s_info.table.pd_access)
-		(void)s_info.table.pd_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					&timestamp,
-					&arg.info.lb_access.x, &arg.info.lb_access.y);
-
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_UNHIGHLIGHT;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_hl(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_HIGHLIGHT;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_HIGHLIGHT_PREV;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_HIGHLIGHT_NEXT;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_value_change(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_VALUE_CHANGE;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_SCROLL;
-	arg.info.lb_access.mouse_state = ACCESS_MOUSE_DOWN;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_SCROLL;
-	arg.info.lb_access.mouse_state = ACCESS_MOUSE_MOVE;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_SCROLL;
-	arg.info.lb_access.mouse_state = ACCESS_MOUSE_UP;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
-struct packet *master_lb_access_activate(pid_t pid, int handle, const struct packet *packet)
-{
-	struct event_arg arg;
-	double timestamp;
-	int ret;
-
-	ret = packet_get(packet, "ssdii", &arg.pkgname, &arg.id,
-					 &timestamp,
-					 &arg.info.lb_access.x, &arg.info.lb_access.y);
-	if (ret != 5) {
-		ErrPrint("Invalid packet\n");
-		goto out;
-	}
-
-	arg.type = EVENT_LB_ACCESS;
-	arg.info.lb_access.event = ACCESS_ACTIVATE;
-	if (s_info.table.lb_access)
-		(void)s_info.table.lb_access(&arg, s_info.data);
-	else
-		(void)provider_send_access_status(arg.pkgname, arg.id, LB_ACCESS_STATUS_ERROR);
-
-out:
-	return NULL;
-}
-
 static struct method s_table[] = {
 	/*!< For the buffer type */
 	{
@@ -1169,80 +722,88 @@ static struct method s_table[] = {
 
 	{
 		.cmd = "pd_access_hl",
-		.handler = master_pd_access_hl,
+		.handler = provider_buffer_pd_access_hl,
 	},
 	{
 		.cmd = "pd_access_hl_prev",
-		.handler = master_pd_access_hl_prev,
+		.handler = provider_buffer_pd_access_hl_prev,
 	},
 	{
 		.cmd = "pd_access_hl_next",
-		.handler = master_pd_access_hl_next,
+		.handler = provider_buffer_pd_access_hl_next,
 	},
 	{
 		.cmd = "pd_access_activate",
-		.handler = master_pd_access_activate,
+		.handler = provider_buffer_pd_access_activate,
 	},
 	{
-		.cmd = "pd_access_value_change",
-		.handler = master_pd_access_value_change,
+		.cmd = "pd_access_action_up",
+		.handler = provider_buffer_pd_access_action_up,
+	},
+	{
+		.cmd = "pd_access_action_down",
+		.handler = provider_buffer_pd_access_action_down,
 	},
 	{
 		.cmd = "pd_access_unhighlight",
-		.handler = master_pd_access_unhighlight,
+		.handler = provider_buffer_pd_access_unhighlight,
 	},
 	{
 		.cmd = "pd_access_scroll_down",
-		.handler = master_pd_access_scroll_down,
+		.handler = provider_buffer_pd_access_scroll_down,
 	},
 	{
 		.cmd = "pd_access_scroll_move",
-		.handler = master_pd_access_scroll_move,
+		.handler = provider_buffer_pd_access_scroll_move,
 	},
 	{
 		.cmd = "pd_access_scroll_up",
-		.handler = master_pd_access_scroll_up,
+		.handler = provider_buffer_pd_access_scroll_up,
 	},
 
 	{
 		.cmd = "lb_access_hl",
-		.handler = master_lb_access_hl,
+		.handler = provider_buffer_lb_access_hl,
 	},
 	{
 		.cmd = "lb_access_hl_prev",
-		.handler = master_lb_access_hl_prev,
+		.handler = provider_buffer_lb_access_hl_prev,
 	},
 	{
 		.cmd = "lb_access_hl_next",
-		.handler = master_lb_access_hl_next,
+		.handler = provider_buffer_lb_access_hl_next,
 	},
 	{
 		.cmd = "lb_access_activate",
-		.handler = master_lb_access_activate,
+		.handler = provider_buffer_lb_access_activate,
 	},
 	{
-		.cmd = "lb_access_value_change",
-		.handler = master_lb_access_value_change,
+		.cmd = "lb_access_action_up",
+		.handler = provider_buffer_lb_access_action_up,
+	},
+	{
+		.cmd = "lb_access_action_down",
+		.handler = provider_buffer_lb_access_action_down,
+	},
+	{
+		.cmd = "lb_access_unhighlight",
+		.handler = provider_buffer_lb_access_unhighlight,
+	},
+	{
+		.cmd = "lb_access_scroll_down",
+		.handler = provider_buffer_lb_access_scroll_down,
+	},
+	{
+		.cmd = "lb_access_scroll_move",
+		.handler = provider_buffer_lb_access_scroll_move,
+	},
+	{
+		.cmd = "lb_access_scroll_up",
+		.handler = provider_buffer_lb_access_scroll_up,
 	},
 	{
 		.cmd = "update_mode",
 		.handler = master_update_mode,
-	},
-	{
-		.cmd = "lb_access_unhighlight",
-		.handler = master_lb_access_unhighlight,
-	},
-	{
-		.cmd = "lb_access_scroll_down",
-		.handler = master_lb_access_scroll_down,
-	},
-	{
-		.cmd = "lb_access_scroll_move",
-		.handler = master_lb_access_scroll_move,
-	},
-	{
-		.cmd = "lb_access_scroll_up",
-		.handler = master_lb_access_scroll_up,
 	},
 
 	{
