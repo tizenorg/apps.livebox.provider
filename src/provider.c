@@ -1228,7 +1228,8 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	keep_file_in_safe(id);
+	if (!provider_buffer_find_buffer(TYPE_LB, pkgname, id))
+		keep_file_in_safe(id);
 
 	packet = packet_create_noack("updated", "ssiidss",
 					pkgname, id, w, h, priority, content_info, title);
