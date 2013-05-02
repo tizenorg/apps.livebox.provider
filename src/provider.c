@@ -1036,28 +1036,28 @@ EAPI int provider_send_ping(void)
 	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
-static inline void keep_file_in_safe(const char *id)
+static inline char *keep_file_in_safe(const char *id, int uri)
 {
 	const char *path;
 	int len;
 	int base_idx;
 	char *new_path;
 
-	path = util_uri_to_path(id);
+	path = uri ? util_uri_to_path(id) : id;
 	if (!path) {
 		ErrPrint("Invalid path\n");
-		return;
+		return NULL;
 	}
 
 	/*!
 	 * \TODO: REMOVE ME
 	 */
 	if (s_info.prevent_overwrite)
-		return;
+		return NULL;
 
 	if (access(path, R_OK | F_OK) != 0) {
 		ErrPrint("[%s] %s\n", path, strerror(errno));
-		return;
+		return NULL;
 	}
 
 	len = strlen(path);
@@ -1069,7 +1069,7 @@ static inline void keep_file_in_safe(const char *id)
 	new_path = malloc(len + 10); /* for "tmp" */
 	if (!new_path) {
 		ErrPrint("Heap: %s\n", strerror(errno));
-		return;
+		return NULL;
 	}
 
 	strncpy(new_path, path, base_idx);
@@ -1081,7 +1081,7 @@ static inline void keep_file_in_safe(const char *id)
 	if (rename(path, new_path) < 0)
 		ErrPrint("Failed to keep content in safe: %s (%s -> %s)\n", strerror(errno), path, new_path);
 
-	free(new_path);
+	return new_path;
 }
 
 /*!
@@ -1228,8 +1228,11 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	if (!provider_buffer_find_buffer(TYPE_LB, pkgname, id))
-		keep_file_in_safe(id);
+	if (!provider_buffer_find_buffer(TYPE_LB, pkgname, id)) {
+		char *tmp;
+		tmp = keep_file_in_safe(id, 1);
+		free(tmp);
+	}
 
 	packet = packet_create_noack("updated", "ssiidss",
 					pkgname, id, w, h, priority, content_info, title);
@@ -1246,6 +1249,7 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile)
 {
 	struct packet *packet;
+	char *desc_path = NULL;
 	int ret;
 
 	if (!pkgname || !id) {
@@ -1261,7 +1265,14 @@ EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const c
 	if (!descfile)
 		descfile = util_uri_to_path(id); /* In case of the NULL descfilename, use the ID */
 
-	packet = packet_create_noack("desc_updated", "sss", pkgname, id, descfile);
+	if (!provider_buffer_find_buffer(TYPE_PD, pkgname, id)) {
+		desc_path = keep_file_in_safe(descfile, 0);
+	} else {
+		desc_path = strdup(descfile);
+	}
+
+	packet = packet_create_noack("desc_updated", "sss", pkgname, id, desc_path);
+	free(desc_path);
 	if (!packet) {
 		ErrPrint("Failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;
