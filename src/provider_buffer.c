@@ -28,7 +28,6 @@
 
 #include <dlog.h>
 #include <livebox-errno.h>
-#include <livebox-service.h> /* LB_ACCESS_STATUS_ERROR */
 
 #include "dlist.h"
 #include "util.h"
@@ -1022,11 +1021,7 @@ struct packet *provider_buffer_pd_access_action_up(pid_t pid, int handle, const 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1062,11 +1057,7 @@ struct packet *provider_buffer_pd_access_action_down(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1102,11 +1093,7 @@ struct packet *provider_buffer_pd_access_scroll_down(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1142,11 +1129,7 @@ struct packet *provider_buffer_pd_access_scroll_move(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1182,11 +1165,7 @@ struct packet *provider_buffer_pd_access_scroll_up(pid_t pid, int handle, const 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1222,11 +1201,7 @@ struct packet *provider_buffer_pd_access_unhighlight(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1262,11 +1237,7 @@ struct packet *provider_buffer_pd_access_hl(pid_t pid, int handle, const struct 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1302,11 +1273,7 @@ struct packet *provider_buffer_pd_access_hl_prev(pid_t pid, int handle, const st
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1342,11 +1309,7 @@ struct packet *provider_buffer_pd_access_hl_next(pid_t pid, int handle, const st
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1382,11 +1345,7 @@ struct packet *provider_buffer_pd_access_activate(pid_t pid, int handle, const s
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1422,11 +1381,7 @@ struct packet *provider_buffer_lb_access_unhighlight(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_UNHIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1462,11 +1417,7 @@ struct packet *provider_buffer_lb_access_hl(pid_t pid, int handle, const struct 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1502,11 +1453,7 @@ struct packet *provider_buffer_lb_access_hl_prev(pid_t pid, int handle, const st
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT_PREV, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1542,11 +1489,7 @@ struct packet *provider_buffer_lb_access_hl_next(pid_t pid, int handle, const st
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_HIGHLIGHT_NEXT, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1582,11 +1525,7 @@ struct packet *provider_buffer_lb_access_action_up(pid_t pid, int handle, const 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTION_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1622,11 +1561,7 @@ struct packet *provider_buffer_lb_access_action_down(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTION_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1662,11 +1597,7 @@ struct packet *provider_buffer_lb_access_scroll_down(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_DOWN, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1702,11 +1633,7 @@ struct packet *provider_buffer_lb_access_scroll_move(pid_t pid, int handle, cons
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_MOVE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1742,11 +1669,7 @@ struct packet *provider_buffer_lb_access_scroll_up(pid_t pid, int handle, const 
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_SCROLL_UP, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
@@ -1782,11 +1705,7 @@ struct packet *provider_buffer_lb_access_activate(pid_t pid, int handle, const s
 		if (provider_buffer_get_size(info, &w, &h, NULL) < 0)
 			ErrPrint("Failed to get buffer size[%s:%s]\n", pkgname, id);
 
-		ret = info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
-		if (ret < 0)
-			(void)provider_send_access_status(pkgname, id, LB_ACCESS_STATUS_ERROR);
-		else
-			(void)provider_send_access_status(pkgname, id, ret);
+		(void)info->handler(info, BUFFER_EVENT_ACTIVATE, timestamp, (double)x / (double)w, (double)y / (double)h, info->data);
 	}
 
 out:
