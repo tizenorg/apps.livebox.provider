@@ -59,8 +59,6 @@ static inline struct fb_info *send_acquire_request(enum target_type type, const 
 		return NULL;
 	}
 
-	DbgPrint("type: 0x%X, name: %s, pkgname[%s], id[%s], w[%d], h[%d], size[%d]\n", type, provider_name(), pkgname, id, w, h, size);
-
 	result = com_core_packet_oneshot_send(SLAVE_SOCKET, packet, 0.0f);
 	packet_destroy(packet);
 
@@ -85,7 +83,7 @@ static inline struct fb_info *send_acquire_request(enum target_type type, const 
 	/*!
 	 * \TODO: Implements me
 	 */
-	DbgPrint("buffer id[%s], fb[%p]\n", buffer_id, ret);
+	DbgPrint("type: 0x%X, name: %s, pkgname[%s], id[%s], w[%d], h[%d], size[%d], buffer_id[%s], fb[%p]\n", type, provider_name(), pkgname, id, w, h, size, buffer_id, ret);
 	packet_unref(result);
 
 	return ret;
@@ -461,7 +459,6 @@ EAPI void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info)
 	addr = fb_acquire_gem(info->fb);
 	fb_release_gem(info->fb);
 
-	DbgPrint("Canvas address is %p\n", addr);
 	return addr;
 }
 
