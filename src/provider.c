@@ -543,6 +543,7 @@ struct packet *master_pd_create(pid_t pid, int handle, const struct packet *pack
 
 	arg.type = EVENT_PD_CREATE;
 
+	DbgPrint("CREATE_PD\n");
 	if (s_info.table.pd_create)
 		(void)s_info.table.pd_create(&arg, s_info.data);
 

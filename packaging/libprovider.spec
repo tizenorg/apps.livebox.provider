@@ -1,6 +1,6 @@
 Name: libprovider
 Summary: Library for developing the livebox service provider.
-Version: 0.9.3
+Version: 0.9.4
 Release: 1
 Group: HomeTF/Livebox
 License: Flora License

@@ -155,19 +155,19 @@ int fb_init(void *disp)
 	s_info.depth = sizeof(int); //DefaultDepthOfScreen(screen);
 
 	if (!DRI2QueryExtension(s_info.disp, &s_info.evt_base, &s_info.err_base)) {
-		DbgPrint("DRI2 is not supported\n");
+		ErrPrint("DRI2 is not supported\n");
 		return LB_STATUS_SUCCESS;
 	}
 
 	if (!DRI2QueryVersion(s_info.disp, &dri2Major, &dri2Minor)) {
-		DbgPrint("DRI2 is not supported\n");
+		ErrPrint("DRI2 is not supported\n");
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
 		return LB_STATUS_SUCCESS;
 	}
 
 	if (!DRI2Connect(s_info.disp, DefaultRootWindow(s_info.disp), &driverName, &deviceName)) {
-		DbgPrint("DRI2 is not supported\n");
+		ErrPrint("DRI2 is not supported\n");
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
 		return LB_STATUS_SUCCESS;
@@ -177,7 +177,7 @@ int fb_init(void *disp)
 	free(deviceName);
 	free(driverName);
 	if (s_info.fd < 0) {
-		DbgPrint("Failed to open a drm device: (%s)\n", strerror(errno));
+		ErrPrint("Failed to open a drm device: (%s)\n", strerror(errno));
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
 		return LB_STATUS_SUCCESS;
@@ -186,7 +186,7 @@ int fb_init(void *disp)
 	drmGetMagic(s_info.fd, &magic);
 	DbgPrint("DRM Magic: 0x%X\n", magic);
 	if (!DRI2Authenticate(s_info.disp, DefaultRootWindow(s_info.disp), (unsigned int)magic)) {
-		DbgPrint("Failed to do authenticate for DRI2\n");
+		ErrPrint("Failed to do authenticate for DRI2\n");
 		close(s_info.fd);
 		s_info.fd = -1;
 		s_info.evt_base = 0;
@@ -196,7 +196,7 @@ int fb_init(void *disp)
 
 	s_info.bufmgr = tbm_bufmgr_init(s_info.fd);
 	if (!s_info.bufmgr) {
-		DbgPrint("Failed to init bufmgr\n");
+		ErrPrint("Failed to init bufmgr\n");
 		close(s_info.fd);
 		s_info.fd = -1;
 		s_info.evt_base = 0;
@@ -289,7 +289,7 @@ static inline int sync_for_pixmap(struct fb_info *info)
 	}
 
 	if (info->handle == 0) {
-		DbgPrint("Pixmap ID is not valid\n");
+		ErrPrint("Pixmap ID is not valid\n");
 		return LB_STATUS_ERROR_INVALID;
 	}
 
@@ -328,7 +328,7 @@ int fb_sync(struct fb_info *info)
 		return LB_STATUS_SUCCESS;
 	}
 
-	DbgPrint("Invalid URI: [%s]\n", info->id);
+	ErrPrint("Invalid URI: [%s]\n", info->id);
 	return LB_STATUS_ERROR_INVALID;
 }
 
@@ -419,8 +419,6 @@ static inline int create_pixmap_info(struct fb_info *info)
 		return LB_STATUS_ERROR_FAULT;
 	}
 
-	DbgPrint("SHMID: %d (Size: %d)\n", pixmap_info->si.shmid, info->bufsz);
-
 	pixmap_info->si.readOnly = False;
 	pixmap_info->si.shmaddr = shmat(pixmap_info->si.shmid, NULL, 0);
 	if (pixmap_info->si.shmaddr == (void *)-1) {
@@ -429,7 +427,6 @@ static inline int create_pixmap_info(struct fb_info *info)
 
 		return LB_STATUS_ERROR_FAULT;
 	}
-	DbgPrint("SHMADDR: 0x%p\n", pixmap_info->si.shmaddr);
 
 	/*!
 	 * \NOTE
@@ -465,7 +462,7 @@ static inline int create_pixmap_info(struct fb_info *info)
 	}
 
 	s_info.shm_list = dlist_append(s_info.shm_list, info);
-	DbgPrint("Pixmap info is successfully created\n");
+	DbgPrint("SHMID: %d (Size: %d), %p\n", pixmap_info->si.shmid, info->bufsz, pixmap_info->si.shmaddr);
 	return LB_STATUS_SUCCESS;
 }
 
@@ -474,7 +471,6 @@ static inline int destroy_pixmap_info(struct fb_info *info)
 	struct pixmap_info *pixmap_info;
 	struct buffer *buffer;
 
-	DbgPrint("Destroy a pixmap info\n");
 	buffer = info->buffer;
 	pixmap_info = (struct pixmap_info *)buffer->data;
 
@@ -489,7 +485,7 @@ static inline int destroy_pixmap_info(struct fb_info *info)
 		ErrPrint("shmctl: %s\n", strerror(errno));
 
 	dlist_remove_data(s_info.shm_list, info);
-	DbgPrint("Successfully destroyed\n");
+	DbgPrint("Destroy a pixmap info\n");
 	return LB_STATUS_SUCCESS;
 }
 
@@ -510,7 +506,6 @@ static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth
 	gem->pixmap = pixmap;
 
 	DRI2CreateDrawable(s_info.disp, gem->pixmap);
-	DbgPrint("DRI2CreateDrawable is done\n");
 
 	gem->dri2_buffer = DRI2GetBuffers(s_info.disp, gem->pixmap,
 				&gem->w, &gem->h, gem->attachments,
@@ -522,11 +517,6 @@ static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth
 		free(gem);
 		return NULL;
 	}
-	DbgPrint("dri2_buffer: %p, name: %p, %dx%d (%dx%d)\n",
-				gem->dri2_buffer, gem->dri2_buffer->name,
-				gem->w, gem->h, w, h);
-	DbgPrint("dri2_buffer->pitch : %d, buf_count: %d\n",
-				gem->dri2_buffer->pitch, gem->buf_count);
 
 	gem->pixmap_bo = tbm_bo_import(s_info.bufmgr, gem->dri2_buffer->name);
 	if (!gem->pixmap_bo) {
@@ -547,8 +537,12 @@ static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth
 		}
 	}
 
-	DbgPrint("Return buffer: %p\n", gem);
 	s_info.gem_list = dlist_append(s_info.gem_list, gem);
+
+	DbgPrint("dri2_buffer: %p, name: %p, %dx%d (%dx%d), pitch: %d, buf_count: %d, gem: %p\n",
+				gem->dri2_buffer, gem->dri2_buffer->name,
+				gem->w, gem->h, w, h,
+				gem->dri2_buffer->pitch, gem->buf_count, gem);
 	return gem;
 }
 
@@ -567,7 +561,6 @@ static inline int destroy_gem(struct gem_data *gem)
 		tbm_bo_unref(gem->pixmap_bo);
 		gem->pixmap_bo = NULL;
 
-		DbgPrint("DRI2DestroyDrawable\n");
 		DRI2DestroyDrawable(s_info.disp, gem->pixmap);
 	}
 
