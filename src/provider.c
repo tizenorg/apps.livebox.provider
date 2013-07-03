@@ -1037,7 +1037,7 @@ EAPI int provider_send_ping(void)
 	return ret < 0 ? LB_STATUS_ERROR_FAULT : LB_STATUS_SUCCESS;
 }
 
-static inline char *keep_file_in_safe(const char *id, int uri)
+static char *keep_file_in_safe(const char *id, int uri)
 {
 	const char *path;
 	int len;
