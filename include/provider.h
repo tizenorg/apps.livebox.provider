@@ -70,7 +70,7 @@ struct event_arg {
 		EVENT_LB_RESUME, /*!< Thaw the update timer of a specified livebox */
 
 		EVENT_PD_ACCESS, /* PD: Accessibility event */
-		EVENT_LB_ACCESS, /* LB: Accessibility event */
+		EVENT_LB_ACCESS /* LB: Accessibility event */
 	} type;
 	const char *pkgname; /*!< Package name of a livebox */
 	const char *id; /*!< Instance Id of a livebox */

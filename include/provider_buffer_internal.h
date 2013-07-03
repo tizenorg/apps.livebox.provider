@@ -17,7 +17,7 @@
 struct livebox_buffer {
 	enum {
 		BUFFER_CREATED = 0x00beef00,
-		BUFFER_DESTROYED = 0x00dead00,
+		BUFFER_DESTROYED = 0x00dead00
 	} state;
 
 	enum target_type type;

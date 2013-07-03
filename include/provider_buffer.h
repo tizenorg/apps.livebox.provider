@@ -28,7 +28,7 @@ extern "C" {
 enum target_type {
 	TYPE_LB, /*!< */
 	TYPE_PD, /*!< */
-	TYPE_ERROR, /*!< */
+	TYPE_ERROR /*!< */
 };
 
 /*!
@@ -54,7 +54,7 @@ enum buffer_event {
 	BUFFER_EVENT_SCROLL_UP,
 	BUFFER_EVENT_SCROLL_MOVE,
 	BUFFER_EVENT_SCROLL_DOWN,
-	BUFFER_EVENT_UNHIGHLIGHT,
+	BUFFER_EVENT_UNHIGHLIGHT
 };
 
 struct livebox_buffer;

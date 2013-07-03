@@ -55,13 +55,13 @@ enum buffer_type { /*!< Must have to be sync with libprovider, liblivebox-viewer
 	BUFFER_TYPE_FILE,
 	BUFFER_TYPE_SHM,
 	BUFFER_TYPE_PIXMAP,
-	BUFFER_TYPE_ERROR,
+	BUFFER_TYPE_ERROR
 };
 
 struct buffer { /*!< Must has to be sync with slave & provider */
 	enum {
 		CREATED = 0x00beef00,
-		DESTROYED = 0x00dead00,
+		DESTROYED = 0x00dead00
 	} state;
 	enum buffer_type type;
 	int refcnt;
