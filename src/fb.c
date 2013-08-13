@@ -187,7 +187,9 @@ int fb_init(void *disp)
 	DbgPrint("DRM Magic: 0x%X\n", magic);
 	if (!DRI2Authenticate(s_info.disp, DefaultRootWindow(s_info.disp), (unsigned int)magic)) {
 		ErrPrint("Failed to do authenticate for DRI2\n");
-		close(s_info.fd);
+		if (close(s_info.fd) < 0) {
+			ErrPrint("close: %s\n", strerror(errno));
+		}
 		s_info.fd = -1;
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
@@ -197,7 +199,9 @@ int fb_init(void *disp)
 	s_info.bufmgr = tbm_bufmgr_init(s_info.fd);
 	if (!s_info.bufmgr) {
 		ErrPrint("Failed to init bufmgr\n");
-		close(s_info.fd);
+		if (close(s_info.fd) < 0) {
+			ErrPrint("close: %s\n", strerror(errno));
+		}
 		s_info.fd = -1;
 		s_info.evt_base = 0;
 		s_info.err_base = 0;
@@ -210,7 +214,9 @@ int fb_init(void *disp)
 int fb_fini(void)
 {
 	if (s_info.fd >= 0) {
-		close(s_info.fd);
+		if (close(s_info.fd) < 0) {
+			ErrPrint("close: %s\n", strerror(errno));
+		}
 		s_info.fd = -1;
 	}
 
@@ -259,11 +265,15 @@ static inline int sync_for_file(struct fb_info *info)
 
 	if (write(fd, buffer->data, info->bufsz) != info->bufsz) {
 		ErrPrint("write: %s\n", strerror(errno));
-		close(fd);
+		if (close(fd) < 0) {
+			ErrPrint("close: %s\n", strerror(errno));
+		}
 		return LB_STATUS_ERROR_IO;
 	}
 
-	close(fd);
+	if (close(fd) < 0) {
+		ErrPrint("close: %s\n", strerror(errno));
+	}
 	return LB_STATUS_SUCCESS;
 }
 
@@ -364,8 +374,9 @@ static inline struct fb_info *find_shm_by_canvas(void *canvas)
 		}
 
 		pixmap_info = (struct pixmap_info *)buffer->data;
-		if (pixmap_info->si.shmaddr == canvas)
+		if (pixmap_info->si.shmaddr == canvas) {
 			break;
+		}
 
 		info = NULL;
 	}
@@ -380,8 +391,9 @@ static inline struct gem_data *find_gem_by_pixmap(Pixmap id)
 
 	gem = NULL;
 	dlist_foreach(s_info.gem_list, l, gem) {
-		if (gem->pixmap == id)
+		if (gem->pixmap == id) {
 			break;
+		}
 
 		gem = NULL;
 	}
@@ -396,8 +408,9 @@ static inline struct gem_data *find_gem_by_canvas(void *canvas)
 
 	gem = NULL;
 	dlist_foreach(s_info.gem_list, l, gem) {
-		if (gem->data == canvas || gem->compensate_data == canvas)
+		if (gem->data == canvas || gem->compensate_data == canvas) {
 			break;
+		}
 
 		gem = NULL;
 	}
@@ -422,8 +435,9 @@ static inline int create_pixmap_info(struct fb_info *info)
 	pixmap_info->si.readOnly = False;
 	pixmap_info->si.shmaddr = shmat(pixmap_info->si.shmid, NULL, 0);
 	if (pixmap_info->si.shmaddr == (void *)-1) {
-		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0) {
 			ErrPrint("shmctl: %s\n", strerror(errno));
+		}
 
 		return LB_STATUS_ERROR_FAULT;
 	}
@@ -434,11 +448,13 @@ static inline int create_pixmap_info(struct fb_info *info)
 	 */
 	pixmap_info->xim = XShmCreateImage(s_info.disp, s_info.visual, (s_info.depth << 3), ZPixmap, NULL, &pixmap_info->si, info->w, info->h);
 	if (pixmap_info->xim == NULL) {
-		if (shmdt(pixmap_info->si.shmaddr) < 0)
+		if (shmdt(pixmap_info->si.shmaddr) < 0) {
 			ErrPrint("shmdt: %s\n", strerror(errno));
+		}
 
-		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0) {
 			ErrPrint("shmctl: %s\n", strerror(errno));
+		}
 
 		return LB_STATUS_ERROR_FAULT;
 	}
@@ -452,11 +468,13 @@ static inline int create_pixmap_info(struct fb_info *info)
 		XShmDetach(s_info.disp, &pixmap_info->si);
 		XDestroyImage(pixmap_info->xim);
 
-		if (shmdt(pixmap_info->si.shmaddr) < 0)
+		if (shmdt(pixmap_info->si.shmaddr) < 0) {
 			ErrPrint("shmdt: %s\n", strerror(errno));
+		}
 
-		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+		if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0) {
 			ErrPrint("shmctl: %s\n", strerror(errno));
+		}
 
 		return LB_STATUS_ERROR_FAULT;
 	}
@@ -478,11 +496,13 @@ static inline int destroy_pixmap_info(struct fb_info *info)
 	XShmDetach(s_info.disp, &pixmap_info->si);
 	XDestroyImage(pixmap_info->xim);
 
-	if (shmdt(pixmap_info->si.shmaddr) < 0)
+	if (shmdt(pixmap_info->si.shmaddr) < 0) {
 		ErrPrint("shmdt: %s\n", strerror(errno));
+	}
 
-	if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0)
+	if (shmctl(pixmap_info->si.shmid, IPC_RMID, 0) < 0) {
 		ErrPrint("shmctl: %s\n", strerror(errno));
+	}
 
 	dlist_remove_data(s_info.shm_list, info);
 	DbgPrint("Destroy a pixmap info\n");
@@ -574,8 +594,9 @@ static inline void *acquire_gem(struct gem_data *gem)
 		tbm_bo_handle handle;
 		handle = tbm_bo_map(gem->pixmap_bo, TBM_DEVICE_CPU, TBM_OPTION_READ | TBM_OPTION_WRITE);
 		gem->data = handle.ptr;
-		if (!gem->data)
+		if (!gem->data) {
 			ErrPrint("Failed to get BO\n");
+		}
 	}
 
 	gem->refcnt++;
@@ -749,8 +770,9 @@ void *fb_acquire_buffer(struct fb_info *info)
 	struct buffer *buffer;
 	void *addr;
 
-	if (!info)
+	if (!info) {
 		return NULL;
+	}
 
 	if (!info->buffer) {
 		if (!strncasecmp(info->id, SCHEMA_PIXMAP, strlen(SCHEMA_PIXMAP))) {
@@ -832,14 +854,16 @@ int fb_release_buffer(void *data)
 	struct buffer *buffer;
 	struct fb_info *info;
 
-	if (!data)
+	if (!data) {
 		return LB_STATUS_SUCCESS;
+	}
 
 	info = find_shm_by_canvas(data);
-	if (info)
+	if (info) {
 		buffer = info->buffer;
-	else
+	} else {
 		buffer = container_of(data, struct buffer, data);
+	}
 
 	if (buffer->state != CREATED) {
 		ErrPrint("Invalid handle\n");
@@ -853,16 +877,18 @@ int fb_release_buffer(void *data)
 		 * SHM can not use the "info"
 		 * it is NULL
 		 */
-		if (shmdt(buffer) < 0)
+		if (shmdt(buffer) < 0) {
 			ErrPrint("shmdt: %s\n", strerror(errno));
+		}
 		break;
 	case BUFFER_TYPE_PIXMAP:
 		buffer->refcnt--;
 		if (buffer->refcnt == 0) {
 			if (info) {
 				destroy_pixmap_info(info);
-				if (info->buffer == buffer)
+				if (info->buffer == buffer) {
 					info->buffer = NULL;
+				}
 			}
 			buffer->state = DESTROYED;
 			free(buffer);
@@ -877,8 +903,9 @@ int fb_release_buffer(void *data)
 			buffer->state = DESTROYED;
 			free(buffer);
 
-			if (info && info->buffer == buffer)
+			if (info && info->buffer == buffer) {
 				info->buffer = NULL;
+			}
 		}
 		break;
 	default:
@@ -895,8 +922,9 @@ int fb_refcnt(void *data)
 	struct shmid_ds buf;
 	int ret;
 
-	if (!data)
+	if (!data) {
 		return LB_STATUS_ERROR_INVALID;
+	}
 
 	buffer = container_of(data, struct buffer, data);
 
@@ -955,6 +983,29 @@ int fb_size(struct fb_info *info)
 
 	info->bufsz = info->w * info->h * s_info.depth;
 	return info->bufsz;
+}
+
+int fb_sync_xdamage(struct fb_info *info)
+{
+	XRectangle rect;
+	XserverRegion region;
+
+	if (!info || s_info.fd < 0) {
+		ErrPrint("Handle is not valid\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	rect.x = 0;
+	rect.y = 0;
+	rect.width = info->w;
+	rect.height = info->h;
+
+	region = XFixesCreateRegion(s_info.disp, &rect, 1);
+	XDamageAdd(s_info.disp, (Pixmap)info->handle, region);
+	XFixesDestroyRegion(s_info.disp, region);
+	XFlush(s_info.disp);
+
+	return LB_STATUS_SUCCESS;
 }
 
 /* End of a file */

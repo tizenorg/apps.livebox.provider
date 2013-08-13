@@ -37,8 +37,9 @@ const char *util_basename(const char *name)
 {
 	int length;
 	length = name ? strlen(name) : 0;
-	if (!length)
+	if (!length) {
 		return ".";
+	}
 
 	while (--length > 0 && name[length] != '/');
 
@@ -50,8 +51,9 @@ const char *util_uri_to_path(const char *uri)
 	int len;
 
 	len = strlen(SCHEMA_FILE);
-	if (strncasecmp(uri, SCHEMA_FILE, len))
+	if (strncasecmp(uri, SCHEMA_FILE, len)) {
 		return NULL;
+	}
 
 	return uri + len;
 }

@@ -74,8 +74,9 @@ static struct packet *master_script(pid_t pid, int handle, const struct packet *
 
 	arg.type = EVENT_CONTENT_EVENT;
 
-	if (s_info.table.content_event)
+	if (s_info.table.content_event) {
 		(void)s_info.table.content_event(&arg, s_info.data);
+	}
 
 errout:
 	return NULL;
@@ -99,8 +100,9 @@ static struct packet *master_clicked(pid_t pid, int handle, const struct packet 
 
 	arg.type = EVENT_CLICKED;
 
-	if (s_info.table.clicked)
+	if (s_info.table.clicked) {
 		(void)s_info.table.clicked(&arg, s_info.data);
+	}
 
 errout:
 	return NULL;
@@ -128,8 +130,9 @@ static struct packet *master_text_signal(pid_t pid, int handle, const struct pac
 	arg.info.text_signal.info.pointer.down = 0;
 	arg.type = EVENT_TEXT_SIGNAL;
 
-	if (s_info.table.text_signal)
+	if (s_info.table.text_signal) {
 		(void)s_info.table.text_signal(&arg, s_info.data);
+	}
 
 errout:
 	return NULL;
@@ -151,10 +154,11 @@ static struct packet *master_delete(pid_t pid, int handle, const struct packet *
 
 	arg.type = EVENT_DELETE;
 
-	if (s_info.table.lb_destroy)
+	if (s_info.table.lb_destroy) {
 		ret = s_info.table.lb_destroy(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -177,10 +181,11 @@ static struct packet *master_resize(pid_t pid, int handle, const struct packet *
 
 	arg.type = EVENT_RESIZE;
 
-	if (s_info.table.resize)
+	if (s_info.table.resize) {
 		ret = s_info.table.resize(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -218,21 +223,24 @@ static struct packet *master_renew(pid_t pid, int handle, const struct packet *p
 
 	arg.type = EVENT_RENEW;
 
-	if (s_info.table.lb_recreate)
+	if (s_info.table.lb_recreate) {
 		ret = s_info.table.lb_recreate(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
-	if (arg.info.lb_recreate.out_content)
+	if (arg.info.lb_recreate.out_content) {
 		content = arg.info.lb_recreate.out_content;
-	else
+	} else {
 		content = "";
+	}
 
-	if (arg.info.lb_recreate.out_title)
+	if (arg.info.lb_recreate.out_title) {
 		title = arg.info.lb_recreate.out_title;
-	else
+	} else {
 		title = "";
+	}
 
 	result = packet_create_reply(packet, "issi", ret, content, title, arg.info.lb_recreate.out_is_pinned_up);
 	/*!
@@ -278,21 +286,24 @@ static struct packet *master_new(pid_t pid, int handle, const struct packet *pac
 
 	arg.type = EVENT_NEW;
 
-	if (s_info.table.lb_create)
+	if (s_info.table.lb_create) {
 		ret = s_info.table.lb_create(&arg, &width, &height, &priority, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
-	if (arg.info.lb_create.out_content)
+	if (arg.info.lb_create.out_content) {
 		content = arg.info.lb_create.out_content;
-	else
+	} else {
 		content = "";
+	}
 
-	if (arg.info.lb_create.out_title)
+	if (arg.info.lb_create.out_title) {
 		title = arg.info.lb_create.out_title;
-	else
+	} else {
 		title = "";
+	}
 
 	result = packet_create_reply(packet, "iiidssi", ret, width, height, priority, content, title, arg.info.lb_create.out_is_pinned_up);
 
@@ -321,10 +332,11 @@ static struct packet *master_set_period(pid_t pid, int handle, const struct pack
 
 	arg.type = EVENT_SET_PERIOD;
 
-	if (s_info.table.set_period)
+	if (s_info.table.set_period) {
 		ret = s_info.table.set_period(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -348,10 +360,11 @@ static struct packet *master_change_group(pid_t pid, int handle, const struct pa
 
 	arg.type = EVENT_CHANGE_GROUP;
 
-	if (s_info.table.change_group)
+	if (s_info.table.change_group) {
 		ret = s_info.table.change_group(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -375,19 +388,22 @@ static struct packet *master_pinup(pid_t pid, int handle, const struct packet *p
 
 	arg.type = EVENT_PINUP;
 
-	if (s_info.table.pinup)
+	if (s_info.table.pinup) {
 		ret = s_info.table.pinup(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	content = "default";
-	if (ret == 0 && arg.info.pinup.content_info)
+	if (ret == 0 && arg.info.pinup.content_info) {
 		content = arg.info.pinup.content_info;
+	}
 
 	result = packet_create_reply(packet, "is", ret, content);
-	if (ret == 0)
+	if (ret == 0) {
 		free(arg.info.pinup.content_info);
+	}
 	return result;
 }
 
@@ -405,8 +421,9 @@ static struct packet *master_update_content(pid_t pid, int handle, const struct 
 
 	arg.type = EVENT_UPDATE_CONTENT;
 
-	if (s_info.table.update_content)
+	if (s_info.table.update_content) {
 		(void)s_info.table.update_content(&arg, s_info.data);
+	}
 
 errout:
 	return NULL;
@@ -425,8 +442,9 @@ static struct packet *master_lb_pause(pid_t pid, int handle, const struct packet
 
 	arg.type = EVENT_LB_PAUSE;
 
-	if (s_info.table.lb_pause)
+	if (s_info.table.lb_pause) {
 		(void)s_info.table.lb_pause(&arg, s_info.data);
+	}
 
 	return NULL;
 }
@@ -444,8 +462,9 @@ static struct packet *master_lb_resume(pid_t pid, int handle, const struct packe
 
 	arg.type = EVENT_LB_RESUME;
 
-	if (s_info.table.lb_resume)
+	if (s_info.table.lb_resume) {
 		(void)s_info.table.lb_resume(&arg, s_info.data);
+	}
 
 	return NULL;
 }
@@ -467,10 +486,11 @@ static struct packet *master_pause(pid_t pid, int handle, const struct packet *p
 	arg.id = NULL;
 	arg.type = EVENT_PAUSE;
 
-	if (s_info.table.pause)
+	if (s_info.table.pause) {
 		ret = s_info.table.pause(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -490,10 +510,11 @@ static struct packet *master_update_mode(pid_t pid, int handle, const struct pac
 		goto errout;
 	}
 
-	if (s_info.table.update_mode)
+	if (s_info.table.update_mode) {
 		ret = s_info.table.update_mode(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
@@ -518,15 +539,17 @@ static struct packet *master_resume(pid_t pid, int handle, const struct packet *
 	arg.id = NULL;
 	arg.type = EVENT_RESUME;
 
-	if (s_info.table.resume)
+	if (s_info.table.resume) {
 		ret = s_info.table.resume(&arg, s_info.data);
-	else
+	} else {
 		ret = LB_STATUS_ERROR_NOT_IMPLEMENTED;
+	}
 
 errout:
 	result = packet_create_reply(packet, "i", ret);
-	if (!result)
+	if (!result) {
 		ErrPrint("Failed to create result packet\n");
+	}
 	return result;
 }
 
@@ -543,9 +566,10 @@ struct packet *master_pd_create(pid_t pid, int handle, const struct packet *pack
 
 	arg.type = EVENT_PD_CREATE;
 
-	DbgPrint("CREATE_PD\n");
-	if (s_info.table.pd_create)
+	DbgPrint("PERF_DBOX\n");
+	if (s_info.table.pd_create) {
 		(void)s_info.table.pd_create(&arg, s_info.data);
+	}
 
 out:
 	return NULL;
@@ -564,8 +588,9 @@ struct packet *master_pd_move(pid_t pid, int handle, const struct packet *packet
 
 	arg.type = EVENT_PD_MOVE;
 
-	if (s_info.table.pd_move)
+	if (s_info.table.pd_move) {
 		(void)s_info.table.pd_move(&arg, s_info.data);
+	}
 
 out:
 	return NULL;
@@ -583,8 +608,9 @@ struct packet *master_pd_destroy(pid_t pid, int handle, const struct packet *pac
 	}
 
 	arg.type = EVENT_PD_DESTROY;
-	if (s_info.table.pd_destroy)
+	if (s_info.table.pd_destroy) {
 		(void)s_info.table.pd_destroy(&arg, s_info.data);
+	}
 
 out:
 	return NULL;
@@ -824,8 +850,9 @@ static int connected_cb(int handle, void *data)
 
 	s_info.fd = handle;
 
-	if (s_info.table.connected)
+	if (s_info.table.connected) {
 		s_info.table.connected(NULL, s_info.data);
+	}
 
 	return 0;
 }
@@ -838,8 +865,9 @@ static int disconnected_cb(int handle, void *data)
 	}
 
 	DbgPrint("Disconnected (%d)\n", handle);
-	if (s_info.table.disconnected)
+	if (s_info.table.disconnected) {
 		s_info.table.disconnected(NULL, s_info.data);
+	}
 
 	/* Reset the FD */
 	s_info.fd = -1;
@@ -852,12 +880,14 @@ EAPI int provider_init(void *disp, const char *name, struct event_handler *table
 	const char *option;
 
 	option = getenv("PROVIDER_DISABLE_PREVENT_OVERWRITE");
-	if (option && !strcasecmp(option, "true"))
+	if (option && !strcasecmp(option, "true")) {
 		s_info.prevent_overwrite = 1;
+	}
 
 	option = getenv("PROVIDER_COM_CORE_THREAD");
-	if (option && !strcasecmp(option, "true"))
+	if (option && !strcasecmp(option, "true")) {
 		com_core_packet_use_thread(1);
+	}
 
 	if (!name || !table) {
 		ErrPrint("Invalid argument\n");
@@ -1053,8 +1083,9 @@ static char *keep_file_in_safe(const char *id, int uri)
 	/*!
 	 * \TODO: REMOVE ME
 	 */
-	if (s_info.prevent_overwrite)
+	if (s_info.prevent_overwrite) {
 		return NULL;
+	}
 
 	if (access(path, R_OK | F_OK) != 0) {
 		ErrPrint("[%s] %s\n", path, strerror(errno));
@@ -1076,11 +1107,13 @@ static char *keep_file_in_safe(const char *id, int uri)
 	strncpy(new_path, path, base_idx);
 	snprintf(new_path + base_idx, len + 10 - base_idx, "reader/%s", path + base_idx);
 
-	if (unlink(new_path) < 0)
+	if (unlink(new_path) < 0) {
 		ErrPrint("Unlink(%s): %s\n", new_path, strerror(errno));
+	}
 
-	if (rename(path, new_path) < 0)
+	if (rename(path, new_path) < 0) {
 		ErrPrint("Failed to keep content in safe: %s (%s -> %s)\n", strerror(errno), path, new_path);
+	}
 
 	return new_path;
 }
@@ -1099,11 +1132,13 @@ EAPI int provider_send_lb_update_begin(const char *pkgname, const char *id, doub
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	if (!content_info)
+	if (!content_info) {
 		content_info = "";
+	}
 
-	if (!title)
+	if (!title) {
 		title = "";
+	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
@@ -1210,6 +1245,7 @@ EAPI int provider_send_pd_update_end(const char *pkgname, const char *id)
 
 EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h, double priority, const char *content_info, const char *title)
 {
+	struct livebox_buffer *info;
 	struct packet *packet;
 	int ret;
 
@@ -1218,21 +1254,26 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	if (!content_info)
+	if (!content_info) {
 		content_info = "";
+	}
 
-	if (!title)
+	if (!title) {
 		title = "";
+	}
 
 	if (s_info.fd < 0) {
 		ErrPrint("Connection is not established\n");
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	if (!provider_buffer_find_buffer(TYPE_LB, pkgname, id)) {
+	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
+	if (!info) {
 		char *tmp;
 		tmp = keep_file_in_safe(id, 1);
 		free(tmp);
+	} else {
+		fb_sync_xdamage(info->fb);
 	}
 
 	packet = packet_create_noack("updated", "ssiidss",
@@ -1249,6 +1290,7 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 
 EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile)
 {
+	struct livebox_buffer *info;
 	struct packet *packet;
 	char *desc_path = NULL;
 	int ret;
@@ -1263,13 +1305,24 @@ EAPI int provider_send_desc_updated(const char *pkgname, const char *id, const c
 		return LB_STATUS_ERROR_INVALID;
 	}
 
-	if (!descfile)
+	if (!descfile) {
 		descfile = util_uri_to_path(id); /* In case of the NULL descfilename, use the ID */
+	}
 
-	if (!provider_buffer_find_buffer(TYPE_PD, pkgname, id)) {
+	info = provider_buffer_find_buffer(TYPE_PD, pkgname, id);
+	if (!info) {
 		desc_path = keep_file_in_safe(descfile, 0);
+		if (!desc_path) {
+			return LB_STATUS_ERROR_INVALID;
+		}
 	} else {
 		desc_path = strdup(descfile);
+		if (!desc_path) {
+			ErrPrint("Heap: %s\n", strerror(errno));
+			return LB_STATUS_ERROR_MEMORY;
+		}
+
+		fb_sync_xdamage(info->fb);
 	}
 
 	packet = packet_create_noack("desc_updated", "sss", pkgname, id, desc_path);

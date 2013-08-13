@@ -1,6 +1,6 @@
 Name: libprovider
 Summary: Library for developing the livebox service provider.
-Version: 0.9.6
+Version: 0.9.8
 Release: 1
 Group: HomeTF/Livebox
 License: Flora License
@@ -37,6 +37,12 @@ Livebox data provider development library (dev)
 %setup -q
 
 %build
+%if 0%{?tizen_build_binary_release_type_eng}
+export CFLAGS="${CFLAGS} -DTIZEN_ENGINEER_MODE"
+export CXXFLAGS="${CXXFLAGS} -DTIZEN_ENGINEER_MODE"
+export FFLAGS="${FFLAGS} -DTIZEN_ENGINEER_MODE"
+%endif
+
 %cmake .
 make %{?jobs:-j%jobs}
 

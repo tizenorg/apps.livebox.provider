@@ -37,5 +37,6 @@ extern int fb_destroy_gem(struct fb_info *info);
 extern void *fb_acquire_gem(struct fb_info *info);
 extern int fb_release_gem(struct fb_info *info);
 extern int fb_has_gem(struct fb_info *info);
+extern int fb_sync_xdamage(struct fb_info *info);
 
 /* End of a file */
