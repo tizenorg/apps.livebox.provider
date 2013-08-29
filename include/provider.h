@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
+/*!
+ * \mainpage Provider
+ * \{
+ * \section Intro Livebox Service Provider
+ * \subsection IntroSub
+ * \section WhatFor Hello
+ * \subsection WaitForSub Hello Sub
+ * \section WhatFor GoodBye
+ * \subsection WhatForSub What for sub
+ * \}
+ */
+
 #ifndef __PROVIDER_H
 #define __PROVIDER_H
 
@@ -22,6 +34,12 @@ extern "C" {
 #endif
 
 /*!
+ * \defgroup PROVIDER Provider Programming Interfaces for development of livebox service provider.
+ * \{
+ */
+
+/*!
+ * \brief
  * Text signal & Content event uses this data structure.
  */
 struct event_info {
@@ -129,6 +147,14 @@ struct event_arg {
 		} lb_recreate; /*!< renew */
 
 		struct {
+			/* This enumeration value must has to be sync with data-provider-master */
+			enum instance_destroy_type {
+				INSTANCE_DESTROY_DEFAULT,
+				INSTANCE_DESTROY_PKGMGR,
+				INSTANCE_DESTROY_TERMINATE,
+				INSTANCE_DESTROY_FAULT,
+				INSTANCE_DESTROY_UNKNOWN,
+			} type;
 		} lb_destroy; /*!< delete */
 
 		struct {
@@ -197,39 +223,39 @@ struct event_arg {
 };
 
 struct event_handler {
-	int (*lb_create)(struct event_arg *arg, int *width, int *height, double *priority, void *data); /* new */
-	int (*lb_destroy)(struct event_arg *arg, void *data); /* delete */
+	int (*lb_create)(struct event_arg *arg, int *width, int *height, double *priority, void *data); /*!< new */
+	int (*lb_destroy)(struct event_arg *arg, void *data); /*!< delete */
 
 	/* Recover from the fault of slave */
-	int (*lb_recreate)(struct event_arg *arg, void *data);
+	int (*lb_recreate)(struct event_arg *arg, void *data); /*!< Re create */
 
-	int (*lb_pause)(struct event_arg *arg, void *data);
-	int (*lb_resume)(struct event_arg *arg, void *data);
+	int (*lb_pause)(struct event_arg *arg, void *data); /*!< Pause Livebox */
+	int (*lb_resume)(struct event_arg *arg, void *data); /*!< Resume Livebox */
 
-	int (*content_event)(struct event_arg *arg, void *data);
-	int (*clicked)(struct event_arg *arg, void *data);
-	int (*text_signal)(struct event_arg *arg, void *data);
-	int (*resize)(struct event_arg *arg, void *data);
-	int (*set_period)(struct event_arg *arg, void *data);
-	int (*change_group)(struct event_arg *arg, void *data);
-	int (*pinup)(struct event_arg *arg, void *data);
-	int (*update_content)(struct event_arg *arg, void *data);
+	int (*content_event)(struct event_arg *arg, void *data); /*!< Content event */
+	int (*clicked)(struct event_arg *arg, void *data); /*!< Clicked */
+	int (*text_signal)(struct event_arg *arg, void *data); /*!< Text Signal */
+	int (*resize)(struct event_arg *arg, void *data); /*!< Resize */
+	int (*set_period)(struct event_arg *arg, void *data); /*!< Set Period */
+	int (*change_group)(struct event_arg *arg, void *data); /*!< Change group */
+	int (*pinup)(struct event_arg *arg, void *data); /*!< Pin up */
+	int (*update_content)(struct event_arg *arg, void *data); /*!< Update content */
 
-	int (*pause)(struct event_arg *arg, void *data);
-	int (*resume)(struct event_arg *arg, void *data);
+	int (*pause)(struct event_arg *arg, void *data); /*!< Pause service provider */
+	int (*resume)(struct event_arg *arg, void *data); /*!< Resume service provider */
 
-	int (*disconnected)(struct event_arg *arg, void *data);
-	int (*connected)(struct event_arg *arg, void *data);
+	int (*disconnected)(struct event_arg *arg, void *data); /*!< Disconnected from master */
+	int (*connected)(struct event_arg *arg, void *data); /*!< Connected to master */
 
 	/*!
 	 * \note
 	 * Only for the buffer type
 	 */
-	int (*pd_create)(struct event_arg *arg, void *data);
-	int (*pd_destroy)(struct event_arg *arg, void *data);
-	int (*pd_move)(struct event_arg *arg, void *data);
+	int (*pd_create)(struct event_arg *arg, void *data); /*!< PD is created */
+	int (*pd_destroy)(struct event_arg *arg, void *data); /*!< PD is destroyed */
+	int (*pd_move)(struct event_arg *arg, void *data); /*!< PD is moved */
 
-	int (*update_mode)(struct event_arg *arg, void *data);
+	int (*update_mode)(struct event_arg *arg, void *data); /*!< Update mode */
 };
 
 /*!
@@ -238,11 +264,14 @@ struct event_handler {
  * \param[in] name Slave name which is given by the master provider.
  * \param[in] table Event handler table
  * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \sa provider_fini
  */
 extern int provider_init(void *disp, const char *name, struct event_handler *table, void *data);
 
 /*!
  * \brief Finalize the provider service
+ * \return void
+ * \sa provider_init
  */
 extern void *provider_fini(void);
 
@@ -281,37 +310,41 @@ extern int provider_send_updated(const char *pkgname, const char *id, int w, int
 extern int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile);
 
 /*!
- * \brief
- * \param[in] pkgname
- * \param[in] id
- * \param[in] priority
- * \param[in] content_info
- * \param[in] title
- * \return
+ * \brief If the client requests async update mode, service provider must has to send update begin when it really start to update its contents
+ * \param[in] pkgname Package name of livebox
+ * \param[in] id Instance Id of livebox
+ * \param[in] priority Priority of current content of livebox
+ * \param[in] content_info Content info should be come back again via livebox_create event.
+ * \param[in] title A sentence for describing content of livebox
+ * \return int
+ * \sa provider_send_lb_update_end
  */
 extern int provider_send_lb_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title);
 
 /*!
- * \brief
- * \param[in] pkgname
- * \param[in] id
- * \return
+ * \brief If the client requests async update mode, service provider must has to send update end when the update is done
+ * \param[in] pkgname Package name of livebox
+ * \param[in] id Instance Id of livebox
+ * \return int
+ * \sa provider_send_lb_update_begin
  */
 extern int provider_send_lb_update_end(const char *pkgname, const char *id);
 
 /*!
- * \brief
- * \param[in] pkgname
- * \param[in] id
- * \return
+ * \brief If the client requests async update mode, service provider must has to send update begin when it really start to update its contents
+ * \param[in] pkgname Package name of livebox
+ * \param[in] id Instance Id of livebox
+ * \return int
+ * \sa provider_send_pd_update_end
  */
 extern int provider_send_pd_update_begin(const char *pkgname, const char *id);
 
 /*!
- * \brief
- * \param[in] pkgname
- * \param[in] id
- * \return
+ * \brief If the client requests async update mode, service provider must has to send update end when it really finish the update its contents
+ * \param[in] pkgname Package name of livebox
+ * \param[in] id Instance Id of livebox
+ * \return int
+ * \sa provider_send_pd_update_begin
  */
 extern int provider_send_pd_update_end(const char *pkgname, const char *id);
 
@@ -320,6 +353,8 @@ extern int provider_send_pd_update_end(const char *pkgname, const char *id);
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Livebox instance ID
  * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \sa provider_send_faulted
+ * \sa provider_send_hold_scroll
  */
 extern int provider_send_deleted(const char *pkgname, const char *id);
 
@@ -330,6 +365,7 @@ extern int provider_send_deleted(const char *pkgname, const char *id);
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which will be called
  * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \sa provider_send_call
  */
 extern int provider_send_ret(const char *pkgname, const char *id, const char *funcname);
 
@@ -340,6 +376,7 @@ extern int provider_send_ret(const char *pkgname, const char *id, const char *fu
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which is called by the slave
  * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \sa provider_send_ret
  */
 extern int provider_send_call(const char *pkgname, const char *id, const char *funcname);
 
@@ -350,6 +387,9 @@ extern int provider_send_call(const char *pkgname, const char *id, const char *f
  * \param[in] id ID of the livebox instance
  * \param[in] funcname Reason of the fault error
  * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \sa provider_send_deleted
+ * \sa provider_send_hold_scroll
+ * \sa provider_send_access_status
  */
 extern int provider_send_faulted(const char *pkgname, const char *id, const char *funcname);
 
@@ -360,21 +400,32 @@ extern int provider_send_faulted(const char *pkgname, const char *id, const char
  * \param[in] id ID of the livebox instance
  * \param[in] seize 1 if viewer needs to hold a box, or 0
  * \return int Success LB_STATUS_SUCCESS othere LB_STATUS_ERROR_XXX
+ * \sa provider_send_faulted
+ * \sa provider_send_deleted
+ * \sa provider_send_access_status
  */
 extern int provider_send_hold_scroll(const char *pkgname, const char *id, int seize);
 
 /*!
  * \brief Notify to viewer for accessiblity event processing status.
- * \param[in] pkgname
- * \param[in] id
+ * \param[in] pkgname Package name of livebox
+ * \param[in] id Instance Id of livebox
  * \param[in] status
  * \return int
+ * \sa provider_send_deleted
+ * \sa provider_send_faulted
+ * \sa provider_send_hold_scroll
  */
 extern int provider_send_access_status(const char *pkgname, const char *id, int status);
+
+/*!
+ * \}
+ */
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+
 /* End of a file */

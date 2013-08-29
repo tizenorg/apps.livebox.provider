@@ -22,6 +22,11 @@ extern "C" {
 #endif
 
 /*!
+ * \ingroup PROVIDER Provider Programming Interface for Buffer
+ * \{
+ */
+
+/*!
  * \NOTE
  * This enumeration value has to be sync'd with the liblivebox interface. (only for inhouse livebox)
  */
@@ -60,15 +65,17 @@ enum buffer_event {
 struct livebox_buffer;
 
 /*!
- * \brief
- * \param[in] type
- * \param[in] pkgname
- * \param[in] id
- * \param[in] width
- * \param[in] height
- * \param[in] pixel_size
- * \param[in] handler
- * \param[in] data
+ * \brief Send request for acquiring buffer of given type.
+ * \param[in] type TYPE_LB or TYPE_PD, select the type of buffer. is it for LB? or PD?
+ * \param[in] pkgname Package name of a livebox instance
+ * \param[in] id Instance Id
+ * \param[in] width Width of buffer
+ * \param[in] height Height of buffer
+ * \param[in] pixel_size Normally, use "4" for this. it is fixed.
+ * \param[in] handler Event handler. Viewer will send the events such as mouse down,move,up, accessibilty event, etc,. via this callback function.
+ * \param[in] data Callback data for event handler
+ * \return livebox_buffer Livebox buffer object handler
+ * \sa provider_buffer_release
  */
 extern struct livebox_buffer *provider_buffer_acquire(enum target_type type, const char *pkgname, const char *id, int width, int height, int pixel_size, int (*handler)(struct livebox_buffer *, enum buffer_event, double, double, double, void *data), void *data);
 
@@ -82,36 +89,39 @@ extern struct livebox_buffer *provider_buffer_acquire(enum target_type type, con
 extern int provider_buffer_resize(struct livebox_buffer *info, int w, int h);
 
 /*!
- * \brief
- * \param[in] info
+ * \brief Get the buffer address of given livebox buffer handle.
+ * \param[in] info Handle of livebox buffer
  * \return address
+ * \sa provider_buffer_unref
  */
 extern void *provider_buffer_ref(struct livebox_buffer *info);
 
 /*!
- * \brief
- * \param[in] ptr
+ * \brief Decrease the reference count of given buffer handle.
+ * \param[in] ptr Address that gets by provider_buffer_ref
  * \return int
+ * \sa provider_buffer_ref
  */
 extern int provider_buffer_unref(void *ptr);
 
 /*!
- * \brief
- * \param[in] info
+ * \brief Release the acquired buffer handle.
+ * \param[in] info Handle of livebox buffer
  * \return int
+ * \sa provider_buffer_acquire
  */
 extern int provider_buffer_release(struct livebox_buffer *info);
 
 /*!
- *\brief
- \param[in] info
+ *\brief Make content sync with master.
+ \param[in] info Handle of livebox buffer
  \return int
  */
 extern int provider_buffer_sync(struct livebox_buffer *info);
 
 /*!
  * \brief Get the buffer type
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return target type PD or LB
  */
 extern enum target_type provider_buffer_type(struct livebox_buffer *info);
@@ -125,21 +135,21 @@ extern const char *provider_buffer_pkgname(struct livebox_buffer *info);
 
 /*!
  * \brief
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return id
  */
 extern const char *provider_buffer_id(struct livebox_buffer *info);
 
 /*!
  * \brief Give the URI of buffer information.
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return uri
  */
 extern const char *provider_buffer_uri(struct livebox_buffer *info);
 
 /*!
  * \brief
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \param[out] w
  * \param[out] h
  * \param[out] pixel_size
@@ -149,110 +159,92 @@ extern int provider_buffer_get_size(struct livebox_buffer *info, int *w, int *h,
 
 /*!
  * \brief Getting the PIXMAP id of mapped on this livebox_buffer
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return 0 if fails or pixmap ID
  */
 extern unsigned long provider_buffer_pixmap_id(struct livebox_buffer *info);
 
 /*!
- * \brief
+ * \brief Initialize the provider buffer system
  * \param[in] disp Display information for handling the XPixmap type.
  * \return int
  */
 extern int provider_buffer_init(void *disp);
 
 /*!
- * \brief
+ * \brief Finalize the provider buffer system
  * \return int
  */
 extern int provider_buffer_fini(void);
 
 /*!
- * \param[in] info
- * \return int
+ * \brief Check whether current livebox buffer support H/W(GEM) buffer
+ * \param[in] info Handle of livebox buffer
+ * \return int 1 if support or 0
  */
 extern int provider_buffer_pixmap_is_support_hw(struct livebox_buffer *info);
 
 /*!
- * \param[in] info
- * \return int
+ * \brief Create H/W(GEM) Buffer
+ * \param[in] info Handle of livebox buffer
+ * \return int LB_STATUS_SUCCESS or LB_STATUS_ERROR_INVALID, LB_STATUS_ERROR_FAULT
+ * \sa provider_buffer_pixmap_destroy_hw
  */
 extern int provider_buffer_pixmap_create_hw(struct livebox_buffer *info);
 
 /*!
- * \param[in] info
- * \return int
+ * \brief Destroy H/W(GEM) Buffer
+ * \param[in] info Handle of livebox buffer
+ * \return int LB_STATUS_SUCCESS or LB_STATUS_ERROR_INVALID
+ * \sa provider_buffer_pixmap_create_hw
  */
 extern int provider_buffer_pixmap_destroy_hw(struct livebox_buffer *info);
 
 /*!
  * \brief Get the H/W system mapped buffer address(GEM buffer) if a buffer support it.
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return void * H/W system mapped buffer address
+ * \sa provider_buffer_pixmap_create_hw
+ * \sa provider_buffer_pixmap_destroy_hw
  */
 extern void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info);
 
 /*!
  * \brief Prepare the render buffer to write or read something on it.
- * \param[in] info
+ * \param[in] info Handle of livebox buffer
  * \return int
+ * \sa provider_buffer_post_render
  */
 extern int provider_buffer_pre_render(struct livebox_buffer *info);
 
 /*!
  * \brief Finish the render buffer acessing.
- * \param[in] info 
+ * \param[in] info Handle of livebox buffer
  * \return int
+ * \sa provider_buffer_pre_render
  */
 extern int provider_buffer_post_render(struct livebox_buffer *info);
 
 /*!
+ * \brief
+ * \param[in] handle Handle of livebox buffer
+ * \return void* User data
+ * \sa provider_buffer_set_user_data
  */
 extern void *provider_buffer_user_data(struct livebox_buffer *handle);
 
 /*!
+ * \brief
+ * \param[in] handle Handle of livebox buffer
+ * \param[in] data User data
+ * \return int
+ * \sa provider_buffer_user_data
  */
 extern int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data);
 
-extern struct packet *provider_buffer_pd_access_action_up(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_action_down(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_hl(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_pd_access_activate(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_hl(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_action_up(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_action_down(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
-
-extern struct packet *provider_buffer_lb_access_activate(pid_t pid, int handle, const struct packet *packet);
+/*!
+ * \}
+ */
 
 #ifdef __cplusplus
 }

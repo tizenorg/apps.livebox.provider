@@ -57,6 +57,27 @@ extern struct packet *provider_buffer_pd_mouse_leave(pid_t pid, int handle, cons
 extern struct packet *provider_buffer_pd_key_down(pid_t pid, int handle, const struct packet *packet);
 extern struct packet *provider_buffer_pd_key_up(pid_t pid, int handle, const struct packet *packet);
 
+extern struct packet *provider_buffer_pd_access_action_up(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_action_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_hl(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_hl_next(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_pd_access_activate(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_unhighlight(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_hl(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_hl_prev(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_hl_next(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_action_up(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_action_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_scroll_down(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_scroll_move(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_scroll_up(pid_t pid, int handle, const struct packet *packet);
+extern struct packet *provider_buffer_lb_access_activate(pid_t pid, int handle, const struct packet *packet);
+
 extern const char *provider_name(void);
 
 /* End of a file */

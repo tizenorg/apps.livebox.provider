@@ -144,15 +144,18 @@ static struct packet *master_delete(pid_t pid, int handle, const struct packet *
 	struct packet *result;
 	struct event_arg arg;
 	int ret;
+	int type;
 
-	ret = packet_get(packet, "ss", &arg.pkgname, &arg.id);
-	if (ret != 2) {
+	ret = packet_get(packet, "ssi", &arg.pkgname, &arg.id, &type);
+	if (ret != 3) {
 		ErrPrint("Parameter is not valid\n");
 		ret = LB_STATUS_ERROR_INVALID;
 		goto errout;
 	}
 
 	arg.type = EVENT_DELETE;
+	arg.info.lb_destroy.type = type;
+	DbgPrint("LB Deleted, reason(%d)\n", type);
 
 	if (s_info.table.lb_destroy) {
 		ret = s_info.table.lb_destroy(&arg, s_info.data);
