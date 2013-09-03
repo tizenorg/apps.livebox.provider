@@ -1122,7 +1122,7 @@ static char *keep_file_in_safe(const char *id, int uri)
 }
 
 /*!
- * \NOTE
+ * \note
  *   Only for the buffer type
  */
 EAPI int provider_send_lb_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title)

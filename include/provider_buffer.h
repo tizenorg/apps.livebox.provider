@@ -22,12 +22,12 @@ extern "C" {
 #endif
 
 /*!
- * \ingroup PROVIDER Provider Programming Interface for Buffer
+ * \addtogroup CAPI_PROVIDER_MODULE
  * \{
  */
 
 /*!
- * \NOTE
+ * \note
  * This enumeration value has to be sync'd with the liblivebox interface. (only for inhouse livebox)
  */
 enum target_type {
@@ -37,7 +37,7 @@ enum target_type {
 };
 
 /*!
- * \NOTE
+ * \note
  * This enumeration value should be sync'd with liblivebox interface. (only for inhouse livebox)
  */
 enum buffer_event {
@@ -66,6 +66,8 @@ struct livebox_buffer;
 
 /*!
  * \brief Send request for acquiring buffer of given type.
+ * \details N/A
+ * \remarks N/A
  * \param[in] type TYPE_LB or TYPE_PD, select the type of buffer. is it for LB? or PD?
  * \param[in] pkgname Package name of a livebox instance
  * \param[in] id Instance Id
@@ -74,171 +76,312 @@ struct livebox_buffer;
  * \param[in] pixel_size Normally, use "4" for this. it is fixed.
  * \param[in] handler Event handler. Viewer will send the events such as mouse down,move,up, accessibilty event, etc,. via this callback function.
  * \param[in] data Callback data for event handler
- * \return livebox_buffer Livebox buffer object handler
- * \sa provider_buffer_release
+ * \return livebox_buffer
+ * \retval Livebox buffer object handler
+ * \retval NULL if it fails to acquire buffer
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_release
  */
 extern struct livebox_buffer *provider_buffer_acquire(enum target_type type, const char *pkgname, const char *id, int width, int height, int pixel_size, int (*handler)(struct livebox_buffer *, enum buffer_event, double, double, double, void *data), void *data);
 
 /*!
  * \brief
+ * \details N/A
+ * \remarks N/A
  * \param[in] info
  * \param[in] w
  * \param[in] h
  * \return int
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_SUCCESS
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_resize(struct livebox_buffer *info, int w, int h);
 
 /*!
  * \brief Get the buffer address of given livebox buffer handle.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \return address
- * \sa provider_buffer_unref
+ * \retval Address of buffer
+ * \retval NULL
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_unref
  */
 extern void *provider_buffer_ref(struct livebox_buffer *info);
 
 /*!
  * \brief Decrease the reference count of given buffer handle.
+ * \details N/A
+ * \remarks N/A
  * \param[in] ptr Address that gets by provider_buffer_ref
  * \return int
- * \sa provider_buffer_ref
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_ref
  */
 extern int provider_buffer_unref(void *ptr);
 
 /*!
  * \brief Release the acquired buffer handle.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \return int
- * \sa provider_buffer_acquire
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_SUCCESS
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_acquire
  */
 extern int provider_buffer_release(struct livebox_buffer *info);
 
 /*!
  *\brief Make content sync with master.
- \param[in] info Handle of livebox buffer
- \return int
+ * \details N/A
+ * \remarks N/A
+ * \param[in] info Handle of livebox buffer
+ * \return int
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_SUCCESS
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_sync(struct livebox_buffer *info);
 
 /*!
  * \brief Get the buffer type
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \return target type PD or LB
+ * \retval TYPE_LB
+ * \retval TYPE_PD
+ * \retval TYPE_ERROR
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern enum target_type provider_buffer_type(struct livebox_buffer *info);
 
 /*!
  * \brief Get the package name
+ * \details N/A
+ * \remarks N/A
  * \param[in] info
- * \return pkgname
+ * \return const char *
+ * \retval NULL
+ * \retval pkgname package name
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern const char *provider_buffer_pkgname(struct livebox_buffer *info);
 
 /*!
  * \brief
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return id
+ * \return const char *
+ * \retval instance Id
+ * \retval NULL
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern const char *provider_buffer_id(struct livebox_buffer *info);
 
 /*!
  * \brief Give the URI of buffer information.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return uri
+ * \return const char *
+ * \retval uri
+ * \retval NULL
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern const char *provider_buffer_uri(struct livebox_buffer *info);
 
 /*!
  * \brief
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \param[out] w
  * \param[out] h
  * \param[out] pixel_size
  * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_get_size(struct livebox_buffer *info, int *w, int *h, int *pixel_size);
 
 /*!
  * \brief Getting the PIXMAP id of mapped on this livebox_buffer
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return 0 if fails or pixmap ID
+ * \return int
+ * \retval 0 if fails
+ * \retval pixmap id, has to be casted to unsigned int type
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern unsigned long provider_buffer_pixmap_id(struct livebox_buffer *info);
 
 /*!
  * \brief Initialize the provider buffer system
+ * \details N/A
+ * \remarks N/A
  * \param[in] disp Display information for handling the XPixmap type.
  * \return int
+ * \retval LB_STATUS_ERROR_FAULT
+ * \retval LB_STATUS_SUCCESS
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_init(void *disp);
 
 /*!
  * \brief Finalize the provider buffer system
+ * \details N/A
+ * \remarks N/A
  * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_fini(void);
 
 /*!
  * \brief Check whether current livebox buffer support H/W(GEM) buffer
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return int 1 if support or 0
+ * \return int
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval 1 if support
+ * \retval 0 if not supported
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_buffer_pixmap_is_support_hw(struct livebox_buffer *info);
 
 /*!
  * \brief Create H/W(GEM) Buffer
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return int LB_STATUS_SUCCESS or LB_STATUS_ERROR_INVALID, LB_STATUS_ERROR_FAULT
- * \sa provider_buffer_pixmap_destroy_hw
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_pixmap_destroy_hw
  */
 extern int provider_buffer_pixmap_create_hw(struct livebox_buffer *info);
 
 /*!
  * \brief Destroy H/W(GEM) Buffer
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return int LB_STATUS_SUCCESS or LB_STATUS_ERROR_INVALID
- * \sa provider_buffer_pixmap_create_hw
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_pixmap_create_hw
  */
 extern int provider_buffer_pixmap_destroy_hw(struct livebox_buffer *info);
 
 /*!
  * \brief Get the H/W system mapped buffer address(GEM buffer) if a buffer support it.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
- * \return void * H/W system mapped buffer address
- * \sa provider_buffer_pixmap_create_hw
- * \sa provider_buffer_pixmap_destroy_hw
+ * \return void *
+ * \retval H/W system mapped buffer address
+ * \retval NULL fails to get buffer address
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_pixmap_create_hw
+ * \see provider_buffer_pixmap_destroy_hw
  */
 extern void *provider_buffer_pixmap_hw_addr(struct livebox_buffer *info);
 
 /*!
  * \brief Prepare the render buffer to write or read something on it.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \return int
- * \sa provider_buffer_post_render
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_post_render
  */
 extern int provider_buffer_pre_render(struct livebox_buffer *info);
 
 /*!
  * \brief Finish the render buffer acessing.
+ * \details N/A
+ * \remarks N/A
  * \param[in] info Handle of livebox buffer
  * \return int
- * \sa provider_buffer_pre_render
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_pre_render
  */
 extern int provider_buffer_post_render(struct livebox_buffer *info);
 
 /*!
  * \brief
+ * \details N/A
+ * \remarks N/A
  * \param[in] handle Handle of livebox buffer
- * \return void* User data
- * \sa provider_buffer_set_user_data
+ * \return void *
+ * \retval User data
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_set_user_data
  */
 extern void *provider_buffer_user_data(struct livebox_buffer *handle);
 
 /*!
  * \brief
+ * \details N/A
+ * \remarks N/A
  * \param[in] handle Handle of livebox buffer
  * \param[in] data User data
  * \return int
- * \sa provider_buffer_user_data
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \pre N/A
+ * \post N/A
+ * \see provider_buffer_user_data
  */
 extern int provider_buffer_set_user_data(struct livebox_buffer *handle, void *data);
 

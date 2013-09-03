@@ -484,7 +484,7 @@ EAPI int provider_buffer_pre_render(struct livebox_buffer *info)
 	}
 
 	if (fb_has_gem(info->fb)) {
-		ret = fb_acquire_gem(info->fb) ? 0 : -EFAULT;
+		ret = fb_acquire_gem(info->fb) ? LB_STATUS_SUCCESS : LB_STATUS_ERROR_FAULT;
 	}
 
 	return ret;

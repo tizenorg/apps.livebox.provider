@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-/*!
- * \mainpage Provider
- * \{
- * \section Intro Livebox Service Provider
- * \subsection IntroSub
- * \section WhatFor Hello
- * \subsection WaitForSub Hello Sub
- * \section WhatFor GoodBye
- * \subsection WhatForSub What for sub
- * \}
- */
-
 #ifndef __PROVIDER_H
 #define __PROVIDER_H
 
@@ -34,7 +22,7 @@ extern "C" {
 #endif
 
 /*!
- * \defgroup PROVIDER Provider Programming Interfaces for development of livebox service provider.
+ * \addtogroup CAPI_PROVIDER_MODULE
  * \{
  */
 
@@ -260,161 +248,279 @@ struct event_handler {
 
 /*!
  * \brief Initialize the provider service
+ * \details N/A
+ * \remarks N/A
  * \param[in] disp XDisplay object, if you don't know what this is, set NULL
  * \param[in] name Slave name which is given by the master provider.
  * \param[in] table Event handler table
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
- * \sa provider_fini
+ * \param[in] data callback data
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_MEMORY
+ * \retval LB_STATUS_ERROR_ALREADY
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_fini
  */
 extern int provider_init(void *disp, const char *name, struct event_handler *table, void *data);
 
 /*!
  * \brief Finalize the provider service
- * \return void
- * \sa provider_init
+ * \details N/A
+ * \remarks N/A
+ * \return void *
+ * \retval callback data which is registered via provider_init
+ * \pre N/A
+ * \post N/A
+ * \see provider_init
  */
 extern void *provider_fini(void);
 
 /*!
  * \brief Send the hello signal to the master
+ * \details N/A
+ * \remarks N/A
  *        Master will activate connection of this only if you send this hello event.
  *        or the master will reject all requests from your provider.
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_send_hello(void);
 
 /*!
  * \brief Send the ping message to the master to notify that your provider is working properly.
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \details N/A
+ * \remarks N/A
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_send_ping(void);
 
 /*!
  * \brief Send the updated event to the master
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name which of an updated livebox.
  * \param[in] id Instance ID of an updated livebox.
  * \param[in] w Width of an updated content
  * \param[in] h Height of an updated content
  * \param[in] priority Priority of an updated content
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \param[in] content Content string
+ * \param[in] title Title string that is summarizing the content to a short text
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_send_updated(const char *pkgname, const char *id, int w, int h, double priority, const char *content, const char *title);
 
 /*!
  * \brief Send the description data updated event to the master
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of an updated livebox.
  * \param[in] id Instance ID of an updated livebox.
  * \param[in] descfile The filename of a description file.
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_MEMORY
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see N/A
  */
 extern int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile);
 
 /*!
  * \brief If the client requests async update mode, service provider must has to send update begin when it really start to update its contents
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of livebox
  * \param[in] id Instance Id of livebox
  * \param[in] priority Priority of current content of livebox
  * \param[in] content_info Content info should be come back again via livebox_create event.
  * \param[in] title A sentence for describing content of livebox
  * \return int
- * \sa provider_send_lb_update_end
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_lb_update_end
  */
 extern int provider_send_lb_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title);
 
 /*!
  * \brief If the client requests async update mode, service provider must has to send update end when the update is done
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of livebox
  * \param[in] id Instance Id of livebox
  * \return int
- * \sa provider_send_lb_update_begin
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_lb_update_begin
  */
 extern int provider_send_lb_update_end(const char *pkgname, const char *id);
 
 /*!
  * \brief If the client requests async update mode, service provider must has to send update begin when it really start to update its contents
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of livebox
  * \param[in] id Instance Id of livebox
  * \return int
- * \sa provider_send_pd_update_end
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_pd_update_end
  */
 extern int provider_send_pd_update_begin(const char *pkgname, const char *id);
 
 /*!
  * \brief If the client requests async update mode, service provider must has to send update end when it really finish the update its contents
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of livebox
  * \param[in] id Instance Id of livebox
  * \return int
- * \sa provider_send_pd_update_begin
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_pd_update_begin
  */
 extern int provider_send_pd_update_end(const char *pkgname, const char *id);
 
 /*!
  * \brief Send the deleted event of specified livebox instance
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Livebox instance ID
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
- * \sa provider_send_faulted
- * \sa provider_send_hold_scroll
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_faulted
+ * \see provider_send_hold_scroll
  */
 extern int provider_send_deleted(const char *pkgname, const char *id);
 
 /*!
- * \breif If you want to use the fault management service of the master provider,
+ * \brief If you want to use the fault management service of the master provider,
  *        Before call any functions of a livebox, call this.
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which will be called
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
- * \sa provider_send_call
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_call
  */
 extern int provider_send_ret(const char *pkgname, const char *id, const char *funcname);
 
 /*!
  * \brief If you want to use the fault management service of the master provider,
+ * \details N/A
+ * \remarks N/A
  *        After call any functions of a livebox, call this.
  * \param[in] pkgname Package name of the livebox
  * \param[in] id Instance ID of the livebox
  * \param[in] funcname Function name which is called by the slave
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
- * \sa provider_send_ret
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_ret
  */
 extern int provider_send_call(const char *pkgname, const char *id, const char *funcname);
 
 /*!
  * \brief If you want to send the fault event to the master provider,
+ * \details N/A
+ * \remarks N/A
  *        Use this API
  * \param[in] pkgname Package name of the livebox
  * \param[in] id ID of the livebox instance
  * \param[in] funcname Reason of the fault error
- * \return int Success LB_STATUS_SUCCESS otherwise errno < 0
- * \sa provider_send_deleted
- * \sa provider_send_hold_scroll
- * \sa provider_send_access_status
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_deleted
+ * \see provider_send_hold_scroll
+ * \see provider_send_access_status
  */
 extern int provider_send_faulted(const char *pkgname, const char *id, const char *funcname);
 
 /*!
  * \brief If you want notify to viewer to seize the screen,
+ * \details N/A
+ * \remarks N/A
  *        prevent moving a box from user event
  * \param[in] pkgname Package name of the livebox
  * \param[in] id ID of the livebox instance
  * \param[in] seize 1 if viewer needs to hold a box, or 0
- * \return int Success LB_STATUS_SUCCESS othere LB_STATUS_ERROR_XXX
- * \sa provider_send_faulted
- * \sa provider_send_deleted
- * \sa provider_send_access_status
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_faulted
+ * \see provider_send_deleted
+ * \see provider_send_access_status
  */
 extern int provider_send_hold_scroll(const char *pkgname, const char *id, int seize);
 
 /*!
  * \brief Notify to viewer for accessiblity event processing status.
+ * \details N/A
+ * \remarks N/A
  * \param[in] pkgname Package name of livebox
  * \param[in] id Instance Id of livebox
  * \param[in] status
  * \return int
- * \sa provider_send_deleted
- * \sa provider_send_faulted
- * \sa provider_send_hold_scroll
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_send_deleted
+ * \see provider_send_faulted
+ * \see provider_send_hold_scroll
  */
 extern int provider_send_access_status(const char *pkgname, const char *id, int status);
 

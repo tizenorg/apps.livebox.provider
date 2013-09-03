@@ -199,7 +199,7 @@ int fb_init(void *disp)
 	s_info.bufmgr = tbm_bufmgr_init(s_info.fd);
 	if (!s_info.bufmgr) {
 		ErrPrint("Failed to init bufmgr\n");
-		if (close(s_info.fd) < 0) {
+		if (close(s_info.fd) < 0) { 
 			ErrPrint("close: %s\n", strerror(errno));
 		}
 		s_info.fd = -1;
