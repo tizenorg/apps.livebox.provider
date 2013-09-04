@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #include <com-core.h>
 #include <packet.h>
@@ -1076,6 +1077,7 @@ static char *keep_file_in_safe(const char *id, int uri)
 	int len;
 	int base_idx;
 	char *new_path;
+	struct timeval tv;
 
 	path = uri ? util_uri_to_path(id) : id;
 	if (!path) {
@@ -1083,11 +1085,15 @@ static char *keep_file_in_safe(const char *id, int uri)
 		return NULL;
 	}
 
-	/*!
-	 * \TODO: REMOVE ME
-	 */
 	if (s_info.prevent_overwrite) {
-		return NULL;
+		char *ret;
+
+		ret = strdup(path);
+		if (!ret) {
+			ErrPrint("Heap: %s\n", strerror(errno));
+		}
+
+		return ret;
 	}
 
 	if (access(path, R_OK | F_OK) != 0) {
@@ -1101,14 +1107,21 @@ static char *keep_file_in_safe(const char *id, int uri)
 	while (base_idx > 0 && path[base_idx] != '/') base_idx--;
 	base_idx += (path[base_idx] == '/');
 
-	new_path = malloc(len + 10); /* for "tmp" */
+	new_path = malloc(len + 10 + 30); /* for "tmp" tv_sec, tv_usec */
 	if (!new_path) {
 		ErrPrint("Heap: %s\n", strerror(errno));
 		return NULL;
 	}
 
 	strncpy(new_path, path, base_idx);
-	snprintf(new_path + base_idx, len + 10 - base_idx, "reader/%s", path + base_idx);
+
+	if (gettimeofday(&tv, NULL) < 0) {
+		ErrPrint("gettimeofday: %s\n", strerror(errno));
+		tv.tv_sec = rand();
+		tv.tv_usec = rand();
+	}
+
+	snprintf(new_path + base_idx, len + 10 - base_idx + 30, "reader/%lu.%lu.%s", tv.tv_sec, tv.tv_usec, path + base_idx);
 
 	if (unlink(new_path) < 0) {
 		ErrPrint("Unlink(%s): %s\n", new_path, strerror(errno));
@@ -1250,6 +1263,7 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 {
 	struct livebox_buffer *info;
 	struct packet *packet;
+	char *safe_filename = NULL;
 	int ret;
 
 	if (!pkgname || !id) {
@@ -1272,15 +1286,17 @@ EAPI int provider_send_updated(const char *pkgname, const char *id, int w, int h
 
 	info = provider_buffer_find_buffer(TYPE_LB, pkgname, id);
 	if (!info) {
-		char *tmp;
-		tmp = keep_file_in_safe(id, 1);
-		free(tmp);
+		safe_filename = keep_file_in_safe(id, 1);
+		if (!safe_filename) {
+			return LB_STATUS_ERROR_INVALID;
+		}
 	} else {
 		fb_sync_xdamage(info->fb);
 	}
 
-	packet = packet_create_noack("updated", "ssiidss",
-					pkgname, id, w, h, priority, content_info, title);
+	packet = packet_create_noack("updated", "ssiidsss",
+					pkgname, id, w, h, priority, content_info, title, safe_filename);
+	free(safe_filename);
 	if (!packet) {
 		ErrPrint("failed to build a packet\n");
 		return LB_STATUS_ERROR_FAULT;

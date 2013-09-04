@@ -309,8 +309,12 @@ extern int provider_send_hello(void);
 extern int provider_send_ping(void);
 
 /*!
- * \brief Send the updated event to the master
- * \details N/A
+ * \brief Send the updated event to the master about livebox.
+ * \details
+ *  If you call this function, the output filename which is pointed by "id" will be renamed to uniq filename.
+ *  So you cannot access the output file after this function calls.
+ *  But if the "prevent_overwrite" option is enabled, the output filename will not be changed.
+ *  This is only happes when the livebox uses "image file" or "text description file".
  * \remarks N/A
  * \param[in] pkgname Package name which of an updated livebox.
  * \param[in] id Instance ID of an updated livebox.
@@ -320,18 +324,19 @@ extern int provider_send_ping(void);
  * \param[in] content Content string
  * \param[in] title Title string that is summarizing the content to a short text
  * \return int
- * \retval LB_STATUS_SUCCESS
- * \retval LB_STATUS_ERROR_INVALID
- * \retval LB_STATUS_ERROR_FAULT
+ * \retval LB_STATUS_SUCCESS Successfully sent update event.
+ * \retval LB_STATUS_ERROR_INVALID Invalid arguments.
+ * \retval LB_STATUS_ERROR_FAULT There is error and it could not be recoverable.
  * \pre N/A
  * \post N/A
- * \see N/A
+ * \see provider_send_desc_updated
  */
 extern int provider_send_updated(const char *pkgname, const char *id, int w, int h, double priority, const char *content, const char *title);
 
 /*!
- * \brief Send the description data updated event to the master
- * \details N/A
+ * \brief Send the description data updated event to the master about PD.
+ * \details
+ *  If you call this function, the descfile will be renamed.
  * \remarks N/A
  * \param[in] pkgname Package name of an updated livebox.
  * \param[in] id Instance ID of an updated livebox.
@@ -343,7 +348,7 @@ extern int provider_send_updated(const char *pkgname, const char *id, int w, int
  * \retval LB_STATUS_ERROR_FAULT
  * \pre N/A
  * \post N/A
- * \see N/A
+ * \see provider_send_updated
  */
 extern int provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile);
 
