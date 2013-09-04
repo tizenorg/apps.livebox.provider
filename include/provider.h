@@ -31,13 +31,13 @@ extern "C" {
  * Text signal & Content event uses this data structure.
  */
 struct event_info {
-        struct {
+        struct pointer {
                 double x; /*!< X value of current mouse(touch) position */
                 double y; /*!< Y value of current mouse(touch) position */
                 int down; /*!< Is it pressed(1) or not(0) */
         } pointer;
 
-        struct {
+        struct part {
                 double sx; /*!< Pressed object's left top X */
                 double sy; /*!< Pressed object's left top Y */
                 double ex; /*!< Pressed object's right bottom X */
@@ -46,7 +46,7 @@ struct event_info {
 };
 
 struct event_arg {
-	enum {
+	enum event_type {
 		EVENT_NEW, /*!< Master will send this to create a new livebox instance */
 		EVENT_RENEW, /*!< If the master detects any problems of your slave, it will terminate slave provider.
 		                  and after reactivating the provider slave, this request will be delievered to create
@@ -81,8 +81,8 @@ struct event_arg {
 	const char *pkgname; /*!< Package name of a livebox */
 	const char *id; /*!< Instance Id of a livebox */
 
-	union {
-		struct {
+	union event_data {
+		struct pd_create {
 			int w; /*!< PD buffer is created with width "w" */
 			int h; /*!< PD buffer is created with height "h" */
 
@@ -90,10 +90,10 @@ struct event_arg {
 			double y; /*!< Relative Y position of a livebox from this PD */
 		} pd_create;
 
-		struct {
+		struct pd_destroy {
 		} pd_destroy;
 
-		struct {
+		struct pd_move {
 			int w; /*!< PD buffer width */
 			int h; /*!< PD buffer height */
 
@@ -101,7 +101,7 @@ struct event_arg {
 			double y; /*!< Relative Y position of a livebox from this PD */
 		} pd_move;
 
-		struct {
+		struct lb_create {
 			const char *content; /*!< Content info */
 			int timeout; /*!< Timeout */
 			int has_script; /*!< Livebox has script (buffer is created from the master) */
@@ -117,7 +117,7 @@ struct event_arg {
 			int out_is_pinned_up; /*!< Is this pinned up? */
 		} lb_create; /*!< "new" */
 
-		struct {
+		struct lb_recreate {
 			const char *content;
 			int timeout;
 			int has_script;
@@ -134,7 +134,7 @@ struct event_arg {
 			int active_update; /*!< Need to know, current update mode */
 		} lb_recreate; /*!< renew */
 
-		struct {
+		struct lb_destroy {
 			/* This enumeration value must has to be sync with data-provider-master */
 			enum instance_destroy_type {
 				INSTANCE_DESTROY_DEFAULT,
@@ -145,66 +145,66 @@ struct event_arg {
 			} type;
 		} lb_destroy; /*!< delete */
 
-		struct {
+		struct content_event {
 			const char *emission; /*!< Event string */
 			const char *source; /*!< Object ID which makes event */
 			struct event_info info;
 		} content_event; /*!< script */
 
-		struct {
+		struct clicked {
 			const char *event; /*!< Event type, currently only "click" supported */
 			double timestamp; /*!< Timestamp of event occurred */
 			double x; /*!< X position of the click event */
 			double y; /*!< Y position of the click event */
 		} clicked; /*!< clicked */
 
-		struct {
+		struct text_signal {
 			const char *emission; /*!< Event string */
 			const char *source; /*!< Object ID which makes event */
 			struct event_info info;
 		} text_signal; /*!< text_signal */
 
-		struct {
+		struct resize {
 			int w; /*!< New width of a livebox */
 			int h; /*!< New height of a livebox */
 		} resize; /*!< resize */
 
-		struct {
+		struct set_period {
 			double period; /*!< New period */
 		} set_period; /*!< set_period */
 
-		struct {
+		struct change_group {
 			const char *cluster;
 			const char *category;
 		} change_group; /*!< change_group */
 
-		struct {
+		struct pinup {
 			int state;
 			char *content_info; /* out value */
 		} pinup; /*!< pinup */
 
-		struct {
+		struct update_content {
 			const char *cluster;
 			const char *category;
 		} update_content; /*! update_content */
 
-		struct {
+		struct pause {
 			double timestamp;
 		} pause; /*!< pause */
 
-		struct {
+		struct resume {
 			double timestamp;
 		} resume; /*!< resume */
 
-		struct {
+		struct lb_pause {
 			/*!< */
 		} lb_pause;
 
-		struct {
+		struct lb_resume {
 			/*!< */
 		} lb_resume;
 
-		struct {
+		struct update_mode {
 			int active_update;
 		} update_mode;
 	} info;
