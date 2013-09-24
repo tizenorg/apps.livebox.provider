@@ -878,30 +878,9 @@ static int disconnected_cb(int handle, void *data)
 	return 0;
 }
 
-EAPI int provider_init(void *disp, const char *name, struct event_handler *table, void *data)
+static int initialize_provider(void *disp, const char *name, struct event_handler *table, void *data)
 {
 	int ret;
-	const char *option;
-
-	option = getenv("PROVIDER_DISABLE_PREVENT_OVERWRITE");
-	if (option && !strcasecmp(option, "true")) {
-		s_info.prevent_overwrite = 1;
-	}
-
-	option = getenv("PROVIDER_COM_CORE_THREAD");
-	if (option && !strcasecmp(option, "true")) {
-		com_core_packet_use_thread(1);
-	}
-
-	if (!name || !table) {
-		ErrPrint("Invalid argument\n");
-		return LB_STATUS_ERROR_INVALID;
-	}
-
-	if (s_info.name) {
-		ErrPrint("Provider is already initialized\n");
-		return LB_STATUS_ERROR_ALREADY;
-	}
 
 	s_info.name = strdup(name);
 	if (!s_info.name) {
@@ -925,6 +904,51 @@ EAPI int provider_init(void *disp, const char *name, struct event_handler *table
 
 	DbgPrint("Slave is initialized\n");
 	return LB_STATUS_SUCCESS;
+}
+
+EAPI int provider_init_with_options(void *disp, const char *name, struct event_handler *table, void *data, int prevent_overwrite, int com_core_use_thread)
+{
+	if (!name || !table) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.name) {
+		ErrPrint("Provider is already initialized\n");
+		return LB_STATUS_ERROR_ALREADY;
+	}
+
+	s_info.prevent_overwrite = prevent_overwrite;
+	com_core_packet_use_thread(com_core_use_thread);
+
+	return initialize_provider(disp, name, table, data);
+}
+
+EAPI int provider_init(void *disp, const char *name, struct event_handler *table, void *data)
+{
+	const char *option;
+
+	if (!name || !table) {
+		ErrPrint("Invalid argument\n");
+		return LB_STATUS_ERROR_INVALID;
+	}
+
+	if (s_info.name) {
+		ErrPrint("Provider is already initialized\n");
+		return LB_STATUS_ERROR_ALREADY;
+	}
+
+	option = getenv("PROVIDER_DISABLE_PREVENT_OVERWRITE");
+	if (option && !strcasecmp(option, "true")) {
+		s_info.prevent_overwrite = 1;
+	}
+
+	option = getenv("PROVIDER_COM_CORE_THREAD");
+	if (option && !strcasecmp(option, "true")) {
+		com_core_packet_use_thread(1);
+	}
+
+	return initialize_provider(disp, name, table, data);
 }
 
 EAPI void *provider_fini(void)

@@ -263,8 +263,31 @@ struct event_handler {
  * \pre N/A
  * \post N/A
  * \see provider_fini
+ * \see provider_init_with_options
  */
 extern int provider_init(void *disp, const char *name, struct event_handler *table, void *data);
+
+/*!
+ * \brief Initialize the provider service
+ * \details Some provider doesn't want to access environment value.
+ *          This API will get some configuration info via argument instead of environment value.
+ * \remarks N/A
+ * \param[in] disp XDisplay object, if you don't know what this is, set NULL
+ * \param[in] name Slave name which is given by the master provider.
+ * \param[in] table Event handler table
+ * \param[in] data callback data
+ * \return int
+ * \retval LB_STATUS_SUCCESS
+ * \retval LB_STATUS_ERROR_INVALID
+ * \retval LB_STATUS_ERROR_MEMORY
+ * \retval LB_STATUS_ERROR_ALREADY
+ * \retval LB_STATUS_ERROR_FAULT
+ * \pre N/A
+ * \post N/A
+ * \see provider_fini
+ * \see provider_init
+ */
+extern int provider_init_with_options(void *disp, const char *name, struct event_handler *table, void *data, int prevent_overwrite, int com_core_use_thread);
 
 /*!
  * \brief Finalize the provider service
