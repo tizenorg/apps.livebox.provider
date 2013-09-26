@@ -1101,7 +1101,6 @@ static char *keep_file_in_safe(const char *id, int uri)
 	int len;
 	int base_idx;
 	char *new_path;
-	struct timeval tv;
 
 	path = uri ? util_uri_to_path(id) : id;
 	if (!path) {
@@ -1139,6 +1138,14 @@ static char *keep_file_in_safe(const char *id, int uri)
 
 	strncpy(new_path, path, base_idx);
 
+#if defined(_USE_ECORE_TIME_GET)
+	double tval;
+
+	tval = util_timestamp();
+
+	snprintf(new_path + base_idx, len + 10 - base_idx + 30, "reader/%lf.%s", tval, path + base_idx);
+#else
+	struct timeval tv;
 	if (gettimeofday(&tv, NULL) < 0) {
 		ErrPrint("gettimeofday: %s\n", strerror(errno));
 		tv.tv_sec = rand();
@@ -1146,6 +1153,7 @@ static char *keep_file_in_safe(const char *id, int uri)
 	}
 
 	snprintf(new_path + base_idx, len + 10 - base_idx + 30, "reader/%lu.%lu.%s", tv.tv_sec, tv.tv_usec, path + base_idx);
+#endif
 
 	if (unlink(new_path) < 0) {
 		ErrPrint("Unlink(%s): %s\n", new_path, strerror(errno));

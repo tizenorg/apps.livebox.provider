@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-extern double util_get_timestamp(void);
+extern double util_timestamp(void);
 extern const char *util_basename(const char *name);
 extern const char *util_uri_to_path(const char *uri);
 
