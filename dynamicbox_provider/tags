@@ -1,0 +1,436 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ACCESS_TYPE_CUR	src/dynamicbox_provider_buffer.c	50;"	d	file:
+ACCESS_TYPE_DOWN	src/dynamicbox_provider_buffer.c	47;"	d	file:
+ACCESS_TYPE_MOVE	src/dynamicbox_provider_buffer.c	48;"	d	file:
+ACCESS_TYPE_NEXT	src/dynamicbox_provider_buffer.c	51;"	d	file:
+ACCESS_TYPE_OFF	src/dynamicbox_provider_buffer.c	53;"	d	file:
+ACCESS_TYPE_PREV	src/dynamicbox_provider_buffer.c	52;"	d	file:
+ACCESS_TYPE_UP	src/dynamicbox_provider_buffer.c	49;"	d	file:
+DBOX_EVENT_CHANGE_GROUP	include/dynamicbox_provider.h	/^		DBOX_EVENT_CHANGE_GROUP, \/**< To change the group(cluster\/sub-cluster) of a dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_CLICKED	include/dynamicbox_provider.h	/^		DBOX_EVENT_CLICKED, \/**< If a dynamicbox is clicked, the master will send this event *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_CONTENT_EVENT	include/dynamicbox_provider.h	/^		DBOX_EVENT_CONTENT_EVENT, \/**< Any events are generated from your dynamicbox or Glance Bar, this event will be sent to you *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_DBOX_PAUSE	include/dynamicbox_provider.h	/^		DBOX_EVENT_DBOX_PAUSE, \/**< Freeze the update timer of a specified dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_DBOX_RESUME	include/dynamicbox_provider.h	/^		DBOX_EVENT_DBOX_RESUME, \/**< Thaw the update timer of a specified dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_DELETE	include/dynamicbox_provider.h	/^		DBOX_EVENT_DELETE, \/**< Master will send this to delete a dynamicbox instance *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_GBAR_CREATE	include/dynamicbox_provider.h	/^		DBOX_EVENT_GBAR_CREATE, \/**< Only for the buffer type *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_GBAR_DESTROY	include/dynamicbox_provider.h	/^		DBOX_EVENT_GBAR_DESTROY, \/**< Only for the buffer type *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_GBAR_MOVE	include/dynamicbox_provider.h	/^		DBOX_EVENT_GBAR_MOVE, \/**< Only for the buffer type *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_NEW	include/dynamicbox_provider.h	/^		DBOX_EVENT_NEW, \/**< Master will send this to create a new dynamicbox instance *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_PAUSE	include/dynamicbox_provider.h	/^		DBOX_EVENT_PAUSE, \/**< Freeze all timer and go to sleep mode *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_PINUP	include/dynamicbox_provider.h	/^		DBOX_EVENT_PINUP, \/**< To make pin up of a dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_RENEW	include/dynamicbox_provider.h	/^		DBOX_EVENT_RENEW, \/**< If the master detects any problems of your slave, it will terminate slave provider.$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_RESIZE	include/dynamicbox_provider.h	/^		DBOX_EVENT_RESIZE, \/**< If a dynamicbox is resized, the master will send this event *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_RESUME	include/dynamicbox_provider.h	/^		DBOX_EVENT_RESUME, \/**< Thaw all timer and wake up *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_SET_PERIOD	include/dynamicbox_provider.h	/^		DBOX_EVENT_SET_PERIOD, \/**< To change the update period of a dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_TEXT_SIGNAL	include/dynamicbox_provider.h	/^		DBOX_EVENT_TEXT_SIGNAL, \/**< Text type dynamicbox or Glance Bar will generate this event *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_EVENT_UPDATE_CONTENT	include/dynamicbox_provider.h	/^		DBOX_EVENT_UPDATE_CONTENT, \/**< It's time to update the content of a dynamicbox *\/$/;"	e	enum:dynamicbox_event_arg::_event_type
+DBOX_PROVIDER_CTRL_DEFAULT	include/dynamicbox_provider.h	/^	DBOX_PROVIDER_CTRL_DEFAULT = 0x00,              \/**< Set default control operation *\/$/;"	e	enum:dynamicbox_provider_ctrl
+DBOX_PROVIDER_CTRL_MANUAL_REACTIVATION	include/dynamicbox_provider.h	/^	DBOX_PROVIDER_CTRL_MANUAL_REACTIVATION = 0x02,  \/**< Reactivate process manually *\/$/;"	e	enum:dynamicbox_provider_ctrl
+DBOX_PROVIDER_CTRL_MANUAL_TERMINATION	include/dynamicbox_provider.h	/^	DBOX_PROVIDER_CTRL_MANUAL_TERMINATION = 0x01,   \/**< Terminate process manually *\/$/;"	e	enum:dynamicbox_provider_ctrl
+DbgPrint	include_internal/debug.h	17;"	d
+EAPI	src/dynamicbox_provider.c	44;"	d	file:
+EAPI	src/dynamicbox_provider.c	61;"	d	file:
+EAPI	src/dynamicbox_provider_buffer.c	45;"	d	file:
+ErrPrint	include_internal/debug.h	18;"	d
+SCHEMA_FILE	include_internal/util.h	21;"	d
+SCHEMA_PIXMAP	include_internal/util.h	22;"	d
+SCHEMA_SHM	include_internal/util.h	23;"	d
+WarnPrint	include_internal/debug.h	19;"	d
+__DBOX_PROVIDER_BUFFER_H	include/dynamicbox_provider_buffer.h	21;"	d
+__DBOX_PROVIDER_H	include/dynamicbox_provider.h	21;"	d
+_change_group	include/dynamicbox_provider.h	/^		struct _change_group {$/;"	s	union:dynamicbox_event_arg::_event_data
+_clicked	include/dynamicbox_provider.h	/^		struct _clicked {$/;"	s	union:dynamicbox_event_arg::_event_data
+_content_event	include/dynamicbox_provider.h	/^		struct _content_event {$/;"	s	union:dynamicbox_event_arg::_event_data
+_dbox_create	include/dynamicbox_provider.h	/^		struct _dbox_create {$/;"	s	union:dynamicbox_event_arg::_event_data
+_dbox_destroy	include/dynamicbox_provider.h	/^		struct _dbox_destroy { \/**< This enumeration value must has to be sync with data-provider-master *\/$/;"	s	union:dynamicbox_event_arg::_event_data
+_dbox_pause	include/dynamicbox_provider.h	/^		struct _dbox_pause {$/;"	s	union:dynamicbox_event_arg::_event_data
+_dbox_recreate	include/dynamicbox_provider.h	/^		struct _dbox_recreate {$/;"	s	union:dynamicbox_event_arg::_event_data
+_dbox_resume	include/dynamicbox_provider.h	/^		struct _dbox_resume {$/;"	s	union:dynamicbox_event_arg::_event_data
+_event_data	include/dynamicbox_provider.h	/^	union _event_data {$/;"	u	struct:dynamicbox_event_arg
+_event_type	include/dynamicbox_provider.h	/^	enum _event_type {$/;"	g	struct:dynamicbox_event_arg
+_gbar_create	include/dynamicbox_provider.h	/^		struct _gbar_create {$/;"	s	union:dynamicbox_event_arg::_event_data
+_gbar_destroy	include/dynamicbox_provider.h	/^		struct _gbar_destroy {$/;"	s	union:dynamicbox_event_arg::_event_data
+_gbar_move	include/dynamicbox_provider.h	/^		struct _gbar_move {$/;"	s	union:dynamicbox_event_arg::_event_data
+_pause	include/dynamicbox_provider.h	/^		struct _pause {$/;"	s	union:dynamicbox_event_arg::_event_data
+_pinup	include/dynamicbox_provider.h	/^		struct _pinup {$/;"	s	union:dynamicbox_event_arg::_event_data
+_resize	include/dynamicbox_provider.h	/^		struct _resize {$/;"	s	union:dynamicbox_event_arg::_event_data
+_resume	include/dynamicbox_provider.h	/^		struct _resume {$/;"	s	union:dynamicbox_event_arg::_event_data
+_set_period	include/dynamicbox_provider.h	/^		struct _set_period {$/;"	s	union:dynamicbox_event_arg::_event_data
+_text_signal	include/dynamicbox_provider.h	/^		struct _text_signal {$/;"	s	union:dynamicbox_event_arg::_event_data
+_update_content	include/dynamicbox_provider.h	/^		struct _update_content {$/;"	s	union:dynamicbox_event_arg::_event_data
+_update_mode	include/dynamicbox_provider.h	/^		struct _update_mode {$/;"	s	union:dynamicbox_event_arg::_event_data
+abi	include/dynamicbox_provider.h	/^			const char *abi;         \/**< ABI tag of this dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+abi	include/dynamicbox_provider.h	/^			const char *abi;         \/**< ABI tag of this dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+acquire_gem	src/fb.c	/^static inline void *acquire_gem(struct gem_data *gem)$/;"	f	file:
+active_update	include/dynamicbox_provider.h	/^			int active_update;       \/**< Need to know, current update mode *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+active_update	include/dynamicbox_provider.h	/^			int active_update; \/**< 1 for Active update mode or 0 *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_update_mode
+attachments	src/fb.c	/^	unsigned int attachments[1];$/;"	m	struct:gem_data	file:
+buf_count	src/fb.c	/^	int buf_count;$/;"	m	struct:gem_data	file:
+buffer	src/fb_wayland.c	/^	void *buffer;$/;"	m	struct:fb_info	file:
+buffer_list	src/dynamicbox_provider_buffer.c	/^	struct dlist *buffer_list;$/;"	m	struct:__anon2	typeref:struct:__anon2::dlist	file:
+bufmgr	src/fb.c	/^	tbm_bufmgr bufmgr;$/;"	m	struct:info	file:
+bufsz	src/fb_wayland.c	/^	int bufsz;$/;"	m	struct:fb_info	file:
+category	include/dynamicbox_provider.h	/^			const char *category;    \/**< Sub-cluster ID of this dynamicbox instance *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+category	include/dynamicbox_provider.h	/^			const char *category;    \/**< Sub-cluster ID of this dynamicbox instance *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+category	include/dynamicbox_provider.h	/^			const char *category; \/**< Sub-cluster information *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_update_content
+category	include/dynamicbox_provider.h	/^			const char *category; \/**< Sub-cluster information is changed *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_change_group
+change_group	include/dynamicbox_provider.h	/^		} change_group; \/**< change_group *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_change_group
+change_group	include/dynamicbox_provider.h	/^    int (*change_group)(struct dynamicbox_event_arg *arg, void *data); \/**< Change group *\/$/;"	m	struct:dynamicbox_event_table
+clicked	include/dynamicbox_provider.h	/^		} clicked; \/**< clicked *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_clicked
+clicked	include/dynamicbox_provider.h	/^    int (*clicked)(struct dynamicbox_event_arg *arg, void *data); \/**< Clicked *\/$/;"	m	struct:dynamicbox_event_table
+closing_fd	src/dynamicbox_provider.c	/^	int closing_fd;$/;"	m	struct:info	file:
+cluster	include/dynamicbox_provider.h	/^			const char *cluster;     \/**< Cluster ID of this dynamicbox instance *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+cluster	include/dynamicbox_provider.h	/^			const char *cluster;     \/**< Cluster ID of this dynamicbox instance *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+cluster	include/dynamicbox_provider.h	/^			const char *cluster;  \/**< Cluster information *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_update_content
+cluster	include/dynamicbox_provider.h	/^			const char *cluster;  \/**< Cluster information is changed *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_change_group
+compensate_data	src/fb.c	/^	void *compensate_data; \/* Check the pitch value, copy this to data *\/$/;"	m	struct:gem_data	file:
+connected	include/dynamicbox_provider.h	/^    int (*connected)(struct dynamicbox_event_arg *arg, void *data); \/**< Connected to master *\/$/;"	m	struct:dynamicbox_event_table
+connected_cb	src/dynamicbox_provider.c	/^static int connected_cb(int handle, void *data)$/;"	f	file:
+container_of	include_internal/util.h	25;"	d
+content	include/dynamicbox_provider.h	/^			const char *content;     \/**< Content info *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+content	include/dynamicbox_provider.h	/^			const char *content;     \/**< Content info *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+content	include/dynamicbox_provider.h	/^			const char *content;  \/**< Content information *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_update_content
+content_event	include/dynamicbox_provider.h	/^		} content_event; \/**< script *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_content_event
+content_event	include/dynamicbox_provider.h	/^    int (*content_event)(struct dynamicbox_event_arg *arg, void *data); \/**< Content event *\/$/;"	m	struct:dynamicbox_event_table
+content_info	include/dynamicbox_provider.h	/^			char *content_info; \/**< out value *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_pinup
+count	src/fb.c	/^	int count;$/;"	m	struct:gem_data	file:
+create_gem	src/fb.c	/^static inline struct gem_data *create_gem(Pixmap pixmap, int w, int h, int depth, int auto_align)$/;"	f	file:
+create_pixmap_info	src/fb.c	/^static inline int create_pixmap_info(struct fb_info *info)$/;"	f	file:
+data	src/dlist.c	/^	void *data;$/;"	m	struct:dlist	file:
+data	src/dynamicbox_provider.c	/^	void *data;$/;"	m	struct:info	file:
+data	src/fb.c	/^	void *data; \/* Gem layer *\/$/;"	m	struct:gem_data	file:
+dbox_create	include/dynamicbox_provider.h	/^		} dbox_create; \/**< Event information for the newly created instance *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_dbox_create
+dbox_create	include/dynamicbox_provider.h	/^    int (*dbox_create)(struct dynamicbox_event_arg *arg, int *width, int *height, double *priority, void *data); \/**< new *\/$/;"	m	struct:dynamicbox_event_table
+dbox_destroy	include/dynamicbox_provider.h	/^		} dbox_destroy; \/**< Destroyed *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_dbox_destroy
+dbox_destroy	include/dynamicbox_provider.h	/^    int (*dbox_destroy)(struct dynamicbox_event_arg *arg, void *data); \/**< delete *\/$/;"	m	struct:dynamicbox_event_table
+dbox_pause	include/dynamicbox_provider.h	/^		} dbox_pause;$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_dbox_pause
+dbox_pause	include/dynamicbox_provider.h	/^    int (*dbox_pause)(struct dynamicbox_event_arg *arg, void *data); \/**< Pause a specific Dynamicbox *\/$/;"	m	struct:dynamicbox_event_table
+dbox_recreate	include/dynamicbox_provider.h	/^		} dbox_recreate; \/**< Event information for the re-created instance *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+dbox_recreate	include/dynamicbox_provider.h	/^    int (*dbox_recreate)(struct dynamicbox_event_arg *arg, void *data); \/**< Re-create *\/$/;"	m	struct:dynamicbox_event_table
+dbox_resume	include/dynamicbox_provider.h	/^		} dbox_resume;$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_dbox_resume
+dbox_resume	include/dynamicbox_provider.h	/^    int (*dbox_resume)(struct dynamicbox_event_arg *arg, void *data); \/**< Resume a specific Dynamicbox *\/$/;"	m	struct:dynamicbox_event_table
+depth	src/fb.c	/^	int depth;$/;"	m	struct:gem_data	file:
+destroy_gem	src/fb.c	/^static inline int destroy_gem(struct gem_data *gem)$/;"	f	file:
+destroy_pixmap_info	src/fb.c	/^static inline int destroy_pixmap_info(struct fb_info *info)$/;"	f	file:
+direct_addr	include/dynamicbox_provider.h	/^			const char *direct_addr; \/** Event path for sending updated event to the viewer directly *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+direct_addr	include/dynamicbox_provider.h	/^			const char *direct_addr; \/**< Event path for sending updated event to the viewer directly *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+disconnected	include/dynamicbox_provider.h	/^    int (*disconnected)(struct dynamicbox_event_arg *arg, void *data); \/**< Disconnected from master *\/$/;"	m	struct:dynamicbox_event_table
+disconnected_cb	src/dynamicbox_provider.c	/^static int disconnected_cb(int handle, void *data)$/;"	f	file:
+disp	src/fb.c	/^	Display *disp;$/;"	m	struct:info	file:
+disp_is_opened	src/fb.c	/^	int disp_is_opened;$/;"	m	struct:info	file:
+dlist	src/dlist.c	/^struct dlist {$/;"	s	file:
+dlist_append	src/dlist.c	/^struct dlist *dlist_append(struct dlist *list, void *data)$/;"	f
+dlist_count	src/dlist.c	/^int dlist_count(struct dlist *l)$/;"	f
+dlist_data	src/dlist.c	/^void *dlist_data(struct dlist *l)$/;"	f
+dlist_find_data	src/dlist.c	/^struct dlist *dlist_find_data(struct dlist *list, void *data)$/;"	f
+dlist_foreach	include_internal/dlist.h	23;"	d
+dlist_foreach_safe	include_internal/dlist.h	26;"	d
+dlist_next	src/dlist.c	/^struct dlist *dlist_next(struct dlist *l)$/;"	f
+dlist_nth	src/dlist.c	/^struct dlist *dlist_nth(struct dlist *l, int nth)$/;"	f
+dlist_prepend	src/dlist.c	/^struct dlist *dlist_prepend(struct dlist *list, void *data)$/;"	f
+dlist_prev	src/dlist.c	/^struct dlist *dlist_prev(struct dlist *l)$/;"	f
+dlist_remove	src/dlist.c	/^struct dlist *dlist_remove(struct dlist *list, struct dlist *l)$/;"	f
+dlist_remove_data	include_internal/dlist.h	17;"	d
+dri2_buffer	src/fb.c	/^	DRI2Buffer *dri2_buffer;$/;"	m	struct:gem_data	file:
+dynamicbox_damage_region	include/dynamicbox_provider.h	/^typedef struct dynamicbox_damage_region {$/;"	s
+dynamicbox_damage_region_t	include/dynamicbox_provider.h	/^} dynamicbox_damage_region_t;$/;"	t	typeref:struct:dynamicbox_damage_region
+dynamicbox_event_arg	include/dynamicbox_provider.h	/^struct dynamicbox_event_arg {$/;"	s
+dynamicbox_event_table	include/dynamicbox_provider.h	/^typedef struct dynamicbox_event_table {$/;"	s
+dynamicbox_event_table_h	include/dynamicbox_provider.h	/^} *dynamicbox_event_table_h;$/;"	t	typeref:struct:dynamicbox_event_table
+dynamicbox_provider_buffer_acquire	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_acquire(dynamicbox_buffer_h info, int width, int height, int pixel_size)$/;"	f
+dynamicbox_provider_buffer_create	src/dynamicbox_provider_buffer.c	/^EAPI dynamicbox_buffer_h dynamicbox_provider_buffer_create(enum dynamicbox_target_type type, const char *pkgname, const char *id, int auto_align, int (*dbox_handler)(dynamicbox_buffer_h , dynamicbox_buffer_event_data_t, void *), void *data)$/;"	f
+dynamicbox_provider_buffer_create_hw	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_create_hw(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_destroy	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_destroy(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_destroy_hw	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_destroy_hw(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_extra_acquire	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_extra_acquire(dynamicbox_buffer_h info, int idx, int width, int height, int pixel_size)$/;"	f
+dynamicbox_provider_buffer_extra_release	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_extra_release(dynamicbox_buffer_h info, int idx)$/;"	f
+dynamicbox_provider_buffer_extra_resource_id	src/dynamicbox_provider_buffer.c	/^EAPI unsigned int dynamicbox_provider_buffer_extra_resource_id(dynamicbox_buffer_h info, int idx)$/;"	f
+dynamicbox_provider_buffer_find_buffer	src/dynamicbox_provider_buffer.c	/^EAPI dynamicbox_buffer_h dynamicbox_provider_buffer_find_buffer(enum dynamicbox_target_type type, const char *pkgname, const char *id)$/;"	f
+dynamicbox_provider_buffer_fini	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_fini(void)$/;"	f
+dynamicbox_provider_buffer_get_size	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_get_size(dynamicbox_buffer_h info, int *w, int *h, int *pixel_size)$/;"	f
+dynamicbox_provider_buffer_hw_addr	src/dynamicbox_provider_buffer.c	/^EAPI void *dynamicbox_provider_buffer_hw_addr(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_id	src/dynamicbox_provider_buffer.c	/^EAPI const char *dynamicbox_provider_buffer_id(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_init	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_init(void *display)$/;"	f
+dynamicbox_provider_buffer_is_support_hw	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_is_support_hw(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_pkgname	src/dynamicbox_provider_buffer.c	/^EAPI const char *dynamicbox_provider_buffer_pkgname(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_post_render	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_post_render(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_pre_render	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_pre_render(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_ref	src/dynamicbox_provider_buffer.c	/^EAPI void *dynamicbox_provider_buffer_ref(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_release	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_release(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_resize	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_resize(dynamicbox_buffer_h info, int w, int h)$/;"	f
+dynamicbox_provider_buffer_resource_id	src/dynamicbox_provider_buffer.c	/^EAPI unsigned int dynamicbox_provider_buffer_resource_id(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_set_user_data	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_set_user_data(dynamicbox_buffer_h handle, void *data)$/;"	f
+dynamicbox_provider_buffer_stride	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_stride(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_sync	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_sync(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_type	src/dynamicbox_provider_buffer.c	/^EAPI enum dynamicbox_target_type dynamicbox_provider_buffer_type(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_unref	src/dynamicbox_provider_buffer.c	/^EAPI int dynamicbox_provider_buffer_unref(void *ptr)$/;"	f
+dynamicbox_provider_buffer_uri	src/dynamicbox_provider_buffer.c	/^EAPI const char *dynamicbox_provider_buffer_uri(dynamicbox_buffer_h info)$/;"	f
+dynamicbox_provider_buffer_user_data	src/dynamicbox_provider_buffer.c	/^EAPI void *dynamicbox_provider_buffer_user_data(dynamicbox_buffer_h handle)$/;"	f
+dynamicbox_provider_control	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_control(int ctrl)$/;"	f
+dynamicbox_provider_ctrl	include/dynamicbox_provider.h	/^typedef enum dynamicbox_provider_ctrl {$/;"	g
+dynamicbox_provider_ctrl_e	include/dynamicbox_provider.h	/^} dynamicbox_provider_ctrl_e;$/;"	t	typeref:enum:dynamicbox_provider_ctrl
+dynamicbox_provider_fini	src/dynamicbox_provider.c	/^EAPI void *dynamicbox_provider_fini(void)$/;"	f
+dynamicbox_provider_init	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_init(void *disp, const char *name, dynamicbox_event_table_h table, void *data, int prevent_overwrite, int com_core_use_thread)$/;"	f
+dynamicbox_provider_send_access_status	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_access_status(const char *pkgname, const char *id, int status)$/;"	f
+dynamicbox_provider_send_call	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_call(const char *pkgname, const char *id, const char *funcname)$/;"	f
+dynamicbox_provider_send_dbox_update_begin	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_dbox_update_begin(const char *pkgname, const char *id, double priority, const char *content_info, const char *title)$/;"	f
+dynamicbox_provider_send_dbox_update_end	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_dbox_update_end(const char *pkgname, const char *id)$/;"	f
+dynamicbox_provider_send_deleted	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_deleted(const char *pkgname, const char *id)$/;"	f
+dynamicbox_provider_send_desc_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_desc_updated(const char *pkgname, const char *id, const char *descfile, dynamicbox_damage_region_t *region)$/;"	f
+dynamicbox_provider_send_direct_desc_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_direct_desc_updated(int fd, const char *pkgname, const char *id, const char *descfile, dynamicbox_damage_region_t *region)$/;"	f
+dynamicbox_provider_send_direct_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_direct_updated(int fd, const char *pkgname, const char *id, dynamicbox_damage_region_t *region)$/;"	f
+dynamicbox_provider_send_extra_direct_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_extra_direct_updated(int fd, const char *pkgname, const char *id, int idx, dynamicbox_damage_region_t *region)$/;"	f
+dynamicbox_provider_send_extra_info	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_extra_info(const char *pkgname, const char *id, double priority, const char *content_info, const char *title, const char *icon, const char *name)$/;"	f
+dynamicbox_provider_send_extra_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_extra_updated(const char *pkgname, const char *id, int idx, dynamicbox_damage_region_t *region)$/;"	f
+dynamicbox_provider_send_faulted	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_faulted(const char *pkgname, const char *id, const char *funcname)$/;"	f
+dynamicbox_provider_send_gbar_update_begin	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_gbar_update_begin(const char *pkgname, const char *id)$/;"	f
+dynamicbox_provider_send_gbar_update_end	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_gbar_update_end(const char *pkgname, const char *id)$/;"	f
+dynamicbox_provider_send_hello	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_hello(void)$/;"	f
+dynamicbox_provider_send_hold_scroll	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_hold_scroll(const char *pkgname, const char *id, int hold)$/;"	f
+dynamicbox_provider_send_key_status	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_key_status(const char *pkgname, const char *id, int status)$/;"	f
+dynamicbox_provider_send_ping	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_ping(void)$/;"	f
+dynamicbox_provider_send_request_close_gbar	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_request_close_gbar(const char *pkgname, const char *id, int reason)$/;"	f
+dynamicbox_provider_send_ret	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_ret(const char *pkgname, const char *id, const char *funcname)$/;"	f
+dynamicbox_provider_send_updated	src/dynamicbox_provider.c	/^EAPI int dynamicbox_provider_send_updated(const char *pkgname, const char *id, dynamicbox_damage_region_t *region)$/;"	f
+emission	include/dynamicbox_provider.h	/^			const char *emission;              \/**< Event string *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_content_event
+emission	include/dynamicbox_provider.h	/^			const char *emission;              \/**< Event string *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_text_signal
+err_base	src/fb.c	/^	int err_base;$/;"	m	struct:info	file:
+errno	src/fb.c	/^int errno;$/;"	v
+errno	src/fb_wayland.c	/^int errno;$/;"	v
+errno	src/util.c	/^int errno;$/;"	v
+event	include/dynamicbox_provider.h	/^			const char *event; \/**< Event type, currently only "click" supported *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_clicked
+evt_base	src/fb.c	/^	int evt_base;$/;"	m	struct:info	file:
+fb_acquire_buffer	src/fb.c	/^void *fb_acquire_buffer(struct fb_info *info)$/;"	f
+fb_acquire_buffer	src/fb_wayland.c	/^void *fb_acquire_buffer(struct fb_info *info)$/;"	f
+fb_acquire_gem	src/fb.c	/^void *fb_acquire_gem(struct fb_info *info)$/;"	f
+fb_create	src/fb.c	/^struct fb_info *fb_create(const char *id, int w, int h)$/;"	f
+fb_create	src/fb_wayland.c	/^struct fb_info *fb_create(const char *id, int w, int h)$/;"	f
+fb_create_gem	src/fb.c	/^int fb_create_gem(struct fb_info *info, int auto_align)$/;"	f
+fb_destroy	src/fb.c	/^int fb_destroy(struct fb_info *info)$/;"	f
+fb_destroy	src/fb_wayland.c	/^int fb_destroy(struct fb_info *info)$/;"	f
+fb_destroy_gem	src/fb.c	/^int fb_destroy_gem(struct fb_info *info)$/;"	f
+fb_fini	src/fb.c	/^int fb_fini(void)$/;"	f
+fb_fini	src/fb_wayland.c	/^int fb_fini(void)$/;"	f
+fb_get_size	src/fb.c	/^int fb_get_size(struct fb_info *info, int *w, int *h)$/;"	f
+fb_get_size	src/fb_wayland.c	/^int fb_get_size(struct fb_info *info, int *w, int *h)$/;"	f
+fb_has_gem	src/fb.c	/^int fb_has_gem(struct fb_info *info)$/;"	f
+fb_id	src/fb.c	/^const char *fb_id(struct fb_info *info)$/;"	f
+fb_id	src/fb_wayland.c	/^const char *fb_id(struct fb_info *info)$/;"	f
+fb_info	src/fb_wayland.c	/^struct fb_info {$/;"	s	file:
+fb_init	src/fb.c	/^int fb_init(void *disp)$/;"	f
+fb_init	src/fb_wayland.c	/^int fb_init(void *disp)$/;"	f
+fb_is_created	src/fb.c	/^int fb_is_created(struct fb_info *info)$/;"	f
+fb_is_created	src/fb_wayland.c	/^int fb_is_created(struct fb_info *info)$/;"	f
+fb_refcnt	src/fb.c	/^int fb_refcnt(void *data)$/;"	f
+fb_refcnt	src/fb_wayland.c	/^int fb_refcnt(void *data)$/;"	f
+fb_release_buffer	src/fb.c	/^int fb_release_buffer(void *data)$/;"	f
+fb_release_buffer	src/fb_wayland.c	/^int fb_release_buffer(void *data)$/;"	f
+fb_release_gem	src/fb.c	/^int fb_release_gem(struct fb_info *info)$/;"	f
+fb_size	src/fb.c	/^int fb_size(struct fb_info *info)$/;"	f
+fb_size	src/fb_wayland.c	/^int fb_size(struct fb_info *info)$/;"	f
+fb_stride	src/fb.c	/^int fb_stride(struct fb_info *info)$/;"	f
+fb_sync	src/fb.c	/^int fb_sync(struct fb_info *info)$/;"	f
+fb_sync	src/fb_wayland.c	/^int fb_sync(struct fb_info *info)$/;"	f
+fb_sync_xdamage	src/fb.c	/^int fb_sync_xdamage(struct fb_info *info, dynamicbox_damage_region_t *region)$/;"	f
+fb_sync_xdamage	src/fb_wayland.c	/^int fb_sync_xdamage(struct fb_info *info, dynamicbox_damage_region_t *region)$/;"	f
+fb_type	src/fb.c	/^int fb_type(struct fb_info *info)$/;"	f
+fb_type	src/fb_wayland.c	/^int fb_type(struct fb_info *info)$/;"	f
+fd	src/dynamicbox_provider.c	/^	int fd;$/;"	m	struct:info	file:
+fd	src/fb.c	/^	int fd;$/;"	m	struct:info	file:
+find_gem_by_canvas	src/fb.c	/^static inline struct gem_data *find_gem_by_canvas(void *canvas)$/;"	f	file:
+find_gem_by_pixmap	src/fb.c	/^static inline struct gem_data *find_gem_by_pixmap(Pixmap id)$/;"	f	file:
+find_shm_by_canvas	src/fb.c	/^static inline struct fb_info *find_shm_by_canvas(void *canvas)$/;"	f	file:
+find_shm_by_pixmap	src/fb.c	/^static inline struct fb_info *find_shm_by_pixmap(Pixmap id)$/;"	f	file:
+force	include/dynamicbox_provider.h	/^			int force;            \/**< Updated by fault *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_update_content
+gbar_create	include/dynamicbox_provider.h	/^		} gbar_create;$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_gbar_create
+gbar_create	include/dynamicbox_provider.h	/^    int (*gbar_create)(struct dynamicbox_event_arg *arg, void *data); \/**< Glance Bar is created *\/$/;"	m	struct:dynamicbox_event_table
+gbar_destroy	include/dynamicbox_provider.h	/^		} gbar_destroy;$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_gbar_destroy
+gbar_destroy	include/dynamicbox_provider.h	/^    int (*gbar_destroy)(struct dynamicbox_event_arg *arg, void *data); \/**< Glance Bar is destroyed *\/$/;"	m	struct:dynamicbox_event_table
+gbar_move	include/dynamicbox_provider.h	/^		} gbar_move;$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_gbar_move
+gbar_move	include/dynamicbox_provider.h	/^    int (*gbar_move)(struct dynamicbox_event_arg *arg, void *data); \/**< Glance Bar is moved *\/$/;"	m	struct:dynamicbox_event_table
+gc	src/fb.c	/^	GC gc;$/;"	m	struct:pixmap_info	file:
+gem_data	src/fb.c	/^struct gem_data {$/;"	s	file:
+gem_list	src/fb.c	/^	struct dlist *gem_list;$/;"	m	struct:info	typeref:struct:info::dlist	file:
+h	include/dynamicbox_provider.h	/^			int h;                   \/**< Glance Bar buffer height *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_move
+h	include/dynamicbox_provider.h	/^			int h;                   \/**< Glance Bar buffer is created with height "h" *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_create
+h	include/dynamicbox_provider.h	/^			int h; \/**< New height of a dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_resize
+h	include/dynamicbox_provider.h	/^	int h; \/**< Height of Damaged region from Y *\/$/;"	m	struct:dynamicbox_damage_region
+h	src/fb.c	/^	int h;$/;"	m	struct:gem_data	file:
+h	src/fb_wayland.c	/^	int h;$/;"	m	struct:fb_info	file:
+handle	src/fb_wayland.c	/^	int handle;$/;"	m	struct:fb_info	file:
+has_script	include/dynamicbox_provider.h	/^			int has_script;          \/**< Dynamicbox has script (buffer would be created from the master) *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+has_script	include/dynamicbox_provider.h	/^			int has_script;          \/**< Dynamicbox has script (buffer would be created from the master) *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+height	include/dynamicbox_provider.h	/^			int height;              \/**< Height of a dynamicbox content in pixels *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+height	include/dynamicbox_provider.h	/^			int height;              \/**< Height of a dynamicbox content in pixels *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+hold_scroll	include/dynamicbox_provider.h	/^			int hold_scroll;         \/**< The scroller which is in viewer is locked *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+id	include/dynamicbox_provider.h	/^	const char *id; \/**< Instance Id of a dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg
+id	src/fb_wayland.c	/^	char *id;$/;"	m	struct:fb_info	file:
+info	include/dynamicbox_provider.h	/^			struct dynamicbox_event_info info; \/**< Extra information *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_content_event	typeref:struct:dynamicbox_event_arg::_event_data::_content_event::dynamicbox_event_info
+info	include/dynamicbox_provider.h	/^			struct dynamicbox_event_info info; \/**< Extra information *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_text_signal	typeref:struct:dynamicbox_event_arg::_event_data::_text_signal::dynamicbox_event_info
+info	include/dynamicbox_provider.h	/^	} info;$/;"	m	struct:dynamicbox_event_arg	typeref:union:dynamicbox_event_arg::_event_data
+info	src/dynamicbox_provider.c	/^static struct info {$/;"	s	file:
+info	src/fb.c	/^static struct info {$/;"	s	file:
+initialize_provider	src/dynamicbox_provider.c	/^static int initialize_provider(void *disp, const char *name, dynamicbox_event_table_h table, void *data)$/;"	f	file:
+keep_file_in_safe	src/dynamicbox_provider.c	/^static char *keep_file_in_safe(const char *id, int uri)$/;"	f	file:
+master_change_group	src/dynamicbox_provider.c	/^static struct packet *master_change_group(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_clicked	src/dynamicbox_provider.c	/^static struct packet *master_clicked(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_dbox_pause	src/dynamicbox_provider.c	/^static struct packet *master_dbox_pause(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_dbox_resume	src/dynamicbox_provider.c	/^static struct packet *master_dbox_resume(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_delete	src/dynamicbox_provider.c	/^static struct packet *master_delete(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_disconnect	src/dynamicbox_provider.c	/^struct packet *master_disconnect(pid_t pid, int handle, const struct packet *packet)$/;"	f
+master_gbar_create	src/dynamicbox_provider.c	/^struct packet *master_gbar_create(pid_t pid, int handle, const struct packet *packet)$/;"	f
+master_gbar_destroy	src/dynamicbox_provider.c	/^struct packet *master_gbar_destroy(pid_t pid, int handle, const struct packet *packet)$/;"	f
+master_gbar_move	src/dynamicbox_provider.c	/^struct packet *master_gbar_move(pid_t pid, int handle, const struct packet *packet)$/;"	f
+master_new	src/dynamicbox_provider.c	/^static struct packet *master_new(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_pause	src/dynamicbox_provider.c	/^static struct packet *master_pause(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_pinup	src/dynamicbox_provider.c	/^static struct packet *master_pinup(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_renew	src/dynamicbox_provider.c	/^static struct packet *master_renew(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_resize	src/dynamicbox_provider.c	/^static struct packet *master_resize(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_resume	src/dynamicbox_provider.c	/^static struct packet *master_resume(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_script	src/dynamicbox_provider.c	/^static struct packet *master_script(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_set_period	src/dynamicbox_provider.c	/^static struct packet *master_set_period(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_text_signal	src/dynamicbox_provider.c	/^static struct packet *master_text_signal(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_update_content	src/dynamicbox_provider.c	/^static struct packet *master_update_content(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+master_update_mode	src/dynamicbox_provider.c	/^static struct packet *master_update_mode(pid_t pid, int handle, const struct packet *packet)$/;"	f	file:
+name	src/dynamicbox_provider.c	/^	char *name;$/;"	m	struct:info	file:
+next	src/dlist.c	/^	struct dlist *next;$/;"	m	struct:dlist	typeref:struct:dlist::dlist	file:
+out_content	include/dynamicbox_provider.h	/^			char *out_content;       \/**< Output content *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+out_content	include/dynamicbox_provider.h	/^			char *out_content;       \/**< Output content *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+out_is_pinned_up	include/dynamicbox_provider.h	/^			int out_is_pinned_up;    \/**< Is this pinned up? *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+out_is_pinned_up	include/dynamicbox_provider.h	/^			int out_is_pinned_up;    \/**< Is this pinned up? *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+out_title	include/dynamicbox_provider.h	/^			char *out_title;         \/**< Output title *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+out_title	include/dynamicbox_provider.h	/^			char *out_title;         \/**< Output title *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+pause	include/dynamicbox_provider.h	/^		} pause; \/**< pause *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_pause
+pause	include/dynamicbox_provider.h	/^    int (*pause)(struct dynamicbox_event_arg *arg, void *data); \/**< Pause the service provider *\/$/;"	m	struct:dynamicbox_event_table
+period	include/dynamicbox_provider.h	/^			double period;           \/**< Update period *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+period	include/dynamicbox_provider.h	/^			double period;           \/**< Update period *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+period	include/dynamicbox_provider.h	/^			double period; \/**< New period *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_set_period
+pinup	include/dynamicbox_provider.h	/^		} pinup; \/**< pinup *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_pinup
+pinup	include/dynamicbox_provider.h	/^    int (*pinup)(struct dynamicbox_event_arg *arg, void *data); \/**< Pin up *\/$/;"	m	struct:dynamicbox_event_table
+pixels	src/fb_wayland.c	/^	int pixels;$/;"	m	struct:fb_info	file:
+pixmap	src/fb.c	/^	Pixmap pixmap;$/;"	m	struct:gem_data	file:
+pixmap_bo	src/fb.c	/^	tbm_bo pixmap_bo;$/;"	m	struct:gem_data	file:
+pixmap_info	src/fb.c	/^struct pixmap_info {$/;"	s	file:
+pkgname	include/dynamicbox_provider.h	/^	const char *pkgname; \/**< Package name of a dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg
+prev	src/dlist.c	/^	struct dlist *prev;$/;"	m	struct:dlist	typeref:struct:dlist::dlist	file:
+prevent_overwrite	src/dynamicbox_provider.c	/^	int prevent_overwrite;$/;"	m	struct:info	file:
+provider_buffer_dbox_access_action	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_action(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_activate	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_activate(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_back	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_back(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_enable	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_enable(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_hl	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_hl(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_mouse	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_mouse(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_over	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_over(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_read	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_read(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_access_value_change	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_access_value_change(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_key_down	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_key_down(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_key_focus_in	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_key_focus_in(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_key_focus_out	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_key_focus_out(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_key_up	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_key_up(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_down	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_down(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_enter	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_enter(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_leave	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_leave(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_move	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_move(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_off_hold	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_off_hold(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_off_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_off_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_on_hold	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_on_hold(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_on_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_on_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_dbox_mouse_up	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_dbox_mouse_up(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_action	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_action(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_activate	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_activate(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_back	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_back(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_enable	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_enable(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_hl	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_hl(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_mouse	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_mouse(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_over	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_over(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_read	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_read(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_access_value_change	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_access_value_change(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_key_down	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_key_down(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_key_focus_in	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_key_focus_in(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_key_focus_out	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_key_focus_out(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_key_up	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_key_up(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_down	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_down(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_enter	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_enter(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_leave	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_leave(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_move	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_move(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_off_hold	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_off_hold(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_off_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_off_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_on_hold	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_on_hold(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_on_scroll	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_on_scroll(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_buffer_gbar_mouse_up	src/dynamicbox_provider_buffer.c	/^struct packet *provider_buffer_gbar_mouse_up(pid_t pid, int handle, const struct packet *packet)$/;"	f
+provider_name	src/dynamicbox_provider.c	/^const char *provider_name(void)$/;"	f
+reason	include/dynamicbox_provider.h	/^			int reason;              \/**< Error (status) code *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_destroy
+refcnt	src/fb.c	/^	int refcnt;$/;"	m	struct:gem_data	file:
+release_gem	src/fb.c	/^static inline void release_gem(struct gem_data *gem)$/;"	f	file:
+resize	include/dynamicbox_provider.h	/^		} resize; \/**< resize *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_resize
+resize	include/dynamicbox_provider.h	/^    int (*resize)(struct dynamicbox_event_arg *arg, void *data); \/**< Resize *\/$/;"	m	struct:dynamicbox_event_table
+resume	include/dynamicbox_provider.h	/^		} resume; \/**< resume *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_resume
+resume	include/dynamicbox_provider.h	/^    int (*resume)(struct dynamicbox_event_arg *arg, void *data); \/**< Resume the service provider *\/$/;"	m	struct:dynamicbox_event_table
+s_info	src/dynamicbox_provider.c	/^} s_info = {$/;"	v	typeref:struct:info	file:
+s_info	src/dynamicbox_provider_buffer.c	/^} s_info = {$/;"	v	typeref:struct:__anon2	file:
+s_info	src/fb.c	/^} s_info = {$/;"	v	typeref:struct:info	file:
+s_info	src/util.c	/^} s_info = {$/;"	v	typeref:struct:__anon1	file:
+s_table	src/dynamicbox_provider.c	/^static struct method s_table[] = {$/;"	v	typeref:struct:method	file:
+screen	src/fb.c	/^	int screen;$/;"	m	struct:info	file:
+send_acquire_extra_request	src/dynamicbox_provider_buffer.c	/^static unsigned int send_acquire_extra_request(enum dynamicbox_target_type type, const char *pkgname, const char *id, int w, int h, int size, int idx)$/;"	f	file:
+send_acquire_request	src/dynamicbox_provider_buffer.c	/^static struct fb_info *send_acquire_request(enum dynamicbox_target_type type, const char *pkgname, const char *id, int w, int h, int size)$/;"	f	file:
+send_desc_updated	src/dynamicbox_provider.c	/^static inline int send_desc_updated(int fd, const char *pkgname, const char *id, const char *descfile, dynamicbox_damage_region_t *region, int direct)$/;"	f	file:
+send_extra_updated	src/dynamicbox_provider.c	/^static inline int send_extra_updated(int fd, const char *pkgname, const char *id, int idx, dynamicbox_damage_region_t *region, int direct)$/;"	f	file:
+send_release_extra_request	src/dynamicbox_provider_buffer.c	/^static inline int send_release_extra_request(enum dynamicbox_target_type type, const char *pkgname, const char *id, int idx)$/;"	f	file:
+send_release_request	src/dynamicbox_provider_buffer.c	/^static inline int send_release_request(enum dynamicbox_target_type type, const char *pkgname, const char *id)$/;"	f	file:
+send_resize_request	src/dynamicbox_provider_buffer.c	/^static inline struct fb_info *send_resize_request(enum dynamicbox_target_type type, const char *pkgname, const char *id, int w, int h)$/;"	f	file:
+send_updated	src/dynamicbox_provider.c	/^static inline int send_updated(int fd, const char *pkgname, const char *id, dynamicbox_damage_region_t *region, int direct)$/;"	f	file:
+set_period	include/dynamicbox_provider.h	/^		} set_period; \/**< set_period *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_set_period
+set_period	include/dynamicbox_provider.h	/^    int (*set_period)(struct dynamicbox_event_arg *arg, void *data); \/**< Set Period *\/$/;"	m	struct:dynamicbox_event_table
+shm_list	src/fb.c	/^	struct dlist *shm_list;$/;"	m	struct:info	typeref:struct:info::dlist	file:
+si	src/fb.c	/^	XShmSegmentInfo si;$/;"	m	struct:pixmap_info	file:
+skip_need_to_create	include/dynamicbox_provider.h	/^			int skip_need_to_create; \/**< Is this dynamicbox need to check the "need_to_create"? *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+source	include/dynamicbox_provider.h	/^			const char *source;                \/**< Object ID which makes event *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_content_event
+source	include/dynamicbox_provider.h	/^			const char *source;                \/**< Object ID which makes event *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_text_signal
+state	include/dynamicbox_provider.h	/^			int state;          \/**< Current state of Pin-up *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_pinup
+sync_for_file	src/fb.c	/^static inline int sync_for_file(struct fb_info *info)$/;"	f	file:
+sync_for_file	src/fb_wayland.c	/^static inline int sync_for_file(struct fb_info *info)$/;"	f	file:
+sync_for_pixmap	src/fb.c	/^static inline int sync_for_pixmap(struct fb_info *info)$/;"	f	file:
+table	src/dynamicbox_provider.c	/^	struct dynamicbox_event_table table;$/;"	m	struct:info	typeref:struct:info::dynamicbox_event_table	file:
+text_signal	include/dynamicbox_provider.h	/^		} text_signal; \/**< text_signal *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_text_signal
+text_signal	include/dynamicbox_provider.h	/^    int (*text_signal)(struct dynamicbox_event_arg *arg, void *data); \/**< Text Signal *\/$/;"	m	struct:dynamicbox_event_table
+timeout	include/dynamicbox_provider.h	/^			int timeout;             \/**< Timeout *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+timeout	include/dynamicbox_provider.h	/^			int timeout;             \/**< Timeout *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+timestamp	include/dynamicbox_provider.h	/^			double timestamp;  \/**< Timestamp of event occurred *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_clicked
+timestamp	include/dynamicbox_provider.h	/^			double timestamp; \/**< Timestamp of the provider pause event occurred *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_pause
+timestamp	include/dynamicbox_provider.h	/^			double timestamp; \/**< Timestamp of the provider resume event occurred *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_resume
+type	include/dynamicbox_provider.h	/^			dynamicbox_destroy_type_e type;$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_destroy
+type	include/dynamicbox_provider.h	/^	} type;$/;"	m	struct:dynamicbox_event_arg	typeref:enum:dynamicbox_event_arg::_event_type
+type	src/util.c	/^	clockid_t type;$/;"	m	struct:__anon1	file:
+update_content	include/dynamicbox_provider.h	/^		} update_content; \/**< update_content *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_update_content
+update_content	include/dynamicbox_provider.h	/^    int (*update_content)(struct dynamicbox_event_arg *arg, void *data); \/**< Update content *\/$/;"	m	struct:dynamicbox_event_table
+update_mode	include/dynamicbox_provider.h	/^		} update_mode; \/**< Update mode *\/$/;"	m	union:dynamicbox_event_arg::_event_data	typeref:struct:dynamicbox_event_arg::_event_data::_update_mode
+update_mode	include/dynamicbox_provider.h	/^    int (*update_mode)(struct dynamicbox_event_arg *arg, void *data); \/**< Update mode *\/$/;"	m	struct:dynamicbox_event_table
+util_basename	src/util.c	/^const char *util_basename(const char *name)$/;"	f
+util_timestamp	src/util.c	/^double util_timestamp(void)$/;"	f
+util_uri_to_path	src/util.c	/^const char *util_uri_to_path(const char *uri)$/;"	f
+visual	src/fb.c	/^	Visual *visual;$/;"	m	struct:info	file:
+w	include/dynamicbox_provider.h	/^			int w;                   \/**< Glance Bar buffer is created with width "w" *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_create
+w	include/dynamicbox_provider.h	/^			int w;                   \/**< Glance Bar buffer width *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_move
+w	include/dynamicbox_provider.h	/^			int w; \/**< New width of a dynamicbox *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_resize
+w	include/dynamicbox_provider.h	/^	int w; \/**< Width of Damaged region from X *\/$/;"	m	struct:dynamicbox_damage_region
+w	src/fb.c	/^	int w;$/;"	m	struct:gem_data	file:
+w	src/fb_wayland.c	/^	int w;$/;"	m	struct:fb_info	file:
+width	include/dynamicbox_provider.h	/^			int width;               \/**< Width of a dynamicbox content in pixels *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_create
+width	include/dynamicbox_provider.h	/^			int width;               \/**< Width of a dynamicbox content in pixels *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_dbox_recreate
+x	include/dynamicbox_provider.h	/^			double x;                \/**< Relative X position of a dynamicbox from this Glance Bar *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_create
+x	include/dynamicbox_provider.h	/^			double x;                \/**< Relative X position of a dynamicbox from this Glance Bar *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_move
+x	include/dynamicbox_provider.h	/^			double x;          \/**< X position of the click event *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_clicked
+x	include/dynamicbox_provider.h	/^	int x; \/**< Damaged region, Coordinates X of Left Top corner *\/$/;"	m	struct:dynamicbox_damage_region
+xim	src/fb.c	/^	XImage *xim;$/;"	m	struct:pixmap_info	file:
+y	include/dynamicbox_provider.h	/^			double y;                \/**< Relative Y position of a dynamicbox from this Glance Bar *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_create
+y	include/dynamicbox_provider.h	/^			double y;                \/**< Relative Y position of a dynamicbox from this Glance Bar *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_gbar_move
+y	include/dynamicbox_provider.h	/^			double y;          \/**< Y position of the click event *\/$/;"	m	struct:dynamicbox_event_arg::_event_data::_clicked
+y	include/dynamicbox_provider.h	/^	int y; \/**< Damaged region, Coordinates Y of Left Top corner *\/$/;"	m	struct:dynamicbox_damage_region

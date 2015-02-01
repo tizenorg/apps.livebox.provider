@@ -33,11 +33,12 @@ extern int fb_release_buffer(void *data);
 extern const char *fb_id(struct fb_info *info);
 extern int fb_type(struct fb_info *info);
 
-extern int fb_create_gem(struct fb_info *info);
+extern int fb_create_gem(struct fb_info *info, int auto_align);
 extern int fb_destroy_gem(struct fb_info *info);
 extern void *fb_acquire_gem(struct fb_info *info);
 extern int fb_release_gem(struct fb_info *info);
 extern int fb_has_gem(struct fb_info *info);
-extern int fb_sync_xdamage(struct fb_info *info);
+extern int fb_sync_xdamage(struct fb_info *info, dynamicbox_damage_region_t *region);
+extern int fb_stride(struct fb_info *info);
 
 /* End of a file */

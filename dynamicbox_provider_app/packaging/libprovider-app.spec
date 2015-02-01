@@ -1,8 +1,8 @@
 %bcond_with wayland
 
-Name: libprovider
-Summary: Library for developing the livebox service provider
-Version: 0.21.1
+Name: libprovider-app
+Summary: Library for developing the livebox app provider
+Version: 0.0.2
 Release: 1
 Group: HomeTF/Livebox
 License: Flora
@@ -14,35 +14,21 @@ BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(com-core)
 BuildRequires: pkgconfig(livebox-service)
-
-%if %{with wayland}
-%else
-BuildRequires: pkgconfig(x11)
-BuildRequires: pkgconfig(xext)
-BuildRequires: pkgconfig(libdri2)
-BuildRequires: pkgconfig(libdrm)
-BuildRequires: pkgconfig(libtbm)
-BuildRequires: pkgconfig(xfixes)
-BuildRequires: pkgconfig(dri2proto)
-BuildRequires: pkgconfig(xdamage)
-%endif
-
-%if "%{sec_product_feature_livebox}" == "0"
-ExclusiveArch:
-%endif
+BuildRequires: pkgconfig(provider)
+BuildRequires: pkgconfig(ecore)
+BuildRequires: pkgconfig(eina)
+BuildRequires: pkgconfig(capi-appfw-application)
 
 %description
-Supporting the commnuncation channel with master service for livebox remote view.
-API for accessing the remote buffer of liveboxes.
-Feature for life-cycle management by the master provider.
+Wrapper library of libprovider to support the application development
 
 %package devel
-Summary: Livebox data provider development library (dev)
+Summary: Header & package configuration files for developing the livebox app provider 
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
 %description devel
-Header & package configuration files for developing the livebox service provider
+Livebox app development library (dev)
 
 %prep
 %setup -q
@@ -77,10 +63,9 @@ rm -rf %{buildroot}
 %make_install
 mkdir -p %{buildroot}/%{_datarootdir}/license
 
-%post -n libprovider -p /sbin/ldconfig
-%postun -n libprovider -p /sbin/ldconfig
+%post
 
-%files -n libprovider
+%files -n libprovider-app
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
 %{_libdir}/*.so*
@@ -89,8 +74,7 @@ mkdir -p %{buildroot}/%{_datarootdir}/license
 %files devel
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_includedir}/provider/provider.h
-%{_includedir}/provider/provider_buffer.h
+%{_includedir}/provider-app/provider-app.h
 %{_libdir}/pkgconfig/*.pc
 
 # End of a file

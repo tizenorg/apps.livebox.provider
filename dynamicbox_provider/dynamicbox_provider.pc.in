@@ -1,0 +1,12 @@
+prefix=@PREFIX@
+exec_prefix=@EXEC_PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
+
+Name: dynamicbox_provider
+Description: Dynamic Box Provider supporting library
+Version: @VERSION@
+Requires: dynamicbox_service
+Libs: -L${libdir} -ldynamicbox_provider
+Cflags: -I${includedir}
+cppflags: -I${includedir}

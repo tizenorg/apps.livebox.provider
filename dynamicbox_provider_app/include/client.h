@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
+extern int client_init(app_control_h service, struct dynamicbox_provider_event_callback *table);
+extern int client_is_initialized(void);
+extern void client_fini(void);
 
-/*!
- * \ingroup CAPI_LIVEBOX_FRAMEWORK Tizen livebox framework
- * \defgroup CAPI_PROVIDER_MODULE Provider Programming Interfaces for development of livebox service provider.
- * \section CAPI_PROVIDER_MODULE_HEADER Required Header
- * \#include <provider.h>
- * \#include <provider_buffer.h>
- * \section CAPI_PROVIDER_MODULE_OVERVIEW Overview
- * Overview
- */
+/* End of a file */

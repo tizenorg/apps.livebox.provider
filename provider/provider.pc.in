@@ -6,6 +6,7 @@ includedir=@INCLUDEDIR@
 Name: libprovider
 Description: livebox supporting library
 Version: @VERSION@
+Requires: dynamicbox_provider
 Libs: -L${libdir} -lprovider
 Cflags: -I${includedir}
 cppflags: -I${includedir}
